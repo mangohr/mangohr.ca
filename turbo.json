@@ -1,7 +1,25 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [".env"],
-  "globalEnv": [".env"],
+  "globalEnv": [
+    "NODE_ENV",
+    "WWW_PORT",
+    "MAIL_PORT",
+    "WWW_URL",
+    "AUTH_SECRET",
+    "AUTH_URL",
+    "DATABASE_URL",
+    "REDIS_URL",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "SES_ACCESS_KEY",
+    "SES_SECRET_ACCESS_KEY",
+    "SES_REGION",
+    "AWS_ACCESS_KEY",
+    "AWS_SECRET_KEY",
+    "S3_UPLOAD_BUCKET",
+    "S3_UPLOAD_REGION"
+  ],
   "ui": "stream",
   "tasks": {
     "build": {

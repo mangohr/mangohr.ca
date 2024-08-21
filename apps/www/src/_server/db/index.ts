@@ -1,10 +1,11 @@
 // import "server-only";
+import { env } from "@/env"
 import { Kysely, PostgresDialect } from "kysely"
 import { Pool } from "pg"
 
 import { DB } from "@/types/db"
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const pool = new Pool({ connectionString: env.DATABASE_URL })
 
 const dialect = new PostgresDialect({
   pool,

@@ -23,7 +23,7 @@ async function Orgs() {
     <div className="mx-auto flex min-h-screen w-full max-w-screen-xl flex-col space-y-8 p-8">
       <div>
         <Image
-          src="/logo-full-black.png"
+          src="/assets/logo/full.png"
           width={150}
           height={150}
           alt="MangoHR"

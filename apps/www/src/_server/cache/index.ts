@@ -1,11 +1,12 @@
 import "server-only"
 
+import { env } from "@/env"
 import Redis from "ioredis"
 import { SelectType } from "kysely"
 
 import { AuthUser, OrgsList } from "@/types/db"
 
-export const redis = new Redis(process.env.REDIS_URL!)
+export const redis = new Redis(env.REDIS_URL!)
 
 export const redisKeys = {
   org: {

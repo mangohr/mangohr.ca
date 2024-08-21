@@ -1,6 +1,7 @@
 {
   "name": "mangohr.ca",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "dotenv -- turbo build --env-mode=loose",
     "dev": "dotenv -- turbo dev --env-mode=loose",

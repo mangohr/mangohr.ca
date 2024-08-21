@@ -1,8 +1,6 @@
-import * as React from "react"
 import {
   Body,
   Button,
-  Column,
   Container,
   Head,
   Heading,
@@ -12,7 +10,7 @@ import {
   Link,
   Preview,
   render,
-  Row,
+  renderAsync,
   Section,
   Tailwind,
   Text,
@@ -26,14 +24,7 @@ interface MagicEmailProps {
 
 export const magicLinkTemplate = ({ name, email, link }: MagicEmailProps) => {
   const previewText = `Sign in to MangoHR`
-  const subject =
-    "Here's your magic link, you can use to sign in to MangoHR platform."
-
-  const text = `Hello ${name},\nHere's your magic link, you can sign in to MangoHR platform by
-              clicking on link below. This link will only be valid for next 30
-              minutes.\n\n${link}`
-
-  const jsx = (
+  return (
     <Html>
       <Head />
       <Preview>{previewText}</Preview>
@@ -42,11 +33,11 @@ export const magicLinkTemplate = ({ name, email, link }: MagicEmailProps) => {
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
             <Section className="mt-[32px]">
               <Img
-                src={`${process.env.WWW_URL}/assets/logo/ico.png`}
-                width="40"
-                height="37"
+                src={`${process.env.WWW_URL}/assets/logo/ico-white.png`}
+                width="100"
+                height="100"
                 alt="Mango HR"
-                className="my-0 mx-auto"
+                className="my-0 mx-auto border border-solid border-[#eaeaea]"
               />
             </Section>
             <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
@@ -88,17 +79,12 @@ export const magicLinkTemplate = ({ name, email, link }: MagicEmailProps) => {
       </Tailwind>
     </Html>
   )
-
-  return { subject, text, render: () => render(jsx) }
 }
 
-export default () => {
-  return <div>hi</div>
+magicLinkTemplate.PreviewProps = {
+  name: "name",
+  email: "enauk",
+  link: "link",
 }
 
-// () =>
-//   magicLinkTemplate({
-//     name: "{{name}}",
-//     email: "{{email}}",
-//     magicLink: "{{magicLink}}",
-//   }).render
+export default magicLinkTemplate

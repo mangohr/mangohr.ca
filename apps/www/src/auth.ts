@@ -1,5 +1,5 @@
 // src.auth.ts
-import { magicLinkTemplate } from "@mhr/mails/emails"
+import { magicLinkRenderer } from "@mhr/mails/emails"
 import NextAuth from "next-auth"
 import google from "next-auth/providers/google"
 
@@ -7,6 +7,7 @@ import { db } from "./_server/db"
 import { KyselyAdapter } from "./_server/db/authAdapter"
 import { sendEmail } from "./_server/mailer/send"
 import { authConfig } from "./auth.config"
+import { env } from "./env"
 
 export const {
   handlers: { GET, POST },
@@ -20,8 +21,8 @@ export const {
     // **************************************************************
     // added provider
     google({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      clientId: env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: env.GOOGLE_CLIENT_SECRET ?? "",
     }),
     // **************************************************************
     {
@@ -36,7 +37,7 @@ export const {
           .select("name")
           .where("email", "=", "email")
           .executeTakeFirst()
-        const { subject, text, render } = magicLinkTemplate({
+        const { subject, text, html } = magicLinkRenderer({
           email: props.identifier,
           link: props.url,
           name: user?.name || "",
@@ -44,7 +45,7 @@ export const {
         await sendEmail({
           subject,
           text,
-          html: render(),
+          html,
           emails: [props.identifier],
         })
       },

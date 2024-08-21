@@ -77,7 +77,8 @@ export default function NewOrgForm() {
               <Button type="submit" disabled={pending}>
                 {pending ? (
                   <>
-                    <Loader2 /> <span>Creating...</span>
+                    <Loader2 className="animate-spin" />{" "}
+                    <span>Creating...</span>
                   </>
                 ) : (
                   "Create Company"
