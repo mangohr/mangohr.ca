@@ -136,13 +136,13 @@ export default function EmployeeLayout({ children }: { children: ReactNode }) {
         </div>
         <div className="flex-1 space-y-6 px-8 py-12">
           <NavigationMenu>
-            <NavigationMenuList className="inline-flex h-9 items-center justify-center gap-1 rounded-lg border bg-background p-1 text-muted-foreground">
+            <NavigationMenuList className="bg-background text-muted-foreground inline-flex h-9 items-center justify-center gap-1 rounded-lg border p-1">
               {navs.map((nav, i) => (
                 <NavigationMenuItem key={i}>
                   <Link href={nav.url} legacyBehavior passHref>
                     <NavigationMenuLink
                       className={cn(
-                        "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                        "ring-offset-background hover:bg-muted focus-visible:ring-ring inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
                         matchIdx === i && "text-primary"
                       )}
                     >

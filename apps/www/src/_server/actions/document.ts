@@ -10,7 +10,7 @@ import { z } from "zod"
 import { getEmployee } from "../cache/org"
 import { db } from "../db"
 import { hasPerm } from "../helpers/hasPerm"
-import { getPresignedUrl } from "../helpers/s3"
+import { getDownloadUrl, getPresignedUrl } from "../helpers/s3"
 
 export const getAllDocuments = async (props: { searchParams: unknown }) => {
   const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
@@ -23,6 +23,7 @@ export const getAllDocuments = async (props: { searchParams: unknown }) => {
       "location",
       "name",
       "size",
+      "type",
       "employee_id",
       "uploaded_by",
       "uploaded_at",
@@ -96,8 +97,15 @@ export const documentUpload = async (data: {
   }
 
   const result = await db.transaction().execute(async (trx) => {
-    const key = `/orgs/${org!.id}/${emp!.id}/${id}`
+    const key = `orgs/${org!.id}/${emp!.id}/${id}.${filename.split(".").pop()}`
 
+    const presigned = await getPresignedUrl({
+      contentLength,
+      contentType,
+      key,
+    })
+
+    const url = new URL(presigned)
     await trx
       .insertInto("orgs.storage")
       .values({
@@ -108,15 +116,9 @@ export const documentUpload = async (data: {
         org_id: org!.id,
         employee_id: emp?.id,
         uploaded_by: session.user.id,
-        location: key,
+        location: `https://${url.host}/${key}`,
       })
       .execute()
-
-    const presigned = await getPresignedUrl({
-      contentLength,
-      contentType,
-      key,
-    })
 
     return presigned
   })
@@ -143,7 +145,7 @@ export const onDocumentUploadSuccess = async (data: { id: string }) => {
       uploaded_at: sql`now()`,
     })
     .execute()
-  return result
+  return true
 }
 
 export const onDocumentUploadRemove = async (data: { id: string }) => {
@@ -163,4 +165,20 @@ export const onDocumentUploadRemove = async (data: { id: string }) => {
     .where("id", "=", id)
     .execute()
   return id
+}
+
+export const getDocumentDownloadUrl = async (data: { path: string }) => {
+  const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
+
+  const { path } = z
+    .object({
+      path: z.string(),
+    })
+    .parse(data)
+
+  await hasPerm({ orgSlug })
+
+  const url = new URL(path)
+
+  return await getDownloadUrl(url.pathname.substring(1))
 }

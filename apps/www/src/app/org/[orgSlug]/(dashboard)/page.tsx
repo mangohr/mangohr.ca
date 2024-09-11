@@ -54,7 +54,7 @@ async function Page() {
         <h1 className="text-3xl leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
           {greet}, {session?.user?.name}!
         </h1>
-        <p className="max-w-2xl font-light text-foreground">
+        <p className="text-foreground max-w-2xl font-light">
           It&apos;s {format(today, "cccc, dd MMMM yyyy")}
         </p>
       </div>

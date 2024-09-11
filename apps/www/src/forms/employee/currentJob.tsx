@@ -1,12 +1,12 @@
 import { useTransition } from "react"
 import { updateEmployeeCurrentJob } from "@/_server/actions/employee"
 import { employmentStatus } from "@/constants/employee"
+import { useEmployee } from "@/context/employee"
 import employeeSchema from "@/schema/employee"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { OrgsEmployee } from "@/types/db"
 import { DatePicker } from "@/components/ui/date-picker"
 import {
   Form,
@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { SelectEmployee } from "@/components/combobox/selectEmployee"
 
 export default function EmployeeCurrentJobForm({
   id,
@@ -34,7 +35,9 @@ export default function EmployeeCurrentJobForm({
   employeeUsername: string
   id: string
   onSubmit?: () => void
-  setDataOptimistic: (val: any) => void
+  setDataOptimistic: (
+    val: z.infer<typeof employeeSchema.currentJob.create.validate>
+  ) => void
 }) {
   const form = useForm<
     z.infer<typeof employeeSchema.currentJob.create.validate>
@@ -51,8 +54,8 @@ export default function EmployeeCurrentJobForm({
   const [_, setTransition] = useTransition()
   const handleSubmit = form.handleSubmit(async (val) => {
     setTransition(() => {
+      setDataOptimistic(val)
       updateEmployeeCurrentJob({ formData: val, username: employeeUsername })
-      setDataOptimistic((p: any) => ({ ...p, ...val }) as any)
     })
     onSubmit && onSubmit()
   })
@@ -133,7 +136,10 @@ export default function EmployeeCurrentJobForm({
               <FormLabel>Reports to</FormLabel>
               <div>
                 <FormControl>
-                  <Input placeholder="Employee Username" {...field} />
+                  <SelectEmployee
+                    selected={field.value}
+                    setSelected={field.onChange}
+                  />
                 </FormControl>
                 <FormMessage />
               </div>

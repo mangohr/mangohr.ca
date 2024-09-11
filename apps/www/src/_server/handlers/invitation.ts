@@ -14,7 +14,7 @@ export const getAllInvitations = async () => {
     .selectFrom("orgs.invitation")
     .where("org_id", "=", org!.id)
     .selectAll()
-    .orderBy("invited_at asc")
+    .orderBy("invited_at desc")
     .execute()
 
   return { items: result }

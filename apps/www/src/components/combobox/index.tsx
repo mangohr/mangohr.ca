@@ -1,0 +1,193 @@
+"use client"
+
+import * as React from "react"
+import { ChevronDown, Loader2 } from "lucide-react"
+
+// import { useMediaQuery } from "@/hooks/mediaQuery"
+import { Button } from "@/components/ui/button"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandLoading,
+} from "@/components/ui/command"
+// import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+export interface DefaultCombobox {
+  image: string | undefined
+  value: string
+  label: string
+}
+
+export function DefaultComboBox({
+  data,
+  name,
+  placeholder,
+  selected,
+  setSelected,
+  onSearch,
+  loading,
+}: {
+  data: DefaultCombobox[] | undefined
+  placeholder: string
+  name: string
+  selected: DefaultCombobox | null
+  setSelected: (val: DefaultCombobox | null) => void
+  onSearch?: (val: string) => void
+  loading?: boolean
+}) {
+  const [open, setOpen] = React.useState(false)
+  // const isDesktop = useMediaQuery("(min-width: 768px)")
+
+  // if (isDesktop) {
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" className="w-[200px] justify-start">
+          {selected ? (
+            <>
+              {selected.image && (
+                <span className="bg-muted block size-5 rounded-full border">
+                  <span
+                    style={{
+                      backgroundImage:
+                        selected.image && `url(${selected.image})`,
+                      backgroundSize: "contain",
+                    }}
+                  />
+                </span>
+              )}
+              <span className=" truncate">{selected.label}</span>
+            </>
+          ) : (
+            <span className="truncate">{name}</span>
+          )}
+          <span className="ml-auto">
+            <ChevronDown />
+          </span>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0" align="start">
+        <StatusList
+          setOpen={setOpen}
+          setSelected={setSelected}
+          data={data}
+          placeholder={placeholder}
+          onSearch={onSearch}
+          loading={loading}
+        />
+      </PopoverContent>
+    </Popover>
+  )
+
+  // return (
+  //   <Drawer open={open} onOpenChange={setOpen}>
+  //     <DrawerTrigger asChild>
+  //       <Button variant="outline" className="w-[200px] justify-start">
+  //         {selected ? (
+  //           <>
+  //             {selected.image && (
+  //               <span
+  //                 className="block size-5 rounded-full border"
+  //                 style={{
+  //                   backgroundImage: selected.image
+  //                     ? `url(${selected.image})`
+  //                     : "hsl(var(--bg-border))",
+  //                   backgroundSize: "contain",
+  //                 }}
+  //               />
+  //             )}
+  //             <span className="">{selected.label}</span>
+  //           </>
+  //         ) : (
+  //           <span className="truncate">{name}</span>
+  //         )}
+  //         <span className="ml-auto">
+  //           <ChevronDown />
+  //         </span>
+  //       </Button>
+  //     </DrawerTrigger>
+  //     <DrawerContent>
+  //       <div className="mt-4 border-t">
+  //         <StatusList
+  //           setOpen={setOpen}
+  //           setSelected={setSelected}
+  //           data={data}
+  //           placeholder={placeholder}
+  //           onSearch={onSearch}
+  //           loading={loading}
+  //         />
+  //       </div>
+  //     </DrawerContent>
+  //   </Drawer>
+  // )
+}
+
+function StatusList({
+  setOpen,
+  setSelected,
+  data,
+  placeholder,
+  loading,
+  onSearch,
+}: {
+  setOpen: (open: boolean) => void
+  setSelected: (val: DefaultCombobox | null) => void
+  data: DefaultCombobox[] | undefined
+  placeholder: string
+  loading?: boolean
+  onSearch?: (val: string) => void
+}) {
+  return (
+    <Command>
+      <CommandInput placeholder={placeholder} onValueChange={onSearch} />
+      <CommandList className="">
+        {loading ? (
+          <CommandLoading className="m-auto flex min-h-24 flex-1 items-center justify-center px-4">
+            <Loader2 className="animate-spin" />
+          </CommandLoading>
+        ) : data?.length === 0 ? (
+          <CommandEmpty className="flex min-h-24 flex-1 items-center justify-center px-4">
+            No results found.
+          </CommandEmpty>
+        ) : null}
+
+        <CommandGroup>
+          {data?.map((d) => (
+            <CommandItem
+              key={d.value}
+              value={d.value}
+              onSelect={(value) => {
+                setSelected(
+                  data.find((priority) => priority.value === value) || null
+                )
+                setOpen(false)
+              }}
+              className="flex items-center gap-2"
+            >
+              {d.image && (
+                <span className="bg-muted block size-5 rounded-full border">
+                  <span
+                    style={{
+                      backgroundImage: d.image && `url(${d.image})`,
+                      backgroundSize: "contain",
+                    }}
+                  />
+                </span>
+              )}
+              <span className="truncate">{d.label}</span>
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  )
+}

@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useOptimistic, useState } from "react"
+import React, { useOptimistic, useState, useTransition } from "react"
+import { deleteDepartmentAction } from "@/_server/actions/departments"
 import { getDepartments } from "@/_server/handlers/org"
 import DepartmentForm from "@/forms/department"
 import { produce } from "immer"
@@ -8,7 +9,13 @@ import { Check, PenLine, Plus, Trash, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import EmptyPage from "@/components/pages/empty"
 
@@ -56,17 +63,23 @@ const DepartmentsInfo = ({
           <span>Add Department</span>
         </Button>
       </div>
-
       {list.length > 0 ? (
-        <div className="rounded-md border">
-          {list.map((d) => (
-            <SingleDepartment
-              data={d}
-              key={d.id}
-              setOptimistic={handleOptimistic}
-            />
-          ))}
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Company Departments</CardTitle>
+            <CardDescription>List of all company departments</CardDescription>
+          </CardHeader>
+          <CardContent className="border-t px-0">
+            {list.map((d, i) => (
+              <SingleDepartment
+                data={d}
+                key={i}
+                onEdit={handleOptimistic}
+                setList={setList}
+              />
+            ))}
+          </CardContent>
+        </Card>
       ) : (
         <Card className="flex h-96 p-8">
           <EmptyPage label="No departments found, Let's create one." />
@@ -78,28 +91,33 @@ const DepartmentsInfo = ({
 
 function SingleDepartment({
   data,
-  setOptimistic,
+  onEdit,
+  setList,
 }: {
   data: Awaited<ReturnType<typeof getDepartments>>["items"][0]
-  setOptimistic: (
-    val: Awaited<ReturnType<typeof getDepartments>>["items"][0]
-  ) => void
+  onEdit: (val: Awaited<ReturnType<typeof getDepartments>>["items"][0]) => void
+  setList: (val: Awaited<ReturnType<typeof getDepartments>>["items"]) => void
 }) {
   const [show, setShow] = useState(false)
-
+  const [_, start] = useTransition()
+  const onRemove = (id: string) => {
+    start(() => {
+      setList(((p: any) => p.filter((f: any) => f.id !== id)) as any)
+      deleteDepartmentAction(id)
+    })
+  }
+  console.log({ data: data.name, show })
+  const handle = (val: any) => {
+    setShow(false)
+    onEdit(val)
+  }
   return (
-    <div className="group flex items-center justify-between gap-2 border-b p-2 px-4 last:border-0">
+    <div className="group flex items-center justify-between gap-2 border-b p-2 px-6 last:border-0">
       <div className="flex flex-1 items-center gap-2">
         {show ? (
           <>
             <div className="flex-1">
-              <DepartmentForm
-                data={data}
-                setOptimistic={(val) => {
-                  setOptimistic(val)
-                  setShow(false)
-                }}
-              />
+              <DepartmentForm data={data} setOptimistic={handle} />
             </div>
             <Button type="submit" size={"icon-sm"} form={data.id}>
               <Check />
@@ -124,7 +142,7 @@ function SingleDepartment({
           size={"icon-sm"}
           variant={"outline"}
           className="opacity-0 group-hover:opacity-100"
-          onClick={() => setShow((p) => !p)}
+          onClick={() => onRemove(data.id)}
         >
           <Trash />
         </Button>

@@ -54,18 +54,18 @@ export const AuthForm = () => {
           <ArrowLeftIcon /> <span>Home</span>
         </Link>
       </div>
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">
+      <div className="mx-auto flex max-w-[400px] flex-col justify-center space-y-6">
         <div className="flex flex-col space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">
             Login to MangoHR
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Enter your details below to login
           </p>
         </div>
         <div className={"grid gap-6"}>
           <Form {...form}>
-            <form onSubmit={onSubmit} className="space-y-5">
+            <form onSubmit={onSubmit} className="space-y-6">
               <FormField
                 control={form.control}
                 name="email"
@@ -93,7 +93,7 @@ export const AuthForm = () => {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="bg-background text-muted-foreground px-2">
                 Or continue with
               </span>
             </div>
@@ -110,18 +110,18 @@ export const AuthForm = () => {
             </Button>
           </form>
         </div>
-        <p className="px-8 text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground px-8 text-center text-sm">
           By signing in, you agree to our{" "}
           <Link
             href="/terms"
-            className="underline underline-offset-4 hover:text-primary"
+            className="hover:text-primary underline underline-offset-4"
           >
             Terms of Service
           </Link>{" "}
           and{" "}
           <Link
             href="/privacy"
-            className="underline underline-offset-4 hover:text-primary"
+            className="hover:text-primary underline underline-offset-4"
           >
             Privacy Policy
           </Link>

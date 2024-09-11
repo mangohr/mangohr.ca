@@ -18,14 +18,14 @@ export default function Sidebar() {
       onMouseEnter={() => setExpand(true)}
       onMouseLeave={() => setExpand(false)}
       className={cn(
-        "fixed inset-y-0 left-0 z-50 hidden w-14 flex-col overflow-hidden border-r bg-background transition-all duration-300 ease-in-out sm:flex",
+        "bg-background fixed inset-y-0 left-0 z-50 hidden w-14 flex-col overflow-hidden border-r transition-all duration-300 ease-in-out sm:flex",
         expand && "w-48"
       )}
     >
       <nav className="flex flex-col items-start gap-4 px-2 sm:py-4">
         <Link
           href="#"
-          className="flex items-end justify-start space-x-1 rounded-lg text-foreground transition-colors md:h-8"
+          className="text-foreground flex items-end justify-start space-x-1 rounded-lg transition-colors md:h-8"
           onClick={() => setExpand(false)}
         >
           <span className="flex w-9 justify-center">
@@ -46,7 +46,7 @@ export default function Sidebar() {
             href={m.url}
             onClick={() => setExpand(false)}
             className={cn(
-              "flex items-center justify-start rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:h-9",
+              "text-muted-foreground hover:bg-muted hover:text-foreground flex items-center justify-start rounded-lg transition-colors md:h-9",
               expand && "w-full space-x-1",
               (m.url === "/org/" + orgSlug
                 ? path === m.url
@@ -74,7 +74,7 @@ export default function Sidebar() {
             href={m.url}
             onClick={() => setExpand(false)}
             className={cn(
-              "flex items-center justify-start rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:h-9",
+              "text-muted-foreground hover:bg-muted hover:text-foreground flex items-center justify-start rounded-lg transition-colors md:h-9",
               expand && "w-full space-x-1",
               path.includes(m.url) && "bg-primary/10 text-foreground"
             )}

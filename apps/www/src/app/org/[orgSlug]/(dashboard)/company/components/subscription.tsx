@@ -76,7 +76,7 @@ export default function SubscriptionInfo() {
                     <TableCell>{d.amount} CAD</TableCell>
                     <TableCell>
                       <Download
-                        className="size-4 stroke-muted-foreground"
+                        className="stroke-muted-foreground size-4"
                         strokeWidth={1.7}
                       />
                     </TableCell>

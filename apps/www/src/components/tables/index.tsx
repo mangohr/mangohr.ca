@@ -10,6 +10,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  TableMeta,
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
@@ -57,6 +58,7 @@ export type ListTable = {
     empty?: { icon?: LucideIcon; title?: string; label?: string }
     searchInput?: { placeholder?: string }
   }
+  meta?: TableMeta<any, any>
   components?: {
     navbar?: {
       above?: ReactNode
@@ -75,6 +77,7 @@ export default function ListTable({
   onRowClick,
   components,
   queryKey,
+  meta,
 }: ListTable) {
   const { empty, searchInput } = config || {}
 
@@ -135,6 +138,8 @@ export default function ListTable({
     onRowSelectionChange: setRowSelection,
     manualFiltering: true,
     manualSorting: true,
+    meta: { ...meta },
+
     state: {
       sorting: decodedSort,
       columnFilters: decodedFilters,
@@ -223,7 +228,7 @@ export default function ListTable({
                 <TableRow className="animate-pulse border-b" key={i}>
                   {table.getVisibleFlatColumns().map((_, k) => (
                     <TableCell key={k}>
-                      <div className="h-12 bg-muted" />
+                      <div className="bg-muted h-12" />
                     </TableCell>
                   ))}
                 </TableRow>
@@ -234,7 +239,7 @@ export default function ListTable({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   onClick={() => onRowClick && onRowClick(row.original)}
-                  className="border-b"
+                  className="group border-b"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -260,7 +265,7 @@ export default function ListTable({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground"></div>
+        <div className="text-muted-foreground flex-1 text-sm"></div>
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -314,7 +319,7 @@ function SearchBar({
       <Search
         width={18}
         height={18}
-        className="absolute left-2 top-2 text-muted-foreground"
+        className="text-muted-foreground absolute left-2 top-2"
       />
       <Input
         placeholder={placeholder || "Search..."}

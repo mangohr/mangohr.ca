@@ -28,7 +28,7 @@ export const getAllEmployeesRoles = async () => {
         "auth.user.username",
         "role",
       ])
-      .orderBy("hired_at asc")
+      .orderBy("hired_at desc")
       .execute(),
     db
       .selectFrom("orgs.employee")

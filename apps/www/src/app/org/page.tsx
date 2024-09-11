@@ -4,9 +4,7 @@ import Link from "next/link"
 import { getAllOrgs } from "@/_server/handlers/org"
 import NewOrgForm from "@/forms/org/new"
 import { formatDistanceToNow } from "date-fns"
-import { Plus } from "lucide-react"
 
-import { buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import EmptyPage from "@/components/pages/empty"
 
@@ -15,8 +13,8 @@ async function Orgs() {
 
   const items = [...data.delegated, ...data.owned].sort(
     (a, b) =>
-      new Date(a.created_at ?? 0).getTime() -
-      new Date(b.created_at ?? 0).getTime()
+      new Date(b.created_at ?? 0).getTime() -
+      new Date(a.created_at ?? 0).getTime()
   )
 
   return (
@@ -34,7 +32,7 @@ async function Orgs() {
           <h1 className="text-3xl leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
             My Organizations
           </h1>
-          <p className="max-w-2xl font-light text-foreground">
+          <p className="text-foreground max-w-2xl font-light">
             List of all organizations you can access.
           </p>
         </div>

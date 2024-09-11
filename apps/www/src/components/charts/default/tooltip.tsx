@@ -7,7 +7,7 @@ export const CustomizedTooltip = (props: any) => {
     return (
       <div
         className={cn(
-          "w-fit min-w-24 rounded-md border border-border/40 bg-white/50 p-1 text-sm text-foreground shadow-lg backdrop-blur-sm",
+          "border-border/40 text-foreground w-fit min-w-24 rounded-md border bg-white/50 p-1 text-sm shadow-lg backdrop-blur-sm",
           className
         )}
       >

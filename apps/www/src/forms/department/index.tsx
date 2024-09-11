@@ -41,12 +41,12 @@ export default function DepartmentForm({
   }, [data])
 
   const handleSubmit = form.handleSubmit(async (val) => {
+    setOptimistic({
+      ...val,
+      id: val.id || idGenerate(),
+      created_at: new Date(),
+    })
     setTransition(() => {
-      setOptimistic({
-        ...val,
-        id: val.id || idGenerate(),
-        created_at: new Date(),
-      })
       if (!val.id) {
         form.reset({ id: undefined, name: "" })
       }

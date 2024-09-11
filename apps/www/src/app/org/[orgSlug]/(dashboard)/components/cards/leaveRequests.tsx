@@ -65,7 +65,7 @@ export const LeaveRequestCard = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} className="h-64 bg-muted/50 text-center">
+                <TableCell colSpan={4} className="bg-muted/50 h-64 text-center">
                   No Requests!
                 </TableCell>
               </TableRow>

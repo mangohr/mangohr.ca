@@ -1,14 +1,16 @@
 import type { Metadata } from "next"
-import { GeistMono } from "geist/font/mono"
-import { GeistSans } from "geist/font/sans"
+import { Outfit } from "next/font/google"
 import HolyLoader from "holy-loader"
 
 import "./globals.css"
 
 import QueryProvider from "@/context/queryProvider"
+import { SessionProvider } from "@/context/session"
 
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
+
+const outfit = Outfit({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,10 +23,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={cn(GeistSans.variable, GeistMono.variable)}>
+    <html lang="en" className={cn(outfit.className)}>
       <body className={"flex min-h-screen flex-col antialiased"}>
-        {/* <AuthWrapper> */} {/* Wrapping the entire app with AuthWrapper */}
-        {/* <GlobalProvider> */}
         <HolyLoader
           color="hsl(var(--primary))"
           height={3}
@@ -34,8 +34,6 @@ export default function RootLayout({
         />
         <Toaster position="top-right" />
         <QueryProvider>{children}</QueryProvider>
-        {/* </GlobalProvider> */}
-        {/* </AuthWrapper> */}
       </body>
     </html>
   )

@@ -7,14 +7,16 @@ app = 'mangohr'
 primary_region = 'iad'
 
 [build]
+[build.args]
+PROJECT = "www"
 
 [http_service]
-  internal_port = 3000
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ['app']
+internal_port = 3000
+force_https = true
+auto_start_machines = true
+auto_stop_machines = "stop"
+min_machines_running = 0
+processes = ['app']
 
 [[vm]]
-  size = 'shared-cpu-1x'
+size = 'shared-cpu-1x'

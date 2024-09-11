@@ -1,19 +1,28 @@
 "use client"
 
-import React, { useOptimistic, useState } from "react"
+import React, { useState } from "react"
 import { useParams } from "next/navigation"
 import { useEmployee } from "@/context/employee"
 import EmployeeCurrentJobForm from "@/forms/employee/currentJob"
+import employeeSchema from "@/schema/employee"
 import { Plus } from "lucide-react"
+import { z } from "zod"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-const CurrentJob = () => {
-  const { employee } = useEmployee()
-  const [cj, setCJ] = useOptimistic(employee?.current_job)
-
+const CurrentJob = ({
+  data,
+  setOptimistic,
+}: {
+  data:
+    | NonNullable<ReturnType<typeof useEmployee>["employee"]>["current_job"]
+    | undefined
+  setOptimistic: (
+    val: z.infer<typeof employeeSchema.currentJob.create.validate>
+  ) => void
+}) => {
   const [edit, setEdit] = useState(false)
   const { userName } = useParams()
 
@@ -51,26 +60,26 @@ const CurrentJob = () => {
               id={formId}
               employeeUsername={userName.toString()}
               onSubmit={() => setEdit(false)}
-              setDataOptimistic={setCJ}
+              setDataOptimistic={setOptimistic}
             />
           </div>
         ) : (
           <div className="grid grid-cols-[200px,auto] gap-6 capitalize">
             <p className="text-muted-foreground">Designation</p>
-            <p>{cj?.title || "No Designation"}</p>
+            <p>{data?.title || "No Designation"}</p>
             <p className="text-muted-foreground">Type</p>
-            <p>{cj?.type?.replaceAll("_", " ") || "-"}</p>
+            <p>{data?.type?.replaceAll("_", " ") || "-"}</p>
             <p className="text-muted-foreground">Reports to</p>
             <p className="flex items-center space-x-2">
-              {cj?.reports_to?.image && (
+              {data?.reports_to?.image && (
                 <Avatar className="size-6">
-                  <AvatarImage src={cj?.reports_to?.image || ""} />
+                  <AvatarImage src={data?.reports_to?.image || ""} />
                   <AvatarFallback>
-                    {cj?.reports_to?.name?.charAt(0) || "A"}
+                    {data?.reports_to?.name?.charAt(0) || "A"}
                   </AvatarFallback>
                 </Avatar>
               )}
-              <span>{cj?.reports_to?.name || "Not Assigned"}</span>
+              <span>{data?.reports_to?.name || "Not Assigned"}</span>
             </p>
           </div>
         )}

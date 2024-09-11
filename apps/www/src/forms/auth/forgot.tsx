@@ -55,7 +55,7 @@ export const ForgotPasswordForm = () => {
           <h1 className="text-2xl font-semibold tracking-tight">
             Forgot your password?
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Enter your email address and we will send you a password reset link.
           </p>
         </div>

@@ -72,8 +72,8 @@ export default function SetAttendanceForm({
             >
               {startTime ? (
                 <span className="relative">
-                  <Squircle className="size-4 fill-destructive stroke-none" />
-                  <Squircle className="-z-1 absolute left-0 top-0 size-4 animate-ping fill-destructive stroke-none" />
+                  <Squircle className="fill-destructive size-4 stroke-none" />
+                  <Squircle className="-z-1 fill-destructive absolute left-0 top-0 size-4 animate-ping stroke-none" />
                 </span>
               ) : (
                 <Play />
@@ -83,7 +83,7 @@ export default function SetAttendanceForm({
         </CardHeader>
         <CardContent>
           <div className="overflow-hidden rounded">
-            <div className="flex w-full items-center bg-muted">
+            <div className="bg-muted flex w-full items-center">
               <div
                 className={cn("relative h-6 bg-[hsl(var(--chart-2))]")}
                 style={{

@@ -1,10 +1,12 @@
 "use client"
 
 import React, { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { useParams } from "next/navigation"
 import {
   documentUpload,
   getAllDocuments,
+  getDocumentDownloadUrl,
   onDocumentUploadRemove,
   onDocumentUploadSuccess,
 } from "@/_server/actions/document"
@@ -13,12 +15,15 @@ import * as ProgressPrimitive from "@radix-ui/react-progress"
 import { useQueryClient } from "@tanstack/react-query"
 import { createColumnHelper } from "@tanstack/react-table"
 import { produce } from "immer"
-import { Check, Upload, X } from "lucide-react"
+import { ArrowUpRight, Check, Eye, File, Trash, Upload, X } from "lucide-react"
 
+import { formatBytes } from "@/lib/size"
+import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import ListTable, { QState } from "@/components/tables"
+import ListTable from "@/components/tables"
+import FileIco from "@/components/upload/fileIco"
 
 type SingleFile = {
   id: string
@@ -43,7 +48,18 @@ const columns = [
         </Button>
       )
     },
-    cell: ({ row }) => <p>{row.getValue("name")}</p>,
+    cell: ({ row, table }) => (
+      <Link
+        href={`/org/${table.options.meta.orgSlug}/preview?type=document&path=${encodeURIComponent(row.original.location)}`}
+        target="_blank"
+        className="flex items-center gap-2"
+      >
+        <span>
+          <FileIco className="size-6" mimeType={row.original.type} />
+        </span>
+        <span>{row.getValue("name")}</span>
+      </Link>
+    ),
   }),
   columnHelper.accessor("size", {
     meta: {
@@ -61,7 +77,14 @@ const columns = [
         </Button>
       )
     },
-    cell: ({ getValue }) => <p>{getValue()}</p>,
+    cell: ({ getValue, row, table }) => (
+      <Link
+        href={`/org/${table.options.meta.orgSlug}/preview?type=document&path=${encodeURIComponent(row.original.location)}`}
+        target="_blank"
+      >
+        {formatBytes(getValue())}
+      </Link>
+    ),
   }),
   columnHelper.display({
     id: "actions",
@@ -69,14 +92,24 @@ const columns = [
       headerClassName: "w-[75px]",
     },
     enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-
+    cell: ({ row, table }) => {
       return (
-        <div className="flex justify-center">
-          <Button variant="ghost" className="size-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <DotsHorizontalIcon className="size-4" />
+        <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100">
+          <Link
+            href={`/org/${table.options.meta.orgSlug}/preview?type=document&path=${encodeURIComponent(row.original.location)}`}
+            target="_blank"
+            className={cn(buttonVariants({ size: "icon", variant: "outline" }))}
+          >
+            <span className="sr-only">View File</span>
+            <ArrowUpRight className="size-4" />
+          </Link>
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => table.options.meta.onDelete(row.original.id)}
+          >
+            <span className="sr-only">Delete File</span>
+            <Trash className="size-4" />
           </Button>
         </div>
       )
@@ -86,7 +119,7 @@ const columns = [
 
 export function DocumentList() {
   const [list, setList] = useState<Array<SingleFile>>([])
-
+  const { orgSlug } = useParams()
   const queryClient = useQueryClient()
   const { userName } = useParams() as { userName: string }
 
@@ -130,6 +163,11 @@ export function DocumentList() {
     await onDocumentUploadSuccess({ id })
   }
 
+  const onDelete = async (id: string) => {
+    await onDocumentUploadRemove({ id })
+    queryClient.invalidateQueries({ queryKey: [queryKey] })
+  }
+
   const handleInvalidate = () => {
     queryClient.invalidateQueries({ queryKey: [queryKey] })
     setList((p) => p.filter((f) => f.status !== "success"))
@@ -156,6 +194,7 @@ export function DocumentList() {
         queryKey={queryKey}
         columns={columns}
         getData={(params) => getAllDocuments({ searchParams: params })}
+        meta={{ orgSlug, onDelete }}
         components={{
           navbar: {
             after: (
@@ -296,10 +335,10 @@ function FileUpload({
   return (
     <div>
       <ProgressPrimitive.Root
-        className={"relative w-full overflow-hidden rounded-md bg-primary/20"}
+        className={"bg-primary/20 relative w-full overflow-hidden rounded-md"}
       >
         <ProgressPrimitive.Indicator
-          className="absolute left-0 top-0 size-full flex-1 bg-primary/70 transition-all"
+          className="bg-primary/70 absolute left-0 top-0 size-full flex-1 transition-all"
           style={{ transform: `translateX(-${100 - (progress || 0)}%)` }}
         />
         <div className="relative z-10 flex h-8 items-center px-4">

@@ -54,7 +54,7 @@ export default function Header({ session }: { session: Session | null }) {
   })
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <header className="bg-background sticky top-0 z-30 flex h-14 items-center gap-4 border-b px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button size="icon" variant="outline" className="sm:hidden">
@@ -66,7 +66,7 @@ export default function Header({ session }: { session: Session | null }) {
           <nav className="grid gap-6 text-lg font-medium">
             <Link
               href="/dashboard"
-              className="flex items-end justify-start space-x-1 rounded-lg text-foreground transition-colors md:h-8"
+              className="text-foreground flex items-end justify-start space-x-1 rounded-lg transition-colors md:h-8"
             >
               {/* <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
               <span className="sr-only">Acme Inc</span> */}
@@ -82,7 +82,7 @@ export default function Header({ session }: { session: Session | null }) {
                 key={i}
                 href={n.url}
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
               >
                 <n.icon className="size-5" />
                 {n.name}
@@ -93,7 +93,7 @@ export default function Header({ session }: { session: Session | null }) {
                 key={i}
                 href={n.url}
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
               >
                 <n.icon className="size-5" />
                 {n.name}

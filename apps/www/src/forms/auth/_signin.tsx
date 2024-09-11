@@ -70,7 +70,7 @@ export const AuthForm = ({ type = "login" }: { type: "login" | "signup" }) => {
           <h1 className="text-2xl font-semibold tracking-tight">
             {type === "signup" ? "Create an account" : "Welcome Back"}
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             {type === "signup"
               ? "Enter your details below to create your account"
               : "Enter your details below to login"}
@@ -127,7 +127,7 @@ export const AuthForm = ({ type = "login" }: { type: "login" | "signup" }) => {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="bg-background text-muted-foreground px-2">
                 Or continue with
               </span>
             </div>
@@ -148,18 +148,18 @@ export const AuthForm = ({ type = "login" }: { type: "login" | "signup" }) => {
             </Button>
           </form>
         </div>
-        <p className="px-8 text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground px-8 text-center text-sm">
           By signing in, you agree to our{" "}
           <Link
             href="/terms"
-            className="underline underline-offset-4 hover:text-primary"
+            className="hover:text-primary underline underline-offset-4"
           >
             Terms of Service
           </Link>{" "}
           and{" "}
           <Link
             href="/privacy"
-            className="underline underline-offset-4 hover:text-primary"
+            className="hover:text-primary underline underline-offset-4"
           >
             Privacy Policy
           </Link>

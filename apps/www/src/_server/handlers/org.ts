@@ -1,17 +1,18 @@
+"use server"
+
 import "server-only"
 
 import { headers } from "next/headers"
+import { env } from "@/env"
 import { z } from "zod"
 
 import { nullsToUndefined } from "@/lib/utils"
 
-import { getOrg } from "../cache/org"
 import { db } from "../db"
 import { hasPerm } from "../helpers/hasPerm"
 
 export const getAllOrgs = async () => {
   const { session } = await hasPerm()
-
   const [delegated, owned] = await Promise.all([
     db
       .selectFrom("orgs.employee as e")
@@ -23,11 +24,13 @@ export const getAllOrgs = async () => {
         "orgs.list.id",
         "orgs.list.slug",
       ])
+      .orderBy("created_at desc")
       .execute(),
     db
       .selectFrom("orgs.list")
       .where("owner", "=", session.user.id)
       .select(["name", "created_at", "id", "slug"])
+      .orderBy("created_at desc")
       .execute(),
   ])
   return { delegated, owned }
@@ -57,7 +60,7 @@ export const getOffices = async () => {
       "orgs.office.location",
       "orgs.office.active",
     ])
-    .orderBy("orgs.office.created_at asc")
+    .orderBy("orgs.office.created_at desc")
     .execute()
 
   return { items: nullsToUndefined(offices) }
@@ -85,7 +88,7 @@ export const getWorkSchedules = async () => {
     .selectFrom("orgs.work_schedule")
     .where("org_id", "=", org!.id)
     .selectAll()
-    .orderBy("created_at asc")
+    .orderBy("created_at desc")
     .execute()
 
   return { items: nullsToUndefined(result) }

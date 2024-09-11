@@ -65,7 +65,7 @@ const Timeline = () => {
   ];
 
   return (
-    <div className="rounded-md border bg-background">
+    <div className="bg-background rounded-md border">
       <ScrollArea className="w-full whitespace-nowrap">
         <div className="flex w-full items-center justify-between gap-6 p-4">
           <div className="flex flex-col justify-between gap-2">
@@ -91,7 +91,7 @@ const Timeline = () => {
               {months.map((d, o) => (
                 <p
                   key={d}
-                  className="h-5 text-center text-[0.6rem] font-medium capitalize text-muted-foreground"
+                  className="text-muted-foreground h-5 text-center text-[0.6rem] font-medium capitalize"
                 >
                   {d.substring(0, 3)}
                 </p>
@@ -102,7 +102,7 @@ const Timeline = () => {
                 {days.map((d, i) => (
                   <p
                     key={d}
-                    className="w-7 text-[0.6rem] font-medium  capitalize leading-normal text-muted-foreground"
+                    className="text-muted-foreground w-7 text-[0.6rem]  font-medium capitalize leading-normal"
                   >
                     {(1 & i && d.substring(0, 3)) || ""}
                   </p>
@@ -142,7 +142,7 @@ const Timeline = () => {
                           <div
                             key={i}
                             className={cn(
-                              "m-0.5 block size-3 rounded bg-muted",
+                              "bg-muted m-0.5 block size-3 rounded",
                               rands.includes(i) && color
                             )}
                           ></div>

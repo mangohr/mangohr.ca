@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { getAllEmployees } from "@/_server/actions/employee"
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
@@ -27,7 +28,10 @@ const columns = [
     header: "",
     cell: ({ row, getValue }) => {
       return (
-        <div className="flex justify-center gap-4">
+        <Link
+          href={`/employee/${row.original.username}`}
+          className="flex justify-center gap-4"
+        >
           <Avatar>
             <AvatarImage src={getValue() || ""} />
             <AvatarFallback>
@@ -38,7 +42,7 @@ const columns = [
                 .join("")}
             </AvatarFallback>
           </Avatar>
-        </div>
+        </Link>
       )
     },
   }),
@@ -55,7 +59,11 @@ const columns = [
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <Link href={`/employee/${row.original.username}`}>
+        {row.getValue("name")}
+      </Link>
+    ),
   }),
   columnHelper.accessor("email", {
     header: ({ column }) => {
@@ -70,11 +78,19 @@ const columns = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => (
+      <Link href={`/employee/${row.original.username}`} className="lowercase">
+        {row.getValue("email")}
+      </Link>
+    ),
   }),
   columnHelper.accessor("department", {
     header: "Department",
-    cell: (val) => <div className="capitalize">{val.getValue()}</div>,
+    cell: ({ row, getValue }) => (
+      <Link href={`/employee/${row.original.username}`} className="capitalize">
+        {getValue() || "-"}
+      </Link>
+    ),
   }),
   // columnHelper.accessor("position", {
   //   header: "Position",
@@ -82,48 +98,47 @@ const columns = [
   // }),
   columnHelper.accessor("hired_at", {
     header: "Hired Date",
-    cell: (val) => (
-      <div className="capitalize">
-        {(val.getValue() &&
-          format(new Date(val.getValue() || ""), "dd MMM yyyy")) ||
+    cell: ({ row, getValue }) => (
+      <Link href={`/employee/${row.original.username}`} className="capitalize">
+        {(getValue() && format(new Date(getValue() || ""), "dd MMM yyyy")) ||
           "-"}
-      </div>
+      </Link>
     ),
   }),
-  columnHelper.display({
-    id: "actions",
-    enableHiding: false,
+  // columnHelper.display({
+  //   id: "actions",
+  //   enableHiding: false,
 
-    cell: ({ row }) => {
-      const payment = row.original
+  //   cell: ({ row }) => {
+  //     const data = row.original
 
-      return (
-        <div className="flex justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="size-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <DotsHorizontalIcon className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() =>
-                  navigator.clipboard.writeText(payment.id.toString())
-                }
-              >
-                Copy payment ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      )
-    },
-  }),
+  //     return (
+  //       <div className="flex justify-center">
+  //         <DropdownMenu>
+  //           <DropdownMenuTrigger asChild>
+  //             <Button variant="ghost" className="size-8 p-0">
+  //               <span className="sr-only">Open menu</span>
+  //               <DotsHorizontalIcon className="size-4" />
+  //             </Button>
+  //           </DropdownMenuTrigger>
+  //           <DropdownMenuContent align="end">
+  //             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+  //             <DropdownMenuItem
+  //               onClick={() =>
+  //                 navigator.clipboard.writeText(data.id.toString())
+  //               }
+  //             >
+  //               Copy Employee ID
+  //             </DropdownMenuItem>
+  //             <DropdownMenuSeparator />
+  //             <DropdownMenuItem>Layoff Employee</DropdownMenuItem>
+  //             <DropdownMenuItem>View payment details</DropdownMenuItem>
+  //           </DropdownMenuContent>
+  //         </DropdownMenu>
+  //       </div>
+  //     )
+  //   },
+  // }),
 ]
 
 export default function EmployeeList() {

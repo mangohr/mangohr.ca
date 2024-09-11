@@ -14,7 +14,7 @@ export default async function Layout({
   return (
     <>
       <OrgProvider data={org}>
-        <div className="flex min-h-screen w-full flex-col overflow-x-auto bg-muted/40">
+        <div className="bg-muted/40 flex min-h-screen w-full flex-col overflow-x-auto">
           <Sidebar />
           <main className="flex min-h-screen flex-col sm:pl-14">
             {/* <Header session={session} /> */}

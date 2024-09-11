@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { getAllTimeOffs } from "@/_server/actions/timeoff"
 import { CaretSortIcon } from "@radix-ui/react-icons"
@@ -22,7 +23,10 @@ const columns = [
     header: "",
     cell: ({ row, getValue }) => {
       return (
-        <div className="flex justify-center gap-4">
+        <Link
+          href={`/employee/${row.original.username}`}
+          className="flex justify-center gap-4"
+        >
           <Avatar>
             <AvatarImage src={getValue() || ""} />
             <AvatarFallback>
@@ -33,7 +37,7 @@ const columns = [
                 .join("")}
             </AvatarFallback>
           </Avatar>
-        </div>
+        </Link>
       )
     },
   }),
@@ -50,7 +54,11 @@ const columns = [
         </Button>
       )
     },
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <Link href={`/employee/${row.original.username}`}>
+        {row.getValue("name")}
+      </Link>
+    ),
   }),
   columnHelper.accessor("start_date", {
     header: ({ column }) => {
@@ -69,11 +77,13 @@ const columns = [
       const v = row.original
 
       return (
-        <Badge variant={"outline"} className="font-light">
-          {format(v.start_date, "PP")}
-          <ArrowRight className="mx-2 size-3" />
-          {format(v.end_date, "PP")}
-        </Badge>
+        <Link href={`/employee/${row.original.username}`}>
+          <Badge variant={"outline"} className="font-light">
+            {format(v.start_date, "PP")}
+            <ArrowRight className="mx-2 size-3" />
+            {format(v.end_date, "PP")}
+          </Badge>
+        </Link>
       )
     },
   }),
@@ -90,16 +100,20 @@ const columns = [
         </Button>
       )
     },
-    cell: ({ getValue }) => {
+    cell: ({ row, getValue }) => {
       const v = getValue()
-      return <div className="lowercase">{getValue() || "-"}</div>
+      return (
+        <Link href={`/employee/${row.original.username}`} className="lowercase">
+          {getValue() || "-"}
+        </Link>
+      )
     },
   }),
 
   columnHelper.accessor("status", {
     header: "Status",
-    cell: ({ getValue }) => (
-      <div className="capitalize">
+    cell: ({ getValue, row }) => (
+      <Link href={`/employee/${row.original.username}`} className="capitalize">
         <Badge
           className="capitalize"
           variant={
@@ -112,7 +126,7 @@ const columns = [
         >
           {getValue().replaceAll("_", " ")}
         </Badge>
-      </div>
+      </Link>
     ),
   }),
   columnHelper.display({

@@ -75,6 +75,10 @@ export const scopes = [
     id: "read:attendance:list",
     label: "Able to modify time off requests",
   },
+  {
+    id: "add:attendance",
+    label: "Able to add attendance on employees all behalf",
+  },
 ] as const
 
 // // Extract the types dynamically

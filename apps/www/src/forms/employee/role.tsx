@@ -93,7 +93,7 @@ export default function EmployeeRoleForm<
                         {(Object.keys(roles) as Array<keyof typeof roles>).map(
                           (r, i) => (
                             <Label key={i} className="relative block w-full">
-                              <div className="flex items-center space-x-2 rounded-md  border p-2 ring-1 ring-transparent [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:ring-primary">
+                              <div className="[&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:ring-primary flex items-center  space-x-2 rounded-md border p-2 ring-1 ring-transparent">
                                 <RadioGroupItem value={r} />
                                 <div className="w-full space-y-1 text-start font-normal">
                                   <p className="font-medium">

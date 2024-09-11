@@ -28,14 +28,14 @@ export default function VerifyMagicLinkForm() {
           <h1 className="text-2xl font-semibold tracking-tight">
             Verification Link Sent
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             We&apos;ve sent a verification link to{" "}
             <span className="font-semibold">{email || "your email"}</span>,
             Please check you inbox.
           </p>
         </div>
         <Button onClick={() => signInWithEmail({ email })}>Resend Email</Button>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Not received? Don&apos;t forget to check spam folder.
         </p>
         <Link

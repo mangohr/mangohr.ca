@@ -32,10 +32,10 @@ export const updateDepartmentAction = async (
   return true
 }
 
-export const deleteDepartmentAction = async (schedule_id: string) => {
+export const deleteDepartmentAction = async (dep_id: string) => {
   const orgSlug = z.string().parse(headers().get("x-org"))
 
-  const id = departmentSchema.delete.validate.parse(schedule_id)
+  const id = departmentSchema.delete.validate.parse(dep_id)
   await hasPerm({ orgSlug })
 
   await db.deleteFrom("orgs.department").where("id", "=", id).execute()

@@ -48,7 +48,7 @@ export default function EmployeeGeneral() {
           <>
             <Card>
               <CardHeader className="grid grid-cols-[auto,200px]">
-                <CardTitle>Personal Info</CardTitle>
+                <CardTitle>Personal Details</CardTitle>
               </CardHeader>
               <CardContent>
                 <div>
@@ -80,7 +80,7 @@ export default function EmployeeGeneral() {
             </Card>
             <Card>
               <CardHeader className="grid grid-cols-[auto,200px]">
-                <CardTitle>Address</CardTitle>
+                <CardTitle>Address Details</CardTitle>
               </CardHeader>
               <CardContent>
                 <div>
@@ -104,7 +104,7 @@ export default function EmployeeGeneral() {
             </Card>
             <Card>
               <CardHeader className="grid grid-cols-[auto,200px]">
-                <CardTitle>Emergency Contact</CardTitle>
+                <CardTitle>Emergency Contacts</CardTitle>
               </CardHeader>
               <CardContent>
                 {(employee?.emergency_contacts?.length || 0) > 0 ? (

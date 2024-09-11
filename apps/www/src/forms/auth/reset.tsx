@@ -57,7 +57,7 @@ export const ResetPasswordForm = () => {
           <h1 className="text-2xl font-semibold tracking-tight">
             Reset password
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Enter your new password below
           </p>
         </div>

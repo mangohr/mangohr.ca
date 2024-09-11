@@ -1,0 +1,298 @@
+# flyctl launch added from .gitignore
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Dependencies
+**/node_modules
+**/.pnp
+**/.pnp.js
+
+# Local env files
+# **/.env
+# **/.env.local
+# **/.env.development.local
+# **/.env.test.local
+# **/.env.production.local
+
+# Testing
+**/coverage
+
+# Turbo
+**/.turbo
+
+# Vercel
+**/.vercel
+
+# Build Outputs
+**/.next
+**/out
+**/build
+**/dist
+
+
+# Debug
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Misc
+**/.DS_Store
+**/*.pem
+**/credentials.json
+**/cloud-sql-proxy
+**/service-account-key.json
+**/serviceAccountKey.json
+
+
+**/schema_dump.sql
+
+# flyctl launch added from apps/dashboard/.gitignore
+# Logs
+apps/dashboard/**/logs
+apps/dashboard/**/*.log
+apps/dashboard/**/npm-debug.log*
+apps/dashboard/**/yarn-debug.log*
+apps/dashboard/**/yarn-error.log*
+apps/dashboard/**/pnpm-debug.log*
+apps/dashboard/**/lerna-debug.log*
+
+apps/dashboard/**/node_modules
+apps/dashboard/**/dist
+apps/dashboard/**/dist-ssr
+apps/dashboard/**/*.local
+
+# Editor directories and filesgi
+apps/dashboard/**/.vscode/*
+!apps/dashboard/**/.vscode/extensions.json
+apps/dashboard/**/.idea
+
+apps/dashboard/**/.DS_Store
+apps/dashboard/**/*.suo
+apps/dashboard/**/*.ntvs*
+apps/dashboard/**/*.njsproj
+apps/dashboard/**/*.sln
+apps/dashboard/**/*.sw?
+
+# Extras
+# .env.local
+apps/dashboard/**/analyse.html
+apps/dashboard/**/stats.html
+# .env*
+
+# flyctl launch added from apps/webchat/.gitignore
+# Logs
+apps/webchat/**/logs
+apps/webchat/**/*.log
+apps/webchat/**/npm-debug.log*
+apps/webchat/**/yarn-debug.log*
+apps/webchat/**/yarn-error.log*
+apps/webchat/**/pnpm-debug.log*
+apps/webchat/**/lerna-debug.log*
+
+apps/webchat/**/node_modules
+apps/webchat/**/dist
+apps/webchat/**/dist-ssr
+apps/webchat/**/*.local
+
+# Editor directories and files
+apps/webchat/**/.vscode/*
+!apps/webchat/**/.vscode/extensions.json
+apps/webchat/**/.idea
+apps/webchat/**/.DS_Store
+apps/webchat/**/*.suo
+apps/webchat/**/*.ntvs*
+apps/webchat/**/*.njsproj
+apps/webchat/**/*.sln
+apps/webchat/**/*.sw?
+
+apps/webchat/**/stats.html
+
+
+# flyctl launch added from apps/www/.gitignore
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+apps/www/node_modules
+apps/www/.pnp
+apps/www/**/.pnp.js
+apps/www/**/.yarn/install-state.gz
+
+# testing
+apps/www/coverage
+
+# next.js
+apps/www/.next
+apps/www/out
+
+# production
+apps/www/build
+
+# misc
+apps/www/**/.DS_Store
+apps/www/**/*.pem
+
+# debug
+apps/www/**/npm-debug.log*
+apps/www/**/yarn-debug.log*
+apps/www/**/yarn-error.log*
+
+# local env files
+apps/www/**/.env*.local
+
+# vercel
+apps/www/**/.vercel
+
+# typescript
+apps/www/**/*.tsbuildinfo
+apps/www/**/next-env.d.ts
+
+# flyctl launch added from firebase/.gitignore
+# Compiled JavaScript files
+firebase/**/dist/**/*.js
+firebase/**/dist/**/*.js.map
+
+# TypeScript v1 declaration files
+firebase/**/typings
+
+# Node.js dependency directory
+firebase/**/node_modules
+
+# Exclude the emulate script
+!firebase/scripts/emulate
+
+firebase/**/isolate
+
+# flyctl launch added from node_modules/.pnpm/tailwindcss@3.4.0/node_modules/tailwindcss/stubs/.gitignore
+!node_modules/.pnpm/tailwindcss@3.4.0/node_modules/tailwindcss/stubs/**/*
+
+# flyctl launch added from node_modules/.pnpm/tailwindcss@3.4.1/node_modules/tailwindcss/stubs/.gitignore
+!node_modules/.pnpm/tailwindcss@3.4.1/node_modules/tailwindcss/stubs/**/*
+
+# flyctl launch added from node_modules/.pnpm/tailwindcss@3.4.3/node_modules/tailwindcss/stubs/.gitignore
+!node_modules/.pnpm/tailwindcss@3.4.3/node_modules/tailwindcss/stubs/**/*
+
+# flyctl launch added from services/_shared/.gitignore
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+services/_shared/dist
+services/_shared/node_modules
+services/_shared/.pnp
+services/_shared/**/.pnp.js
+services/_shared/**/.yarn/install-state.gz
+
+
+# testing
+services/_shared/coverage
+
+# next.js
+services/_shared/.next
+services/_shared/out
+
+# production
+services/_shared/build
+
+# misc
+services/_shared/**/.DS_Store
+services/_shared/**/*.pem
+
+# debug
+services/_shared/**/npm-debug.log*
+services/_shared/**/yarn-debug.log*
+services/_shared/**/yarn-error.log*
+
+# local env files
+services/_shared/**/.env*.local
+
+# vercel
+services/_shared/**/.vercel
+
+# typescript
+services/_shared/**/*.tsbuildinfo
+services/_shared/**/next-env.d.ts
+
+#G-Cloud Proxy File
+services/_shared/**/cloud-sql-proxy.exe
+services/_shared/cloudsql
+services/_shared/**/service-account-key.json
+services/_shared/**/serviceAccountKey.json
+#rcloud
+services/_shared/**/*notebook.json
+
+#G-Cloud Proxy File
+services/_shared/**/cloud-sql-proxy.exe
+services/_shared/cloudsql
+services/_shared/**/service-account-key.json
+
+#rcloud
+services/_shared/**/*notebook.json
+
+services/_shared/**/cloud-sql-proxy.exe
+services/_shared/cloudsql
+services/_shared/**/serviceAccountKey.json
+services/_shared/**/stats.html
+
+# flyctl launch added from services/mailer/.gitignore
+services/mailer/**/include ../_shared/.gitignore
+
+# flyctl launch added from services/monolith/.gitignore
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+services/monolith/dist
+services/monolith/node_modules
+services/monolith/.pnp
+services/monolith/**/.pnp.js
+services/monolith/**/.yarn/install-state.gz
+
+
+# testing
+services/monolith/coverage
+
+# next.js
+services/monolith/.next
+services/monolith/out
+
+# production
+services/monolith/build
+
+# misc
+services/monolith/**/.DS_Store
+services/monolith/**/*.pem
+
+# debug
+services/monolith/**/npm-debug.log*
+services/monolith/**/yarn-debug.log*
+services/monolith/**/yarn-error.log*
+
+# local env files
+services/monolith/**/.env*.local
+
+# vercel
+services/monolith/**/.vercel
+
+# typescript
+services/monolith/**/*.tsbuildinfo
+services/monolith/**/next-env.d.ts
+
+#G-Cloud Proxy File
+services/monolith/**/cloud-sql-proxy.exe
+services/monolith/cloudsql
+services/monolith/**/service-account-key.json
+services/monolith/**/serviceAccountKey.json
+#rcloud
+services/monolith/**/*notebook.json
+
+#G-Cloud Proxy File
+services/monolith/**/cloud-sql-proxy.exe
+services/monolith/cloudsql
+services/monolith/**/service-account-key.json
+services/monolith/**/gc-keys.json
+
+#rcloud
+services/monolith/**/*notebook.json
+
+services/monolith/**/cloud-sql-proxy.exe
+services/monolith/cloudsql
+services/monolith/**/serviceAccountKey.json
+services/monolith/**/stats.html
+fly.toml

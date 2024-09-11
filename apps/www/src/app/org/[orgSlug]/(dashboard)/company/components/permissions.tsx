@@ -60,7 +60,7 @@ export default function PermissionInfo({
         placeholder="Search Employee"
         className="w-full"
       />
-      <div className="rounded-md border bg-background">
+      <div className="bg-background rounded-md border">
         <Table>
           <TableCaption className="border-t">1 employee(s) found.</TableCaption>
           <TableHeader>

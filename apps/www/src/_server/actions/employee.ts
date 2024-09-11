@@ -122,10 +122,9 @@ export const updateEmployeeCurrentJob = async (props: {
   if (!emp || !emp?.user_id) throw Error("Employee not found!")
 
   let reports_to_emp_id = undefined
-  console.log({ reporting_username })
   if (reporting_username) {
     if (reporting_username === session.user.username) {
-      reports_to_emp_id = session.user.id
+      reports_to_emp_id = session.employee!.id
     } else {
       const reportingEmp = await getEmployee(org!.id, username).catch((err) => {
         throw new Error("Reporting employee not found!")
@@ -134,6 +133,7 @@ export const updateEmployeeCurrentJob = async (props: {
       reports_to_emp_id = reportingEmp?.id || undefined
     }
   }
+  console.log({ reporting_username, reports_to_emp_id })
 
   const values = {
     ...data,

@@ -18,7 +18,7 @@ const EmployeeBarChart = () => {
           <CardTitle className="text-4xl">15</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-xs text-muted-foreground">Total employees</div>
+          <div className="text-muted-foreground text-xs">Total employees</div>
         </CardContent>
         {/* <CardFooter>
             <Progress value={12} aria-label="12% increase" />
@@ -30,7 +30,7 @@ const EmployeeBarChart = () => {
           <CardTitle className="text-4xl">15</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             Total departments count
           </div>
         </CardContent>

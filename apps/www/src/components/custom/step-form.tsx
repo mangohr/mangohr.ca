@@ -139,7 +139,7 @@ export function MultiStepForm({
               <div
                 key={i}
                 className={cn(
-                  "size-6 rounded-md bg-border",
+                  "bg-border size-6 rounded-md",
                   activeIdx === i && "bg-primary"
                 )}
               />

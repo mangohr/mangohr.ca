@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useTransition } from "react"
-import { useParams } from "next/navigation"
 import { updateOrgAction } from "@/_server/actions/org"
 import { useOrg } from "@/context/org"
 import orgSchema from "@/schema/org"

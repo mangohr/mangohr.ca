@@ -10,4 +10,5 @@ declare module "@tanstack/react-table" {
     headerClassName?: string
     cellClassName?: string
   }
+  interface TableMeta<any> {}
 }

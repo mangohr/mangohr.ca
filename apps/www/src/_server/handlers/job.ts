@@ -36,10 +36,11 @@ export const getEmployeeJobs = async (params: {
       "type",
       "start_date",
       "end_date",
-      sql<string>`trim(COALESCE(first_name, '') || ' ' || COALESCE(middle_name, '') || COALESCE(last_name, ''))`.as(
+      sql<string>`trim(COALESCE(first_name, '') || ' ' || COALESCE(middle_name, '') || ' ' || COALESCE(last_name, ''))`.as(
         "reports_to"
       ),
     ])
+    .orderBy("start_date desc")
     .execute()
 
   return result
