@@ -145,13 +145,13 @@ export default async function Home() {
             </h2>
             <div></div>
             <p className="text-lg">
-              Customer success is at the heart of what we do. We're dedicated to
-              helping Canadian SMBs thrive, which is why our CoreHR package is
-              always free—no credit card needed. We want you to experience our
-              services fully and confidently without any obligation. Every
-              package comes with 24/7 support for priority issues and a
-              dedicated customer success manager to ensure mangoHR meets your
-              needs perfectly.
+              Customer success is at the heart of what we do. We&apos;re
+              dedicated to helping Canadian SMBs thrive, which is why our CoreHR
+              package is always free—no credit card needed. We want you to
+              experience our services fully and confidently without any
+              obligation. Every package comes with 24/7 support for priority
+              issues and a dedicated customer success manager to ensure mangoHR
+              meets your needs perfectly.
             </p>
             <Button
               className="gap-4 rounded-full text-lg"
