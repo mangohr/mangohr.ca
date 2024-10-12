@@ -2,10 +2,14 @@ name: Deploy to App Runner
 on:
   push:
     branches: [main]
+
 concurrency:
   group: ${{ github.head_ref }}-webchat
   cancel-in-progress: true
 
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read
 jobs:
   deploy:
     runs-on: ubuntu-latest
