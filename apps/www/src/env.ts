@@ -44,4 +44,5 @@ export const env = createEnv({
     S3_UPLOAD_BUCKET: process.env.S3_UPLOAD_BUCKET,
     S3_UPLOAD_REGION: process.env.S3_UPLOAD_REGION,
   },
+  skipValidation: true,
 })

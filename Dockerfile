@@ -29,7 +29,6 @@ COPY --from=pruner /app/.eslintrc.json ./.eslintrc.json
 COPY --from=pruner /app/tailwind.config.cjs ./tailwind.config.cjs
 COPY --from=pruner /app/postcss.config.cjs ./postcss.config.cjs
 COPY --from=pruner /app/prettier.config.cjs ./prettier.config.cjs
-COPY --from=pruner /app/.env ./.env
 
 
 # First install the dependencies (as they change less often)
