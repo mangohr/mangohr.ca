@@ -55,5 +55,6 @@ COPY --from=build /app/apps/${PROJECT}/.next/static ./apps/${PROJECT}/.next/stat
 COPY --from=build /app/apps/${PROJECT}/public ./apps/${PROJECT}/public
 
 # CMD ["npm", "run", "start"]
+EXPOSE 3000
 CMD node apps/www/server.js
 
