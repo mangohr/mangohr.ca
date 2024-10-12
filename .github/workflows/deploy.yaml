@@ -8,14 +8,15 @@ concurrency:
   group: ${{ github.head_ref }}-mangohr-ca
   cancel-in-progress: true
 
+permissions:
+  id-token: write # required!
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
-    permissions:
-      contents: "read"
-      id-token: "write"
+    secrets: inherit
 
     steps:
       - name: Configure AWS credentials
