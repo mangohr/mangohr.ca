@@ -1,4 +1,4 @@
-ARG NODE_VERSION=20.6.1
+ARG NODE_VERSION=18
 
 FROM node:${NODE_VERSION}-alpine AS base
 RUN apk update
@@ -9,7 +9,7 @@ RUN pnpm config set store-dir ~/.pnpm-store
 # Prune projects
 FROM base AS pruner
 ARG PROJECT
-RUN echo "Project: ${PROJECT}"
+RUN echo "Project:" ${PROJECT}
 WORKDIR /app
 COPY . .
 RUN turbo prune --scope=${PROJECT} --docker
