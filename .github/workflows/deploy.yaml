@@ -18,9 +18,8 @@ jobs:
       id-token: "write"
 
     steps:
-      - name: test
-        id: test
-        run: echo ${{ secrets.AWS_REGION }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
