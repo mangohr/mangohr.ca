@@ -8,13 +8,6 @@ concurrency:
   group: ${{ github.head_ref }}-mangohr-ca
   cancel-in-progress: true
 
-env:
-  AWS_REGION: ${{ vars.AWS_REGION }}
-  AWS_ROLE_TO_ASSUME: ${{ vars.AWS_ROLE_TO_ASSUME }}
-  ECR_REPO: ${{ vars.ECR_REPO }}
-  ROLE_ARN: ${{ vars.ROLE_ARN }}
-  APP_RUNNER_SERVICE_NAME: ${{ vars.APP_RUNNER_SERVICE_NAME }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -27,14 +20,14 @@ jobs:
     steps:
       - name: test
         id: test
-        run: echo ${{ env.AWS_REGION }}
+        run: echo ${{ secrets.AWS_REGION }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           # Use GitHub OIDC provider
-          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -44,7 +37,7 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ env.ECR_REPO }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
@@ -57,10 +50,10 @@ jobs:
         env:
           SECRET_ENV: secret_env
         with:
-          service: ${{ env.APP_RUNNER_SERVICE_NAME }}
+          service: ${{ secrets.APP_RUNNER_SERVICE_NAME }}
           image: ${{ steps.build-image.outputs.image }}
-          access-role-arn: ${{ env.ROLE_ARN }}
-          region: ${{ env.AWS_REGION }}
+          access-role-arn: ${{ secrets.ROLE_ARN }}
+          region: ${{ secrets.AWS_REGION }}
           cpu: 0.25
           memory: 0.5
           wait-for-service-stability-seconds: 600
