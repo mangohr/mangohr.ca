@@ -14,8 +14,8 @@ jobs:
     timeout-minutes: 15
 
     permissions:
-      id-token: write
-      contents: read
+      contents: "read"
+      id-token: "write"
 
     steps:
       - name: Configure AWS credentials
