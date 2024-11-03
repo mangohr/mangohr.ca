@@ -5,7 +5,6 @@ import HolyLoader from "holy-loader"
 import "./globals.css"
 
 import QueryProvider from "@/context/queryProvider"
-import { SessionProvider } from "@/context/session"
 
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
@@ -34,7 +33,7 @@ export default function RootLayout({
         />
         <Toaster position="top-right" />
         <QueryProvider>
-          <main>{children}</main>
+          <main className="flex min-h-screen flex-col">{children}</main>
         </QueryProvider>
       </body>
     </html>
