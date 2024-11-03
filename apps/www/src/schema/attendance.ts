@@ -15,11 +15,16 @@ const attendanceSchema = {
   },
   add: {
     scope: scopeIds["add:attendance"],
-    validate: z.object({
-      employee_id: bigintStringSchema,
-      login: dateSchema,
-      logout: dateSchema,
-    }),
+    validate: z
+      .object({
+        employee: z.string().min(1),
+        login: dateSchema,
+        logout: dateSchema,
+      })
+      .refine((data) => data.login < data.logout, {
+        message: "Login date must not be greater than logout date",
+        path: ["login"], // specify the path for the error
+      }),
   },
 }
 

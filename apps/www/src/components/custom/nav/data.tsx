@@ -1,5 +1,6 @@
-import { Building, Calendar, Home, Settings, Timer, Users } from "lucide-react";
-export const navs = (orgSlug: string) => ({
+import { Building, Calendar, Home, Settings, Timer, Users } from "lucide-react"
+
+export const superUserNavs = (orgSlug: string) => ({
   main: [
     {
       name: "Home",
@@ -34,4 +35,27 @@ export const navs = (orgSlug: string) => ({
       url: `/org/${orgSlug}/settings`,
     },
   ],
-});
+})
+
+export const employeeUserNavs = (orgSlug: string) => ({
+  main: [
+    {
+      name: "Home",
+      icon: Home,
+      url: `/org/${orgSlug}`,
+    },
+
+    {
+      name: "Company",
+      icon: Building,
+      url: `/org/${orgSlug}/company`,
+    },
+  ],
+  bottom: [
+    {
+      name: "Settings",
+      icon: Settings,
+      url: `/org/${orgSlug}/settings`,
+    },
+  ],
+})

@@ -19,7 +19,7 @@ export default async function Page() {
           </p>
         </div>
         <div className="flex gap-4">
-          <Link href={"edit-attendance"} className={cn(buttonVariants())}>
+          <Link href={"new-employee"} className={cn(buttonVariants())}>
             <Plus height={18} width={18} strokeWidth={1.5} />
             <span>Add Employee</span>
           </Link>

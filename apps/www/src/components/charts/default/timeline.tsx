@@ -1,26 +1,36 @@
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipProvider,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+"use client"
+
+import React, { useMemo, useState } from "react"
+import { getTimeOffChart } from "@/_server/handlers/timeoff"
 import {
   eachDayOfInterval,
   endOfYear,
-  startOfYear,
   format,
+  getDayOfYear,
   getYear,
+  startOfYear,
   subYears,
-} from "date-fns";
-import React from "react";
-import { number } from "zod";
+} from "date-fns"
 
-const Timeline = () => {
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
+const Timeline = ({
+  data,
+}: {
+  data: Awaited<ReturnType<typeof getTimeOffChart>>
+}) => {
+  const [today, setToday] = useState(new Date())
+
   const months = [
     "january",
     "february",
@@ -34,7 +44,7 @@ const Timeline = () => {
     "october",
     "november",
     "december",
-  ];
+  ]
   const days = [
     "sunday",
     "monday",
@@ -43,18 +53,12 @@ const Timeline = () => {
     "thursday",
     "friday",
     "saturday",
-  ];
-
-  const today = new Date();
+  ]
 
   const dates = eachDayOfInterval({
     start: startOfYear(today),
     end: endOfYear(today),
-  });
-
-  const rands = [...Array(150)].map((_, i) =>
-    Math.floor(Math.random() * (365 - 0 + 1) + 0)
-  );
+  })
 
   const legends = [
     { color: "bg-muted", min: 0, max: undefined },
@@ -62,7 +66,24 @@ const Timeline = () => {
     { color: "bg-primary/40", min: 5, max: 20 },
     { color: "bg-primary/70", min: 20, max: 50 },
     { color: "bg-primary", min: 50, max: -1 },
-  ];
+  ]
+
+  let totalTimeOffs = 0
+
+  data.forEach((d) => {
+    totalTimeOffs += Number(d.value)
+    return getDayOfYear(d.date)
+  })
+
+  const years = useMemo(
+    () => [
+      getYear(today),
+      getYear(subYears(today, 1)),
+      getYear(subYears(today, 2)),
+      getYear(subYears(today, 3)),
+    ],
+    []
+  )
 
   return (
     <div className="bg-background rounded-md border">
@@ -70,7 +91,11 @@ const Timeline = () => {
         <div className="flex w-full items-center justify-between gap-6 p-4">
           <div className="flex flex-col justify-between gap-2">
             <div>
-              <p className="text-2xl font-medium leading-none">400</p>
+              {typeof window !== undefined && (
+                <p className="text-2xl font-medium leading-none">
+                  {totalTimeOffs}
+                </p>
+              )}
               <Label className="font-light">Time-offs this year</Label>
             </div>
             <Separator />
@@ -110,19 +135,25 @@ const Timeline = () => {
               </div>
               <div className="grid w-full grid-flow-col grid-rows-[repeat(7,1fr)]">
                 {dates.map((d, i) => {
-                  const val = Math.floor(Math.random() * (100 - 0 + 1) + 0);
-                  let color = legends[0].color;
+                  const val = Number(
+                    data.find((v) => {
+                      return getDayOfYear(v.date) === getDayOfYear(d)
+                    })?.value || 0
+                  )
+
+                  let color = legends[0].color
                   for (const l of legends) {
                     if (
                       l.min === 0 &&
                       typeof l.max === undefined &&
                       l.min === val
                     ) {
-                      break;
+                      break
                     }
                     if (l.max === -1 && l.min > 0 && val > l.min) {
-                      color = l.color;
-                      break;
+                      color = l.color
+
+                      break
                     }
 
                     if (
@@ -131,8 +162,8 @@ const Timeline = () => {
                       val > l.min &&
                       val <= l.max
                     ) {
-                      color = l.color;
-                      break;
+                      color = l.color
+                      break
                     }
                   }
                   return (
@@ -143,44 +174,42 @@ const Timeline = () => {
                             key={i}
                             className={cn(
                               "bg-muted m-0.5 block size-3 rounded",
-                              rands.includes(i) && color
+                              color
                             )}
                           ></div>
                         </TooltipTrigger>
                         <TooltipContent>
                           <div>
                             <p>
-                              {(rands.includes(i) && val) || 0} Time-offs <br />{" "}
-                              on {format(d, "PP")}
+                              {val} Time-offs <br /> on {format(d, "PP")}
                             </p>
                           </div>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-                  );
+                  )
                 })}
               </div>
             </div>
           </div>
           <div className="flex max-w-48 flex-1 flex-col justify-center gap-1">
-            <Button variant={"secondary"} size={"sm"} className="w-full">
-              {getYear(today)}
-            </Button>
-            <Button variant={"ghost"} size={"sm"} className="w-full">
-              {getYear(subYears(today, 1))}
-            </Button>
-            <Button variant={"ghost"} size={"sm"} className="w-full">
-              {getYear(subYears(today, 2))}
-            </Button>
-            <Button variant={"ghost"} size={"sm"} className="w-full">
-              {getYear(subYears(today, 3))}
-            </Button>
+            {years.map((y, i) => (
+              <Button
+                key={i}
+                variant={y === getYear(today) ? "secondary" : "ghost"}
+                size={"sm"}
+                className="w-full"
+                onClick={() => setToday(startOfYear(new Date(y, 0, 1)))}
+              >
+                {y}
+              </Button>
+            ))}
           </div>
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </div>
-  );
-};
+  )
+}
 
-export default Timeline;
+export default Timeline

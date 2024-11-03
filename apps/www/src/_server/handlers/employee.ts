@@ -17,14 +17,16 @@ export const getAllEmployeesRoles = async () => {
   const { org } = await hasPerm({ orgSlug })
   const [result, roles] = await Promise.all([
     db
-      .selectFrom("orgs.employee")
+      .selectFrom("orgs.employee as e")
       .where("org_id", "=", org!.id)
-      .innerJoin("auth.user", "auth.user.id", "orgs.employee.user_id")
+      .innerJoin("auth.user", "auth.user.id", "e.user_id")
       .select([
-        "orgs.employee.id",
+        "e.id",
         "scopes",
         "auth.user.image",
-        "auth.user.name",
+        sql<string>`trim(COALESCE(e.first_name, '') || ' ' || COALESCE(e.last_name, ''))`.as(
+          "name"
+        ),
         "auth.user.username",
         "role",
       ])

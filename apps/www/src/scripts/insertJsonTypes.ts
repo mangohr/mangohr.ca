@@ -1,9 +1,9 @@
 import { readFileSync, writeFileSync } from "fs"
-import { env } from "@/env"
 import { Kysely, PostgresDialect } from "kysely"
 import { Pool } from "pg"
 
-import { DB } from "@/types/db"
+import { env } from "../env"
+import { DB } from "../types/db"
 
 const pool = new Pool({ connectionString: env.DATABASE_URL })
 

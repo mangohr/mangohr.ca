@@ -1,7 +1,6 @@
 "use client"
 
 import React, { ReactElement, useEffect, useState, useTransition } from "react"
-import { createOrgAction } from "@/_server/actions/org"
 import { updateScheduleAction } from "@/_server/actions/schedule"
 import { getWorkSchedules } from "@/_server/handlers/org"
 import workScheduleSchema from "@/schema/work-schedule"

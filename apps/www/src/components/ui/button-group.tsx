@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
-import { CheckCircle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -26,7 +25,7 @@ const ButtonGroupItem = React.forwardRef<
     icon?: React.ReactNode
     label: string
   } & React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
->(({ className, icon, label, ...props }, ref) => {
+>(({ className, icon, label, children, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Item
       ref={ref}
@@ -36,10 +35,14 @@ const ButtonGroupItem = React.forwardRef<
       )}
       {...props}
     >
-      <div className="flex flex-col justify-center space-y-2">
-        {icon && <div className="self-center">{icon}</div>}
-        <div className="text-sm">{label}</div>
-      </div>
+      {children ? (
+        children
+      ) : (
+        <div className="flex flex-col justify-center space-y-2">
+          {icon && <div className="self-center">{icon}</div>}
+          <div className="text-sm">{label}</div>
+        </div>
+      )}
     </RadioGroupPrimitive.Item>
   )
 })

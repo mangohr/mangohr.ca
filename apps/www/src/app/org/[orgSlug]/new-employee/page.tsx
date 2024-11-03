@@ -1,6 +1,7 @@
-import React from "react";
-import { AddEmployeeForm } from "./components";
+import React from "react"
 
-export default function Page() {
-  return <AddEmployeeForm />;
+import EmployeeForm from "./components"
+
+export default function Page({}) {
+  return <EmployeeForm />
 }

@@ -179,13 +179,14 @@ export interface OrgsStorage {
 }
 
 export interface OrgsTimeOff {
+  action_by: Int8 | null;
+  action_message: string | null;
   cost: Numeric;
   created_at: Generated<Timestamp>;
   employee_id: Int8 | null;
   end_date: Timestamp;
   id: Generated<Int8>;
   org_id: Int8 | null;
-  reject_reason: string | null;
   request_reason: string | null;
   start_date: Timestamp;
   status: Generated<TimeOffStatus>;

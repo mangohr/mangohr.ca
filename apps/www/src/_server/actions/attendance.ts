@@ -1,11 +1,15 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
 import { db } from "@/_server/db"
 import { hasPerm } from "@/_server/helpers/hasPerm"
 import attendanceSchema from "@/schema/attendance"
 import { orgSlugSchema } from "@/schema/default"
 import { Expression, sql, SqlBool } from "kysely"
+import { z } from "zod"
+
+import { getEmployee } from "../cache/org"
 
 export const getAllAttendance = async (props: { searchParams: unknown }) => {
   const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
@@ -66,4 +70,41 @@ export const getAllAttendance = async (props: { searchParams: unknown }) => {
     .execute()
 
   return { items: result, hasMore: result.length === parsed.limit }
+}
+
+export const adminAddAttendance = async (
+  props: z.infer<typeof attendanceSchema.add.validate>
+) => {
+  const orgSlug = z.string().parse(headers().get("x-org"))
+  const {
+    employee: emp_username,
+    login,
+    logout,
+  } = attendanceSchema.add.validate.parse(props)
+
+  const { session, org } = await hasPerm({ orgSlug })
+
+  let emp = session.employee
+
+  if (session.user.username !== emp_username) {
+    emp = await getEmployee(org!.id, emp_username)
+  }
+  if (!emp || !emp?.user_id) throw new Error("Employee not found!")
+
+  const data = await db
+    .insertInto("orgs.attendance")
+    .values({
+      logout,
+      login,
+      employee_id: emp.id,
+      org_id: org!.id,
+    })
+    .returning(["id"])
+    .executeTakeFirstOrThrow()
+    .catch(() => {
+      throw new Error("Failed to add attendance!")
+    })
+
+  // revalidatePath("/org/[orgSlug]/attendance", "page")
+  return data
 }

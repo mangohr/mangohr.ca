@@ -8,9 +8,11 @@ import { useDebounce } from "use-debounce"
 import { DefaultCombobox, DefaultComboBox } from "."
 
 export function SelectEmployee({
+  size,
   selected = undefined,
   setSelected,
 }: {
+  size?: Parameters<typeof DefaultComboBox>[0]["size"]
   selected: string | undefined
   setSelected: (val: string | undefined) => void
 }) {
@@ -40,6 +42,7 @@ export function SelectEmployee({
       onSearch={setSearch}
       selected={curr}
       setSelected={handleSelected}
+      size={size}
     />
   )
 }

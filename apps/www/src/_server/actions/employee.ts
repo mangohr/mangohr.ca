@@ -18,15 +18,17 @@ export const getAllEmployees = async (props: { searchParams: unknown }) => {
   const parsed = employeeSchema.list.read.validate.parse(props.searchParams)
   const { org } = await hasPerm({ orgSlug })
   const query = db
-    .selectFrom("orgs.employee")
-    .leftJoin("auth.user", "auth.user.id", "orgs.employee.user_id")
+    .selectFrom("orgs.employee as e")
+    .leftJoin("auth.user", "auth.user.id", "e.user_id")
     .select([
-      "orgs.employee.id",
+      "e.id",
       "role",
       "username",
       "email",
       "image",
-      "name",
+      sql<string>`trim(COALESCE(e.first_name, '') || ' ' || COALESCE(e.middle_name, '') || ' ' || COALESCE(e.last_name, ''))`.as(
+        "name"
+      ),
       "department",
       "hired_at",
       "role",
@@ -42,7 +44,7 @@ export const getAllEmployees = async (props: { searchParams: unknown }) => {
         ]
 
         if (Number(parsed.search)) {
-          searchConditions.push(eb("orgs.employee.id", "=", parsed.search!))
+          searchConditions.push(eb("e.id", "=", parsed.search!))
         }
 
         filters.push(eb.or(searchConditions))
@@ -133,7 +135,6 @@ export const updateEmployeeCurrentJob = async (props: {
       reports_to_emp_id = reportingEmp?.id || undefined
     }
   }
-  console.log({ reporting_username, reports_to_emp_id })
 
   const values = {
     ...data,
@@ -251,11 +252,11 @@ export const addEmployeeAttendance = async (props: {
 }
 
 export const employeeTimeOffRequest = async (props: {
-  formData: z.infer<typeof timeoffSchema.create.validate>
+  formData: z.infer<typeof timeoffSchema.request.validate>
   username: string
 }) => {
   const orgSlug = z.string().parse(headers().get("x-org"))
-  const data = timeoffSchema.create.validate.parse(props.formData)
+  const data = timeoffSchema.request.validate.parse(props.formData)
 
   const username = props.username && z.string().parse(props.username)
 

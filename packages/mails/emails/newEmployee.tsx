@@ -9,21 +9,31 @@ import {
   Img,
   Link,
   Preview,
-  render,
-  renderAsync,
   Section,
   Tailwind,
   Text,
 } from "@react-email/components"
 
-interface MagicEmailProps {
-  name: string
+interface EmailProps {
+  company: { name: string }
+  employee: {
+    name: string
+  }
+  invitee: {
+    name: string
+  }
   email: string
   link: string
 }
 
-export const magicLinkTemplate = ({ name, email, link }: MagicEmailProps) => {
-  const previewText = `Sign in to MangoHR`
+export const newEmployeeTemplate = ({
+  company,
+  employee,
+  invitee,
+  email,
+  link,
+}: EmailProps) => {
+  const previewText = `Welcome to ${company.name}`
   return (
     <Html>
       <Head />
@@ -31,25 +41,15 @@ export const magicLinkTemplate = ({ name, email, link }: MagicEmailProps) => {
       <Tailwind>
         <Body className="bg-white my-auto mx-auto font-sans px-2">
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
-            <Section className="mt-[32px]">
-              <Img
-                src={`${process.env.WWW_URL}/assets/logo/ico-white.png`}
-                width="100"
-                height="100"
-                alt="Mango HR"
-                className="my-0 mx-auto border border-solid border-[#eaeaea]"
-              />
-            </Section>
             <Heading className="text-black text-[24px] font-normal text-center p-0 mt-[30px] mb-[70px] mx-0">
-              Sign in to <strong>Mango HR</strong>
+              Welcome to <strong>{company.name}</strong>
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
-              Hello {name},
+              Hello {employee.name},
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
-              Here's your magic link, you can sign in to MangoHR platform by
-              clicking on button below. This link will only be valid for next 30
-              minutes.
+              You have been invited to join {company.name} by {invitee.name}.
+              Please sign in by clicking on button below.
             </Text>
 
             <Section className="text-center mt-[32px] mb-[32px]">
@@ -57,7 +57,7 @@ export const magicLinkTemplate = ({ name, email, link }: MagicEmailProps) => {
                 className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center px-5 py-3"
                 href={link}
               >
-                Login to MangoHR
+                Continue to platform
               </Button>
             </Section>
             <Text className="text-black text-[14px] leading-[24px]">
@@ -81,10 +81,12 @@ export const magicLinkTemplate = ({ name, email, link }: MagicEmailProps) => {
   )
 }
 
-magicLinkTemplate.PreviewProps = {
-  name: "name",
+newEmployeeTemplate.PreviewProps = {
+  company: { name: "Mango HR", image: "string" },
+  employee: { name: "nandan" },
+  invitee: { name: "kundan" },
   email: "enauk",
   link: "link",
 }
 
-export default magicLinkTemplate
+export default newEmployeeTemplate

@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
-import { navs } from "./data"
+import { superUserNavs } from "./data"
 
 export default function Header({ session }: { session: Session | null }) {
   const [open, setOpen] = useState(false)
@@ -77,7 +77,7 @@ export default function Header({ session }: { session: Session | null }) {
                 Mango HR
               </span>
             </Link>
-            {navs(orgSlug).main.map((n, i) => (
+            {superUserNavs(orgSlug).main.map((n, i) => (
               <Link
                 key={i}
                 href={n.url}
@@ -88,7 +88,7 @@ export default function Header({ session }: { session: Session | null }) {
                 {n.name}
               </Link>
             ))}
-            {navs(orgSlug).bottom.map((n, i) => (
+            {superUserNavs(orgSlug).bottom.map((n, i) => (
               <Link
                 key={i}
                 href={n.url}

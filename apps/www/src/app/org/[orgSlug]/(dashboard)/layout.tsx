@@ -14,14 +14,13 @@ export default async function Layout({
   return (
     <>
       <OrgProvider data={org}>
-        <div className="bg-muted/40 flex min-h-screen w-full flex-col overflow-x-auto">
+        <div className="bg-muted/40 flex min-h-screen w-full overflow-x-auto">
           <Sidebar />
-          <main className="flex min-h-screen flex-col sm:pl-14">
+          <main className="flex min-h-screen flex-1 flex-col">
             {/* <Header session={session} /> */}
-            {/* <main className="grid flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-            {children}
-          </main> */}
-            {children}
+            <div className="grid flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+              {children}
+            </div>
           </main>
         </div>
       </OrgProvider>

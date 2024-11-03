@@ -61,6 +61,7 @@ export const scopes = [
     id: "read:timeoff",
     label: "Able to read time off requests",
   },
+
   {
     id: "create:timeoff",
     label: "Able to create time off requests",

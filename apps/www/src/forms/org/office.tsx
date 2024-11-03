@@ -5,7 +5,7 @@ import { updateOfficeAction } from "@/_server/actions/office"
 import { getOffices } from "@/_server/handlers/org"
 import officeSchema from "@/schema/office"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useFormContext } from "react-hook-form"
 import { z } from "zod"
 
 import { idGenerate } from "@/lib/idGenerate"
@@ -29,7 +29,67 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-export default function CompanyOfficeForm<
+export function OfficeForm() {
+  const form = useFormContext()
+  return (
+    <div className="grid grid-cols-2 gap-6">
+      <FormField
+        control={form.control}
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Office Name</FormLabel>
+            <FormControl>
+              <Input placeholder="Mango HR" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="location"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Office Location</FormLabel>
+            <FormControl>
+              <Input placeholder="Canada" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="email"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input placeholder="support@mangohr.ca" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="phone"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Phone</FormLabel>
+            <FormControl>
+              <Input placeholder="support@mangohr.ca" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
+  )
+}
+
+export function CompanyOfficeForm<
   T extends Awaited<ReturnType<typeof getOffices>>["items"][0],
 >({
   data,
@@ -85,59 +145,8 @@ export default function CompanyOfficeForm<
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={onSubmit}>
-            <DialogBody className="grid grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Office Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Mango HR" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Office Location</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Canada" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="support@mangohr.ca" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone</FormLabel>
-                    <FormControl>
-                      <Input placeholder="support@mangohr.ca" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <DialogBody>
+              <OfficeForm />
             </DialogBody>
             <DialogFooter className="flex justify-end">
               <Button disabled={isPending}>Save Changes</Button>

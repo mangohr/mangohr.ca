@@ -4,6 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { getAllAttendance } from "@/_server/actions/attendance"
+import { queryKeys } from "@/constants/queryKeys"
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { createColumnHelper } from "@tanstack/react-table"
 import { format } from "date-fns"
@@ -85,7 +86,7 @@ const columns = [
           className="h-fit p-0 hover:bg-none"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Login
+          Logout
           <CaretSortIcon className="ml-2 size-4" />
         </Button>
       )
@@ -103,31 +104,37 @@ const columns = [
   columnHelper.display({
     id: "total_hrs",
     header: "Total Hours",
-    cell: ({ row }) => (
-      <Link href={"employee/" + row?.original?.username} className="capitalize">
-        {(row.original.logout &&
-          row.original.login &&
-          formatTimeDifference(row.original.login, row.original.logout)) ||
-          "TBD"}
-      </Link>
-    ),
-  }),
-  columnHelper.display({
-    id: "actions",
-    enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
-
+      const total =
+        row.original.logout &&
+        row.original.login &&
+        formatTimeDifference(row.original.login, row.original.logout)
       return (
-        <div className="flex justify-center">
-          <Button variant="ghost" className="size-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <DotsHorizontalIcon className="size-4" />
-          </Button>
-        </div>
+        <Link
+          href={"employee/" + row?.original?.username}
+          className="capitalize"
+        >
+          {total || "TBD"}
+        </Link>
       )
     },
   }),
+  // columnHelper.display({
+  //   id: "actions",
+  //   enableHiding: false,
+  //   cell: ({ row }) => {
+  //     const payment = row.original
+
+  //     return (
+  //       <div className="flex justify-center">
+  //         <Button variant="ghost" className="size-8 p-0">
+  //           <span className="sr-only">Open menu</span>
+  //           <DotsHorizontalIcon className="size-4" />
+  //         </Button>
+  //       </div>
+  //     )
+  //   },
+  // }),
 ]
 
 export default function AttendanceList() {
@@ -135,7 +142,7 @@ export default function AttendanceList() {
 
   return (
     <ListTable
-      queryKey="attendance"
+      queryKey={queryKeys.attendanceList}
       columns={columns}
       getData={(params) => getAllAttendance({ searchParams: params })}
       config={{

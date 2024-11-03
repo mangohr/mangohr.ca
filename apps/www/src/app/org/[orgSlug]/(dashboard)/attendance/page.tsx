@@ -1,10 +1,8 @@
 import React from "react"
-import Link from "next/link"
 import AdminAddAttendanceForm from "@/forms/attendance/addAttendance"
 import { Plus } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import PageLayout from "@/components/custom/layouts/page"
 
 import AttendanceList from "./components/list"
@@ -20,7 +18,14 @@ export default async function Page() {
           </p>
         </div>
         <div className="flex gap-4">
-          <AdminAddAttendanceForm trigger={<Button>Add Attendance</Button>} />
+          <AdminAddAttendanceForm
+            trigger={
+              <Button>
+                <Plus />
+                <span>Add Attendance</span>
+              </Button>
+            }
+          />
         </div>
       </div>
       {/* <div>

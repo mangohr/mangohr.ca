@@ -41,7 +41,7 @@ const Input = React.forwardRef<
         ref={ref}
         {...props}
       />
-      <span>
+      <span className="text-sm">
         {suffixEl && (
           <span
             className={cn(

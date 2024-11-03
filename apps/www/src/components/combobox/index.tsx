@@ -3,6 +3,7 @@
 import * as React from "react"
 import { ChevronDown, Loader2 } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 // import { useMediaQuery } from "@/hooks/mediaQuery"
 import { Button } from "@/components/ui/button"
 import {
@@ -35,6 +36,7 @@ export function DefaultComboBox({
   setSelected,
   onSearch,
   loading,
+  size = "default",
 }: {
   data: DefaultCombobox[] | undefined
   placeholder: string
@@ -43,15 +45,27 @@ export function DefaultComboBox({
   setSelected: (val: DefaultCombobox | null) => void
   onSearch?: (val: string) => void
   loading?: boolean
+  size?: "lg" | "default" | "full"
 }) {
   const [open, setOpen] = React.useState(false)
+  const ref = React.useRef<HTMLButtonElement>(null)
   // const isDesktop = useMediaQuery("(min-width: 768px)")
-
   // if (isDesktop) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-[200px] justify-start">
+        <Button
+          ref={ref}
+          variant="outline"
+          size={size === "full" ? "default" : size}
+          // eslint-disable-next-line tailwindcss/no-contradicting-classname
+          className={cn(
+            "w-[200px] justify-start",
+            size === "lg" && "w-full",
+            size === "full",
+            "w-full"
+          )}
+        >
           {selected ? (
             <>
               {selected.image && (
@@ -75,7 +89,11 @@ export function DefaultComboBox({
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align="start">
+      <PopoverContent
+        className={cn("p-0")}
+        style={{ width: `${ref.current?.clientWidth || 200}px` }}
+        align="start"
+      >
         <StatusList
           setOpen={setOpen}
           setSelected={setSelected}
@@ -174,8 +192,9 @@ function StatusList({
               className="flex items-center gap-2"
             >
               {d.image && (
-                <span className="bg-muted block size-5 rounded-full border">
+                <span className="bg-muted block size-5 overflow-hidden rounded-full border">
                   <span
+                    className="block size-full"
                     style={{
                       backgroundImage: d.image && `url(${d.image})`,
                       backgroundSize: "contain",

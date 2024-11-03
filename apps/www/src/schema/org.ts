@@ -1,6 +1,8 @@
 import { scopeIds } from "@/constants/scopes"
 import { z } from "zod"
 
+import { dateSchema } from "./default"
+
 const editOrgSchema = {
   slug: z.string().optional(),
   name: z.string().min(1),
@@ -22,7 +24,17 @@ const orgSchema = {
   },
   create: {
     scope: scopeIds["create:org"],
-    validate: z.object({ name: z.string() }),
+    validate: z.object({
+      general: z.object({
+        name: z.string().min(1),
+        email: z.string().email(),
+        established_on: dateSchema.optional(),
+        industry: z.string(),
+        phone: z.string(),
+        website: z.string().optional(),
+        location: z.string().optional(),
+      }),
+    }),
   },
   update: {
     scope: scopeIds["update:org"],

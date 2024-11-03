@@ -3,7 +3,7 @@
 import React, { useOptimistic, useTransition } from "react"
 import { deleteOfficeAction } from "@/_server/actions/office"
 import { getOffices } from "@/_server/handlers/org"
-import CompanyOfficeForm from "@/forms/org/office"
+import { CompanyOfficeForm } from "@/forms/org/office"
 import { produce } from "immer"
 import { PenLine, Plus, Trash } from "lucide-react"
 

@@ -46,5 +46,11 @@ export const getEmployeesComboBox = async (params: { search: string }) => {
     .limit(10)
     .execute()
 
+  data.forEach((d) => {
+    if (!d.image) {
+      d.image = `https://api.dicebear.com/9.x/initials/svg?seed=${d.label.replaceAll(" ", "_")}`
+    }
+  })
+
   return nullsToUndefined(data)
 }

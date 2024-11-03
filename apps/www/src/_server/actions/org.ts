@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
-import { redirect } from "next/navigation"
+import { redirect, RedirectType } from "next/navigation"
 import { delCache, redisKeys } from "@/_server/cache"
 import { db } from "@/_server/db"
 import { hasPerm } from "@/_server/helpers/hasPerm"
@@ -16,14 +16,14 @@ import { idGenerate } from "@/lib/idGenerate"
 export const createOrgAction = async (
   formData: z.infer<typeof orgSchema.create.validate>
 ) => {
-  const data = orgSchema.create.validate.parse(formData)
+  const { general } = orgSchema.create.validate.parse(formData)
   const { session } = await hasPerm()
-  const slug = slugify(data.name)
+  const slug = slugify(general.name)
 
   const org = await db.transaction().execute(async (trx) => {
     const org = await db
       .insertInto("orgs.list")
-      .values({ ...data, slug, owner: session.user.id })
+      .values({ ...general, slug, owner: session.user.id })
       .onConflict((oc) =>
         oc
           .column("slug")
@@ -43,10 +43,11 @@ export const createOrgAction = async (
       })
       .returningAll()
       .executeTakeFirst()
+
     return org
   })
 
-  return redirect("/org/" + org.slug)
+  return redirect("/org/" + org.slug, RedirectType.replace)
 }
 
 export const updateOrgAction = async (

@@ -1,10 +1,13 @@
-import { useEffect, useTransition } from "react"
+"use client"
+
+import { useEffect, useState, useTransition } from "react"
 import { useParams } from "next/navigation"
 import { updateEmployeeGeneralData } from "@/_server/actions/employee"
 import { useEmployee } from "@/context/employee"
 import employeeSchema from "@/schema/employee"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Minus, Plus } from "lucide-react"
+import { format } from "date-fns"
+import { Minus, PenLine, Plus } from "lucide-react"
 import { useFieldArray, useForm, useFormContext } from "react-hook-form"
 import { z } from "zod"
 
@@ -26,6 +29,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Separator } from "@/components/ui/separator"
 
 const contact = {
   name: "",
@@ -53,12 +58,14 @@ export const EmployeeGeneralFormDefaultValues = {
   emergency_contacts: [contact],
 }
 
-export function EmployeeGeneralForm({
+function FormComp({
   id,
   onSubmit,
+  bareForm = false,
 }: {
   id: string
-  onSubmit?: () => void
+  onSubmit?: (val: z.infer<typeof employeeSchema.general.edit.validate>) => void
+  bareForm?: boolean
 }) {
   const { userName } = useParams() as any
   const [_, setTransition] = useTransition()
@@ -74,10 +81,11 @@ export function EmployeeGeneralForm({
 
   const handleSubmit = form.handleSubmit(async (val) => {
     setTransition(() => {
-      updateEmployeeGeneralData({ formData: val, username: userName })
+      !bareForm &&
+        updateEmployeeGeneralData({ formData: val, username: userName })
       setOptimisticEmployee(((p: any) => ({ ...p, ...val })) as any)
     })
-    onSubmit && onSubmit()
+    onSubmit && onSubmit(val)
   })
 
   return (
@@ -436,6 +444,146 @@ export function EmployeeGeneralFormContent() {
           </Button>
         </CardContent>
       </Card>
+    </div>
+  )
+}
+
+export function EmployeeGeneralForm({
+  employee,
+  bareForm,
+  onSubmit,
+}: {
+  employee: ReturnType<typeof useEmployee>["employee"]
+  bareForm?: Parameters<typeof FormComp>[0]["bareForm"]
+  onSubmit?: Parameters<typeof FormComp>[0]["onSubmit"]
+}) {
+  const [edit, setEdit] = useState(false)
+  const formId = "employee-general"
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center space-x-6">
+        <div className="flex-1">
+          <h1 className="text-xl font-medium">General Information</h1>
+          <Label>Basic information about employee</Label>
+        </div>
+        <div className="ml-auto flex space-x-4">
+          {edit ? (
+            <>
+              <Button variant={"outline"} onClick={() => setEdit(false)}>
+                Cancel
+              </Button>
+              <Button variant={"default"} type="submit" form={formId}>
+                Save Changes
+              </Button>
+            </>
+          ) : (
+            <Button variant={"outline"} onClick={() => setEdit(true)}>
+              <PenLine />
+              <span>Edit Information</span>
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <>
+        {edit ? (
+          <FormComp
+            id={formId}
+            onSubmit={(val) => {
+              setEdit(false)
+              onSubmit && onSubmit(val)
+            }}
+            bareForm={bareForm}
+          />
+        ) : (
+          <>
+            <Card>
+              <CardHeader className="grid grid-cols-[auto,200px]">
+                <CardTitle>Personal Details</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div>
+                  <div className="grid grid-cols-[200px,auto] gap-6">
+                    <p className="text-muted-foreground">Full Name</p>
+                    <p>
+                      {`${employee?.first_name || ""} ${employee?.middle_name || ""} ${employee?.last_name || ""}`.trim() ||
+                        "-"}
+                    </p>
+                    <p className="text-muted-foreground">Gender</p>
+                    <p>{employee?.gender || "-"}</p>
+                    <p className="text-muted-foreground">Date of Birth</p>
+                    <p>
+                      {(employee?.date_of_birth &&
+                        format(employee?.date_of_birth, "P")) ||
+                        "-"}
+                    </p>
+                    <p className="text-muted-foreground">Email</p>
+                    <p>{employee?.work_email || "-"}</p>
+                    <p className="text-muted-foreground">Phone Number</p>
+                    <p>{employee?.phone || "-"}</p>
+                    <p className="text-muted-foreground">Country</p>
+                    <p>{employee?.address?.country || "-"}</p>
+                    <p className="text-muted-foreground">Marital Status</p>
+                    <p>{employee?.marital_status || "-"}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="grid grid-cols-[auto,200px]">
+                <CardTitle>Address Details</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div>
+                  <div className="grid grid-cols-[200px,auto] gap-6">
+                    <p className="text-muted-foreground">Primary Address</p>
+                    <p>
+                      {`${employee?.address?.line1 || ""} ${employee?.address?.line2 || ""}`.trim() ||
+                        "-"}
+                    </p>
+                    <p className="text-muted-foreground">City</p>
+                    <p>{employee?.address?.city || "-"}</p>
+                    <p className="text-muted-foreground">State/Province</p>
+                    <p>{employee?.address?.state || "-"}</p>
+                    <p className="text-muted-foreground">Country</p>
+                    <p>{employee?.address?.country || "-"}</p>
+                    <p className="text-muted-foreground">Zip Code</p>
+                    <p>{employee?.address?.zip_code || ""}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="grid grid-cols-[auto,200px]">
+                <CardTitle>Emergency Contacts</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {(employee?.emergency_contacts?.length || 0) > 0 ? (
+                  employee?.emergency_contacts?.map((e, i) => (
+                    <div key={i}>
+                      <div className="grid grid-cols-[200px,auto] gap-6">
+                        <p className="text-muted-foreground">Full Name</p>
+                        <p>{e?.name || "-"}</p>
+                        <p className="text-muted-foreground">Phone Number</p>
+                        <p>{e?.phone || "-"}</p>
+                        <p className="text-muted-foreground">Relation</p>
+                        <p>{e?.relation || "-"}</p>
+                      </div>
+                      {i < employee?.emergency_contacts.length - 1 && (
+                        <Separator className="my-6" />
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div>
+                    <h1>No Emergency Contacts found...</h1>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </>
+        )}
+      </>
     </div>
   )
 }

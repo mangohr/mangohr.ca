@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { useParams } from "next/navigation"
 import { useEmployee } from "@/context/employee"
-import EmployeeCurrentJobForm from "@/forms/employee/currentJob"
+import { EmployeeCurrentJobForm } from "@/forms/employee/currentJob"
 import employeeSchema from "@/schema/employee"
 import { Plus } from "lucide-react"
 import { z } from "zod"

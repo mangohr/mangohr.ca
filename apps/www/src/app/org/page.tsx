@@ -2,16 +2,18 @@ import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { getAllOrgs } from "@/_server/handlers/org"
-import NewOrgForm from "@/forms/org/new"
 import { formatDistanceToNow } from "date-fns"
+import { Plus } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import EmptyPage from "@/components/pages/empty"
 
 async function Orgs() {
   const data = await getAllOrgs()
 
-  const items = [...data.delegated, ...data.owned].sort(
+  const items = data.sort(
     (a, b) =>
       new Date(b.created_at ?? 0).getTime() -
       new Date(a.created_at ?? 0).getTime()
@@ -43,14 +45,19 @@ async function Orgs() {
             </span>{" "}
             <span>Create Organization</span>
           </Link> */}
-          <NewOrgForm />
+          <Link href={"org/new"} className={cn(buttonVariants({}))}>
+            <span>
+              <Plus />
+            </span>
+            <span>Add Company</span>
+          </Link>
         </div>
       </div>{" "}
       {items.length > 0 ? (
         <div className="grid grid-cols-4 gap-4">
           {items.map((d, i) => (
             <Link key={i} href={`/org/${d.slug}`} className="border p-3">
-              <p>{d.name}</p>
+              <p>{d.name || "Untitled"}</p>
               <Label className="font-light">
                 Created {formatDistanceToNow(new Date(d.created_at ?? 0))}
               </Label>

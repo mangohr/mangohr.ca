@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { Suspense, useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { parseAsString, useQueryState } from "nuqs"
 import { useForm } from "react-hook-form"
@@ -36,7 +36,18 @@ const useStore = create<Store>((set) => ({
     }),
 }))
 
-export function MultiStepForm({
+export function MultiStepForm(props: {
+  schema: Schema
+  onSubmit: (val: any) => void
+}) {
+  return (
+    <Suspense>
+      <FormComp {...props} />
+    </Suspense>
+  )
+}
+
+export function FormComp({
   schema,
   onSubmit,
 }: {
@@ -161,7 +172,7 @@ export function MultiStepForm({
                 Previous
               </Button>
             )}
-            <Button>{isLast ? "Submit" : `${"Continue ->"} `}</Button>
+            <Button>{isLast ? "Submit" : `${"Continue"} `}</Button>
           </div>
         </form>
       </Form>

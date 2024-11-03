@@ -50,10 +50,15 @@ const roleSchema = z.object({
 })
 
 const inviteSchema = z.object({
-  general: personalSchema,
-  professional: z.object({
-    employee_id: z.string(),
+  general: z.object({
+    first_name: personalSchema.shape.first_name,
+    middle_name: personalSchema.shape.middle_name,
+    last_name: personalSchema.shape.last_name,
+    email: z.string().email(),
+    job: currentJobSchema,
+    action: z.enum(["create", "invite"]),
   }),
+  personal: personalSchema.optional(),
 })
 
 const attendanceSchema = z.object({
@@ -86,6 +91,7 @@ const employeeSchema = {
       validate: null,
     },
   },
+
   general: {
     get: {
       scope: scopeIds["read:employee:personal"],

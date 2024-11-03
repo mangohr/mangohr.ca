@@ -23,6 +23,7 @@ export default auth((req) => {
   if (org) {
     requestHeaders.set("x-org", org)
   }
+  requestHeaders.set("x-url", req.url)
 
   const response = NextResponse.next({
     request: { headers: requestHeaders },

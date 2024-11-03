@@ -27,7 +27,6 @@ export const authConfig = {
     session: ({ session, token }) => {
       session.user.username = String(token.username)!
       session.user.id = String(token.id)!
-
       return session
     },
   },

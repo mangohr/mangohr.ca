@@ -54,7 +54,7 @@ COPY --from=build /app/apps/${PROJECT}/.next/standalone ./
 COPY --from=build /app/apps/${PROJECT}/.next/static ./apps/${PROJECT}/.next/static
 COPY --from=build /app/apps/${PROJECT}/public ./apps/${PROJECT}/public
 
-# CMD ["npm", "run", "start"]
 EXPOSE 3000
 CMD ["node", "apps/www/server.js", "--host", "0.0.0.0", "--port", "${PORT}"]
 
+# CMD ["cd apps/www && npm run start"]

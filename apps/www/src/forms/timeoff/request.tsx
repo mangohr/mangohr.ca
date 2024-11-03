@@ -39,8 +39,8 @@ export default function TimeOffRequestForm({
 }) {
   const [_, setTransition] = useTransition()
 
-  const form = useForm<z.infer<typeof timeoffSchema.create.validate>>({
-    resolver: zodResolver(timeoffSchema.create.validate),
+  const form = useForm<z.infer<typeof timeoffSchema.request.validate>>({
+    resolver: zodResolver(timeoffSchema.request.validate),
     defaultValues: {
       request_reason: "",
       start_date: new Date().toString(),
@@ -102,7 +102,7 @@ export default function TimeOffRequestForm({
                         {...field}
                         className="max-w-md"
                         type="number"
-                        suffixEl={<span>Day(s)</span>}
+                        suffixEl={<span className="text-sm">Day(s)</span>}
                       />
                     </FormControl>
                     <FormMessage />

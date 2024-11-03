@@ -1,9 +1,8 @@
 import React from "react"
-import Link from "next/link"
+import AddTimeOffForm from "@/forms/timeoff/add"
 import { Plus } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import TimeOffCharts from "@/components/charts/time-offs"
 import PageLayout from "@/components/custom/layouts/page"
 
@@ -20,10 +19,18 @@ export default async function Page() {
           </p>
         </div>
         <div className="flex gap-4">
-          <Link href={"new-employee"} className={cn(buttonVariants())}>
+          {/* <Link href={""} className={cn(buttonVariants())}>
             <Plus height={18} width={18} strokeWidth={1.5} />
             <span>Add Request</span>
-          </Link>
+          </Link> */}
+          <AddTimeOffForm
+            trigger={
+              <Button>
+                <Plus />
+                <span>Add Time-off</span>
+              </Button>
+            }
+          />
         </div>
       </div>
       <div>

@@ -1,18 +1,22 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import * as React from "react"
+import Link from "next/link"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { Cross2Icon } from "@radix-ui/react-icons"
+import { LucideIcon } from "lucide-react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-const Dialog = DialogPrimitive.Root;
+import { Button, buttonVariants } from "./button"
 
-const DialogTrigger = DialogPrimitive.Trigger;
+const Dialog = DialogPrimitive.Root
 
-const DialogPortal = DialogPrimitive.Portal;
+const DialogTrigger = DialogPrimitive.Trigger
 
-const DialogClose = DialogPrimitive.Close;
+const DialogPortal = DialogPrimitive.Portal
+
+const DialogClose = DialogPrimitive.Close
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
@@ -26,15 +30,20 @@ const DialogOverlay = React.forwardRef<
     )}
     {...props}
   />
-));
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
+))
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
-    disabled?: boolean;
+    disabled?: boolean
+    actionBtns?: Array<{
+      href?: string
+      icon?: LucideIcon
+      onClick?: (v: any) => void
+    }>
   }
->(({ className, children, disabled, ...props }, ref) => (
+>(({ className, children, disabled, actionBtns, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -46,17 +55,48 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
-      <DialogPrimitive.Close
-        disabled={disabled}
-        className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none"
-      >
-        <Cross2Icon className="size-4" />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
+      <div className="absolute right-4 top-4 flex gap-1 [&_svg]:w-4">
+        {actionBtns?.map((a, i) => (
+          <React.Fragment key={i}>
+            {a.href ? (
+              <Link
+                href={a.href}
+                onClick={a.onClick}
+                // disabled={disabled}
+                className={cn(
+                  buttonVariants({ size: "icon-sm", variant: "ghost" })
+                )}
+              >
+                {a.icon && <span>{<a.icon />}</span>}
+              </Link>
+            ) : (
+              <Button
+                onClick={a.onClick}
+                disabled={disabled}
+                size={"icon-sm"}
+                variant={"ghost"}
+              >
+                {a.icon && <span>{<a.icon />}</span>}
+              </Button>
+            )}
+          </React.Fragment>
+        ))}
+        <DialogPrimitive.Close
+          disabled={disabled}
+          // className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground  rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none"
+          asChild
+        >
+          <Button size={"icon-sm"} variant={"ghost"} disabled={disabled}>
+            <span className="sr-only">Close</span>
+
+            <Cross2Icon />
+          </Button>
+        </DialogPrimitive.Close>
+      </div>
     </DialogPrimitive.Content>
   </DialogPortal>
-));
-DialogContent.displayName = DialogPrimitive.Content.displayName;
+))
+DialogContent.displayName = DialogPrimitive.Content.displayName
 
 const DialogHeader = ({
   className,
@@ -69,16 +109,16 @@ const DialogHeader = ({
     )}
     {...props}
   />
-);
-DialogHeader.displayName = "DialogHeader";
+)
+DialogHeader.displayName = "DialogHeader"
 
 const DialogBody = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn("px-6 py-8", className)} {...props} />
-);
-DialogBody.displayName = "DialogBody";
+)
+DialogBody.displayName = "DialogBody"
 
 const DialogFooter = ({
   className,
@@ -91,8 +131,8 @@ const DialogFooter = ({
     )}
     {...props}
   />
-);
-DialogFooter.displayName = "DialogFooter";
+)
+DialogFooter.displayName = "DialogFooter"
 
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
@@ -106,8 +146,8 @@ const DialogTitle = React.forwardRef<
     )}
     {...props}
   />
-));
-DialogTitle.displayName = DialogPrimitive.Title.displayName;
+))
+DialogTitle.displayName = DialogPrimitive.Title.displayName
 
 const DialogDescription = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Description>,
@@ -118,8 +158,8 @@ const DialogDescription = React.forwardRef<
     className={cn("text-muted-foreground text-sm", className)}
     {...props}
   />
-));
-DialogDescription.displayName = DialogPrimitive.Description.displayName;
+))
+DialogDescription.displayName = DialogPrimitive.Description.displayName
 
 export {
   Dialog,
@@ -133,4 +173,4 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-};
+}

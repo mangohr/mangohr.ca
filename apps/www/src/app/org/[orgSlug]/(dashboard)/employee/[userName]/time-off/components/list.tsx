@@ -94,10 +94,14 @@ const TimeOffList = ({
                         {t.status.replaceAll("_", " ")}
                       </Badge>
                     </TableCell>
-                    <TableCell>
-                      <Badge className="capitalize" variant={"outline"}>
-                        {t.type.replaceAll("_", " ")}
-                      </Badge>
+                    <TableCell className="text-center">
+                      {t.type ? (
+                        <Badge className="capitalize" variant={"outline"}>
+                          {t.type.replaceAll("_", " ")}
+                        </Badge>
+                      ) : (
+                        "-"
+                      )}
                     </TableCell>
                     <TableCell>
                       <Badge variant={"outline"} className="font-light">

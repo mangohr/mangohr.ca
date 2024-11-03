@@ -3,12 +3,14 @@
 import React, { ReactNode } from "react"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
+import { logout } from "@/_server/actions/auth"
 import { useEmployee } from "@/context/employee"
 import { AvatarImage } from "@radix-ui/react-avatar"
-import { Mail, MapPin, Phone } from "lucide-react"
+import { LogOut, Mail, MapPin, Phone } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import {
   NavigationMenu,
@@ -135,24 +137,35 @@ export default function EmployeeLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
         <div className="flex-1 space-y-6 px-8 py-12">
-          <NavigationMenu>
-            <NavigationMenuList className="bg-background text-muted-foreground inline-flex h-9 items-center justify-center gap-1 rounded-lg border p-1">
-              {navs.map((nav, i) => (
-                <NavigationMenuItem key={i}>
-                  <Link href={nav.url} legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className={cn(
-                        "ring-offset-background hover:bg-muted focus-visible:ring-ring inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                        matchIdx === i && "text-primary"
-                      )}
-                    >
-                      {nav.label}
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
+          <div className="flex items-center justify-between">
+            <NavigationMenu>
+              <NavigationMenuList className="bg-background text-muted-foreground inline-flex h-9 items-center justify-center gap-1 rounded-lg border p-1">
+                {navs.map((nav, i) => (
+                  <NavigationMenuItem key={i}>
+                    <Link href={nav.url} legacyBehavior passHref>
+                      <NavigationMenuLink
+                        className={cn(
+                          "ring-offset-background hover:bg-muted focus-visible:ring-ring inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                          matchIdx === i && "text-primary"
+                        )}
+                      >
+                        {nav.label}
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+            <div>
+              <Button
+                variant={"outline"}
+                size={"icon-sm"}
+                onClick={() => logout()}
+              >
+                <LogOut /> <span className="sr-only">Logout</span>
+              </Button>
+            </div>
+          </div>
           {children}
           {/* <Tabs defaultValue="general" className="space-y-6">
             <TabsList>

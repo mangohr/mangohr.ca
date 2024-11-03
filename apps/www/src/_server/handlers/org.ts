@@ -3,7 +3,6 @@
 import "server-only"
 
 import { headers } from "next/headers"
-import { env } from "@/env"
 import { z } from "zod"
 
 import { nullsToUndefined } from "@/lib/utils"
@@ -13,7 +12,7 @@ import { hasPerm } from "../helpers/hasPerm"
 
 export const getAllOrgs = async () => {
   const { session } = await hasPerm()
-  const [delegated, owned] = await Promise.all([
+  const [result] = await Promise.all([
     db
       .selectFrom("orgs.employee as e")
       .leftJoin("orgs.list", "orgs.list.id", "e.org_id")
@@ -26,14 +25,11 @@ export const getAllOrgs = async () => {
       ])
       .orderBy("created_at desc")
       .execute(),
-    db
-      .selectFrom("orgs.list")
-      .where("owner", "=", session.user.id)
-      .select(["name", "created_at", "id", "slug"])
-      .orderBy("created_at desc")
-      .execute(),
   ])
-  return { delegated, owned }
+
+  console.log(result)
+
+  return result
 }
 
 export const getSingleOrg = async () => {

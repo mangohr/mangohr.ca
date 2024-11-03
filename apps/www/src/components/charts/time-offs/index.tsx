@@ -1,12 +1,19 @@
-import React from "react";
-import Timeline from "../default/timeline";
+import React from "react"
+import { getTimeOffChart } from "@/_server/handlers/timeoff"
+import { endOfYear, startOfYear } from "date-fns"
 
-const TimeOffCharts = () => {
+import Timeline from "../default/timeline"
+
+const TimeOffCharts = async () => {
+  const data = await getTimeOffChart({
+    start: startOfYear(new Date()).toISOString(),
+    end: endOfYear(new Date()).toISOString(),
+  })
   return (
     <div>
-      <Timeline />
+      <Timeline data={data} />
     </div>
-  );
-};
+  )
+}
 
-export default TimeOffCharts;
+export default TimeOffCharts

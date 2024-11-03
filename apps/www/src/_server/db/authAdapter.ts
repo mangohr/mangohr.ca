@@ -6,11 +6,12 @@ import {
   type AdapterUser,
   type VerificationToken,
 } from "@auth/core/adapters"
-import { Kysely, SqliteAdapter } from "kysely"
+import { Kysely, SqliteAdapter, Transaction } from "kysely"
 
+import { DB } from "@/types/db"
 import { idGenerate } from "@/lib/idGenerate"
 
-import { db } from "."
+import { db as database } from "."
 
 // import { cache } from "react";
 
@@ -39,7 +40,28 @@ export const format = {
   },
 }
 
-export function KyselyAdapter(): Adapter {
+export const createUser = async (
+  user: AdapterUser,
+  db: Transaction<DB> | Kysely<DB>
+) => {
+  const username = user.email.split("@")[0]
+
+  const result = await db
+    .insertInto("auth.user")
+    .values(format.to({ ...user, id: undefined, username }))
+    .onConflict((oc) =>
+      oc.column("username").doUpdateSet({
+        username: idGenerate({ prefix: username, length: 10 }),
+      })
+    )
+    .returning(["id"])
+    .executeTakeFirstOrThrow()
+  user.id = result.id
+  return { ...user, username }
+}
+
+export function KyselyAdapter(trx?: Transaction<DB>): Adapter {
+  const db = trx ? trx : database
   const { adapter } = db.getExecutor()
   const { supportsReturning } = adapter
   const isSqlite = adapter instanceof SqliteAdapter
@@ -50,20 +72,7 @@ export function KyselyAdapter(): Adapter {
 
   return {
     createUser: async (user: AdapterUser) => {
-      const username = user.email.split("@")[0]
-
-      const result = await db
-        .insertInto("auth.user")
-        .values(to({ ...user, id: undefined, username }))
-        .onConflict((oc) =>
-          oc.column("username").doUpdateSet({
-            username: idGenerate({ prefix: username, length: 10 }),
-          })
-        )
-        .returning(["id"])
-        .executeTakeFirstOrThrow()
-      user.id = result.id
-      return user
+      return createUser(user, db)
     },
     getUser: async (id: string) => {
       const result = await db
