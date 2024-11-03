@@ -12,8 +12,10 @@ export default async function Layout({
   const { session, org } = await hasPerm({ orgSlug: params.orgSlug })
 
   return (
-    <SessionProvider session={session} org={org}>
-      {children}
-    </SessionProvider>
+    <div>
+      <SessionProvider session={session} org={org}>
+        {children}
+      </SessionProvider>
+    </div>
   )
 }

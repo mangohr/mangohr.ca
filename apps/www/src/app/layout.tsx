@@ -33,7 +33,9 @@ export default function RootLayout({
           showSpinner={false}
         />
         <Toaster position="top-right" />
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <main>{children}</main>
+        </QueryProvider>
       </body>
     </html>
   )
