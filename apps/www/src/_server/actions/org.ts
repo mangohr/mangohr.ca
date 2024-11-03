@@ -31,7 +31,8 @@ export const createOrgAction = async (
       )
       .returning(["slug", "id"])
       .executeTakeFirstOrThrow()
-
+    const [first_name, middle_name, last_name] =
+      session.user.name?.split(" ") || [session.user.email?.split("@")[0]] || []
     await trx
       .insertInto("orgs.employee")
       .values({
@@ -39,6 +40,9 @@ export const createOrgAction = async (
         user_id: session.user.id,
         role: "owner",
         address: {},
+        first_name,
+        last_name,
+        middle_name,
         emergency_contacts: [],
       })
       .returningAll()

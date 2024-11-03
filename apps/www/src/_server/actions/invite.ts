@@ -55,7 +55,9 @@ export const inviteEmployeeAction = async (data: string) => {
       user = (await createUser(
         {
           id: "",
-          name: `${parsed.general.first_name} ${parsed.general.last_name}`.trim(),
+          name:
+            `${parsed.general.first_name} ${parsed.general.last_name}`.trim() ||
+            parsed.general.email?.split("@")[0],
           email: parsed.general.email,
           emailVerified: null,
         },
