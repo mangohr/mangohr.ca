@@ -1,21 +1,30 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useOptimistic, useState } from "react"
 import { useParams } from "next/navigation"
+import { getEmployeeTimeOff } from "@/_server/handlers/timeoff"
 import TimeOffRequestForm from "@/forms/timeoff/request"
 import { Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 
-const EmployeeTimeOffHead = () => {
+import TimeOffList from "./list"
+
+const EmployeeTimeOff = ({
+  list,
+}: {
+  list: Awaited<ReturnType<typeof getEmployeeTimeOff>>
+}) => {
+  const [data, setOptimisticData] = useOptimistic(list)
+
   const [edit, setEdit] = useState(false)
 
   const formId = "request-timeoff"
   const { userName } = useParams() as any
 
   return (
-    <>
+    <div className="space-y-6">
       <div className="flex items-center space-x-6">
         <div className="flex-1">
           <h1 className="text-xl font-medium">Time Off Requests</h1>
@@ -45,10 +54,12 @@ const EmployeeTimeOffHead = () => {
           id={formId}
           onSubmit={() => setEdit(false)}
           empUsername={userName}
+          setDataOptimistic={(val) => setOptimisticData((p) => [val, ...p])}
         />
       )}
-    </>
+      <TimeOffList data={data} />
+    </div>
   )
 }
 
-export default EmployeeTimeOffHead
+export default EmployeeTimeOff

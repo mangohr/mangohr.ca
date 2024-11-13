@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Fragment } from "react"
 import { getEmployeeTimeOff } from "@/_server/handlers/timeoff"
 import { format } from "date-fns"
 import { ArrowRight } from "lucide-react"
@@ -75,8 +75,8 @@ const TimeOffList = ({
               </TableRow>
             ) : (
               data?.map((t, i) => (
-                <>
-                  <TableRow key={i} className="border-t-0">
+                <Fragment key={i}>
+                  <TableRow className="border-t-0">
                     <TableCell className="py-4">
                       <p>{format(t.created_at, "PP")}</p>
                     </TableCell>
@@ -114,7 +114,7 @@ const TimeOffList = ({
                       <p>{t.cost}</p>
                     </TableCell>
                   </TableRow>
-                </>
+                </Fragment>
               ))
             )}
           </TableBody>

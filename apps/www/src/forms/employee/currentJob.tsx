@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFormContext } from "react-hook-form"
 import { z } from "zod"
 
-import { DatePicker } from "@/components/ui/date-picker"
+import { DateTimePicker } from "@/components/ui/calendar"
 import {
   Form,
   FormControl,
@@ -129,9 +129,10 @@ export function SingleCurrentJobForm() {
             <FormLabel>Effective from</FormLabel>
             <div>
               <FormControl>
-                <DatePicker
-                  selected={(field.value && new Date(field.value)) || undefined}
-                  onSelect={field.onChange}
+                <DateTimePicker
+                  granularity="day"
+                  value={(field.value && new Date(field.value)) || undefined}
+                  onChange={field.onChange}
                 />
               </FormControl>
               <FormMessage />

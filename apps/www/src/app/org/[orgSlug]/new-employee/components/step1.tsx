@@ -83,7 +83,7 @@ export default function NewEmployeeStep1() {
               <FormControl>
                 <Input
                   size={"lg"}
-                  placeholder="jhondoe@acme.inc"
+                  placeholder="example@company.com"
                   aria-labelledby="names"
                   {...field}
                 />

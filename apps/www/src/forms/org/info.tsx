@@ -8,8 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFormContext } from "react-hook-form"
 import { z } from "zod"
 
+import { DateTimePicker } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DatePicker } from "@/components/ui/date-picker"
 import {
   Form,
   FormControl,
@@ -177,12 +177,12 @@ export function OrgGeneralFormContent() {
                 <FormLabel>Established on</FormLabel>
                 <div>
                   <FormControl>
-                    <DatePicker
-                      mode="single"
-                      onSelect={field.onChange}
-                      selected={
+                    <DateTimePicker
+                      granularity="day"
+                      value={
                         (field.value && new Date(field.value)) || undefined
                       }
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />

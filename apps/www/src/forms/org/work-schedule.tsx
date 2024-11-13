@@ -11,7 +11,7 @@ import { z } from "zod"
 
 import { days } from "@/lib/calendar"
 import { Button } from "@/components/ui/button"
-import { DatePicker } from "@/components/ui/date-picker"
+import { DateTimePicker } from "@/components/ui/calendar"
 import {
   Dialog,
   DialogBody,
@@ -138,11 +138,13 @@ export default function CompanyWorkScheduleForm({
                     <FormLabel className="mt-2">Effective form</FormLabel>
                     <div>
                       <FormControl>
-                        <DatePicker
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          modal={true}
-                          mode="single"
+                        <DateTimePicker
+                          granularity="day"
+                          value={
+                            (field.value && new Date(field.value)) || undefined
+                          }
+                          // modal={true}
+                          onChange={field.onChange}
                         />
                       </FormControl>
                       <FormMessage />

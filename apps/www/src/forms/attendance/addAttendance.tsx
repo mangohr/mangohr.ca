@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
+import { DateTimePicker } from "@/components/ui/calendar"
 import {
   Dialog,
   DialogBody,
@@ -97,7 +98,15 @@ export default function AddAttendanceForm({ trigger }: { trigger: ReactNode }) {
                       <FormLabel>Login Time</FormLabel>
                       <div>
                         <FormControl>
-                          <Input type="datetime-local" {...field} />
+                          {/* <Input type="datetime-local" {...field} /> */}
+                          <DateTimePicker
+                            hourCycle={12}
+                            value={
+                              (field.value && new Date(field.value)) ||
+                              undefined
+                            }
+                            onChange={field.onChange}
+                          />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -112,10 +121,18 @@ export default function AddAttendanceForm({ trigger }: { trigger: ReactNode }) {
                       <FormLabel>Logout Time</FormLabel>
                       <div>
                         <FormControl>
-                          <Input
+                          {/* <Input
                             type="datetime-local"
                             placeholder="Logout Time..."
                             {...field}
+                          /> */}
+                          <DateTimePicker
+                            hourCycle={12}
+                            value={
+                              (field.value && new Date(field.value)) ||
+                              undefined
+                            }
+                            onChange={field.onChange}
                           />
                         </FormControl>
                         <FormMessage />

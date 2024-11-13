@@ -4,7 +4,6 @@ import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { navs } from "@/constants/links"
-import { useSession } from "@/context/session"
 
 import { cn } from "@/lib/utils"
 
@@ -18,7 +17,6 @@ function DefaultNav() {
     >
       <div className="m-auto flex max-w-screen-xl items-center justify-between">
         <div>
-          {" "}
           <Link href={navs.home.url}>
             <Image
               src="/assets/logo/full-white.png"
@@ -33,7 +31,7 @@ function DefaultNav() {
             <Link
               href={navs.dashboard.url}
               className={cn(
-                buttonVariants({ variant: "white" }),
+                buttonVariants({ variant: "white-outline" }),
                 "h-10 rounded-full text-lg hover:bg-transparent"
               )}
             >
@@ -54,7 +52,7 @@ function DefaultNav() {
               <Link
                 href={navs.login.url}
                 className={cn(
-                  buttonVariants({ variant: "white" }),
+                  buttonVariants({ variant: "white-outline" }),
                   "h-10 rounded-full text-lg hover:bg-transparent"
                 )}
               >

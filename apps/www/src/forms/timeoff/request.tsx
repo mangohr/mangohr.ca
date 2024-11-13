@@ -2,13 +2,15 @@
 
 import React, { useTransition } from "react"
 import { employeeTimeOffRequest } from "@/_server/actions/employee"
+import { getEmployeeTimeOff } from "@/_server/handlers/timeoff"
 import { timeoffSchema } from "@/schema/timeoff"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { addDays } from "date-fns"
-import { DateRange } from "react-day-picker"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { idGenerate } from "@/lib/idGenerate"
+import { DateTimePicker } from "@/components/ui/calendar"
 import {
   Card,
   CardContent,
@@ -16,7 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { DatePicker } from "@/components/ui/date-picker"
 import {
   Form,
   FormControl,
@@ -32,9 +33,13 @@ export default function TimeOffRequestForm({
   id,
   onSubmit,
   empUsername,
+  setDataOptimistic,
 }: {
   id: string
   onSubmit: (val: any) => void
+  setDataOptimistic: (
+    val: Awaited<ReturnType<typeof getEmployeeTimeOff>>[0]
+  ) => void
   empUsername: string
 }) {
   const [_, setTransition] = useTransition()
@@ -52,6 +57,20 @@ export default function TimeOffRequestForm({
   const handleSubmit = form.handleSubmit(async (val) => {
     setTransition(() => {
       employeeTimeOffRequest({ formData: val, username: empUsername })
+      setDataOptimistic({
+        status: "pending",
+        action_by: null,
+        action_message: null,
+        employee_id: null,
+        created_at: new Date(),
+        end_date: new Date(addDays(val.start_date, val.cost).toString()),
+        id: idGenerate(),
+        org_id: null,
+        request_reason: val.request_reason,
+        start_date: new Date(val.start_date),
+        cost: String(val.cost),
+        type: val.type,
+      })
     })
     onSubmit && onSubmit(val)
   })
@@ -75,13 +94,17 @@ export default function TimeOffRequestForm({
                   <FormLabel>Starting Date</FormLabel>
                   <div>
                     <FormControl>
-                      <DatePicker
-                        mode="single"
-                        selected={new Date(field.value) || undefined}
-                        onSelect={(e) =>
-                          field.onChange(e?.toISOString() || undefined)
+                      <DateTimePicker
+                        granularity="day"
+                        value={
+                          (field.value && new Date(field.value)) || undefined
                         }
-                        disabled={(date) => date < new Date()}
+                        // modal={true}
+                        onChange={field.onChange}
+                        // disabled={
+                        //   (field.value && new Date(field.value) < new Date()) ||
+                        //   undefined
+                        // }
                       />
                     </FormControl>
                     <FormMessage />

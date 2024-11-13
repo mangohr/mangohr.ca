@@ -18,8 +18,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
+import { DateTimePicker } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DatePicker } from "@/components/ui/date-picker"
 import {
   Form,
   FormControl,
@@ -30,6 +30,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 
 const contact = {
@@ -180,7 +187,7 @@ export function EmployeeGeneralFormContent() {
                 <FormLabel>Work Email</FormLabel>
                 <div>
                   <FormControl>
-                    <Input placeholder="jhon@company.com" {...field} />
+                    <Input placeholder="example@company.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -195,7 +202,7 @@ export function EmployeeGeneralFormContent() {
                 <FormLabel>Phone No.</FormLabel>
                 <div>
                   <FormControl>
-                    <Input placeholder="+12 2234234342" {...field} />
+                    <Input placeholder="+1 250 123 0909" {...field} />
                   </FormControl>
                   <FormMessage />
                 </div>
@@ -210,12 +217,12 @@ export function EmployeeGeneralFormContent() {
                 <FormLabel>Date of birth</FormLabel>
                 <div>
                   <FormControl>
-                    <DatePicker
-                      mode="single"
-                      onSelect={field.onChange}
-                      selected={
+                    <DateTimePicker
+                      granularity="day"
+                      value={
                         (field.value && new Date(field.value)) || undefined
                       }
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
@@ -230,9 +237,22 @@ export function EmployeeGeneralFormContent() {
               <FormItem className="grid grid-cols-[200px,auto] items-center gap-6">
                 <FormLabel>Gender</FormLabel>
                 <div>
-                  <FormControl>
-                    <Input placeholder="Select" {...field} />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Gender" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="non-binary">Non Binary</SelectItem>
+                      <SelectItem value="">Prefer not to say </SelectItem>
+                    </SelectContent>
+                  </Select>{" "}
                   <FormMessage />
                 </div>
               </FormItem>
@@ -245,9 +265,24 @@ export function EmployeeGeneralFormContent() {
               <FormItem className="grid grid-cols-[200px,auto] items-center gap-6">
                 <FormLabel>Marital Status</FormLabel>
                 <div>
-                  <FormControl>
-                    <Input placeholder="Select" {...field} />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="married">Married</SelectItem>
+                      <SelectItem value="un-married">Un-married</SelectItem>
+                      <SelectItem value="common-law">Common-law</SelectItem>
+                      <SelectItem value="">Prefer not to say </SelectItem>
+
+                      {/* <SelectItem value="non-binary">Non Binary</SelectItem> */}
+                    </SelectContent>
+                  </Select>{" "}
                   <FormMessage />
                 </div>
               </FormItem>
@@ -340,10 +375,10 @@ export function EmployeeGeneralFormContent() {
             name="address.zip_code"
             render={({ field }) => (
               <FormItem className="grid grid-cols-[200px,auto] items-center gap-6">
-                <FormLabel>Zip Code</FormLabel>
+                <FormLabel>Postal Code/Zip Code</FormLabel>
                 <div>
                   <FormControl>
-                    <Input placeholder="Zip Code" {...field} />
+                    <Input placeholder="Postal Code/Zip Code" {...field} />
                   </FormControl>
                   <FormMessage />
                 </div>

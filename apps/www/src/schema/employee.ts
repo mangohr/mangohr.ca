@@ -9,10 +9,9 @@ import {
 } from "./default"
 
 const personalSchema = z.object({
-  first_name: z.string(),
+  first_name: z.string().min(1),
   middle_name: z.string(),
-  last_name: z.string(),
-
+  last_name: z.string().min(1),
   gender: z.string(),
   date_of_birth: dateSchema.optional(),
   work_email: z.string(),
@@ -54,7 +53,7 @@ const inviteSchema = z.object({
     first_name: personalSchema.shape.first_name,
     middle_name: personalSchema.shape.middle_name,
     last_name: personalSchema.shape.last_name,
-    email: z.string().email(),
+    email: z.string().email().min(1),
     job: currentJobSchema,
     action: z.enum(["create", "invite"]),
   }),

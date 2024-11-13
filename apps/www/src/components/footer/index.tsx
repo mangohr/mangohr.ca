@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 
 export default function DefaultFooter() {
   return (
-    <footer className="m-auto max-w-screen-xl space-y-8 py-16">
+    <footer className="m-auto max-w-screen-xl space-y-8 px-4 py-16 xl:px-0">
       <div className="flex  items-center justify-between">
         <Link href={navs.home.url}>
           <Image

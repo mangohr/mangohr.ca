@@ -18,7 +18,9 @@
     "AWS_ACCESS_KEY",
     "AWS_SECRET_KEY",
     "S3_UPLOAD_BUCKET",
-    "S3_UPLOAD_REGION"
+    "S3_UPLOAD_REGION",
+    "NEXT_PUBLIC_POSTHOG_KEY",
+    "NEXT_PUBLIC_POSTHOG_HOST"
   ],
   "ui": "stream",
   "tasks": {

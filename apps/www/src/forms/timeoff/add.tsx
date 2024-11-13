@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
-import { DatePicker } from "@/components/ui/date-picker"
+import { DateTimePicker } from "@/components/ui/calendar"
 import {
   Dialog,
   DialogBody,
@@ -112,13 +112,27 @@ export default function AddTimeOffForm({ trigger }: { trigger: ReactNode }) {
                       <FormLabel>Starting Date</FormLabel>
                       <div>
                         <FormControl>
-                          <DatePicker
+                          {/* <DatePicker
                             mode="single"
                             selected={new Date(field.value) || undefined}
                             onSelect={(e) =>
                               field.onChange(e?.toISOString() || undefined)
                             }
                             disabled={(date) => date < new Date()}
+                          /> */}
+                          <DateTimePicker
+                            granularity="day"
+                            value={
+                              (field.value && new Date(field.value)) ||
+                              undefined
+                            }
+                            // modal={true}
+                            onChange={field.onChange}
+                            // disabled={
+                            //   (field.value &&
+                            //     new Date(field.value) < new Date()) ||
+                            //   undefined
+                            // }
                           />
                         </FormControl>
                         <FormMessage />

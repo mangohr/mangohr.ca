@@ -5,9 +5,11 @@ import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { logout } from "@/_server/actions/auth"
 import { useEmployee } from "@/context/employee"
+import { useSession } from "@/context/session"
 import { AvatarImage } from "@radix-ui/react-avatar"
 import { LogOut, Mail, MapPin, Phone } from "lucide-react"
 
+import { isSuperUser } from "@/lib/user"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -22,6 +24,7 @@ import { Separator } from "@/components/ui/separator"
 
 export default function EmployeeLayout({ children }: { children: ReactNode }) {
   const { employee: data } = useEmployee()
+  const { session } = useSession()
 
   const { userName, orgSlug } = useParams() as {
     userName: string
@@ -156,15 +159,17 @@ export default function EmployeeLayout({ children }: { children: ReactNode }) {
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
-            <div>
-              <Button
-                variant={"outline"}
-                size={"icon-sm"}
-                onClick={() => logout()}
-              >
-                <LogOut /> <span className="sr-only">Logout</span>
-              </Button>
-            </div>
+            {!isSuperUser(session?.employee?.role) && (
+              <div>
+                <Button
+                  variant={"outline"}
+                  size={"icon-sm"}
+                  onClick={() => logout()}
+                >
+                  <LogOut /> <span className="sr-only">Logout</span>
+                </Button>
+              </div>
+            )}
           </div>
           {children}
           {/* <Tabs defaultValue="general" className="space-y-6">

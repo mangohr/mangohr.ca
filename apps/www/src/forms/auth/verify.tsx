@@ -1,10 +1,11 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useTransition } from "react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { signInWithEmail } from "@/_server/actions/auth"
 import { useAuthStore } from "@/stores/auth"
+import { ArrowLeft, Loader2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -12,11 +13,19 @@ import { Button, buttonVariants } from "@/components/ui/button"
 export default function VerifyMagicLinkForm() {
   const { email } = useAuthStore()
   const [isHydrated, setIsHydrated] = useState(false)
+  const [pending, startTransition] = useTransition()
 
   useEffect(() => {
     if (!isHydrated) setIsHydrated(true)
     if (isHydrated && !email) redirect("login")
   }, [email, isHydrated])
+
+  const onSubmit = () => {
+    startTransition(() => {
+      if (!email) return
+      signInWithEmail({ email })
+    })
+  }
 
   if (!email) return null
 
@@ -34,7 +43,11 @@ export default function VerifyMagicLinkForm() {
             Please check you inbox.
           </p>
         </div>
-        <Button onClick={() => signInWithEmail({ email })}>Resend Email</Button>
+        <Button onClick={onSubmit} disabled={pending}>
+          {" "}
+          {pending && <Loader2 className="animate-spin" />}
+          <span> Resend Email</span>
+        </Button>
         <p className="text-muted-foreground text-sm">
           Not received? Don&apos;t forget to check spam folder.
         </p>
@@ -42,7 +55,7 @@ export default function VerifyMagicLinkForm() {
           href={"/auth/login"}
           className={cn(buttonVariants({ variant: "link" }), "h-0 w-fit p-0")}
         >
-          &lt;-&nbsp; Go back to Login
+          <ArrowLeft className="size-4" /> Go back to Login
         </Link>
       </div>
     </div>
