@@ -138,6 +138,9 @@ const ROLES = {
       update: true,
       delete: true,
     },
+    orgDashboard: {
+      view: true,
+    },
     orgList: {
       view: false, /// not working
     },
@@ -206,6 +209,9 @@ const ROLES = {
     orgList: {
       view: false,
     },
+    orgDashboard: {
+      view: true,
+    },
     employeeList: {
       view: false,
     },
@@ -269,6 +275,9 @@ const ROLES = {
       delete: true,
     },
     orgList: {
+      view: true,
+    },
+    orgDashboard: {
       view: true,
     },
     employeeList: {

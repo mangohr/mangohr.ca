@@ -20,6 +20,9 @@ export function CSPostHogProvider({ children }: { children: ReactNode }) {
       capture_pageleave: true, // Enable pageleave capture
     })
   }, [])
+
+  console.log(env.NEXT_PUBLIC_POSTHOG_KEY, env.NEXT_PUBLIC_POSTHOG_HOST)
+
   return (
     <PostHogProvider client={posthog}>
       <PostHogPageView />
