@@ -1,5 +1,7 @@
-import React from "react"
-import AdminAddAttendanceForm from "@/forms/attendance/addAttendance"
+"use client"
+
+import React, { useState } from "react"
+import AdminAddAttendanceForm from "@/forms/attendance/updateAttendance"
 import { Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -7,7 +9,8 @@ import PageLayout from "@/components/custom/layouts/page"
 
 import AttendanceList from "./components/list"
 
-export default async function Page() {
+export default function Page() {
+  const [open, setOpen] = useState(false)
   return (
     <PageLayout>
       <div className="flex justify-between">
@@ -18,14 +21,11 @@ export default async function Page() {
           </p>
         </div>
         <div className="flex gap-4">
-          <AdminAddAttendanceForm
-            trigger={
-              <Button>
-                <Plus />
-                <span>Add Attendance</span>
-              </Button>
-            }
-          />
+          <AdminAddAttendanceForm open={open} setOpen={setOpen} />
+          <Button onClick={() => setOpen(true)}>
+            <Plus />
+            <span>Add Attendance</span>
+          </Button>
         </div>
       </div>
       {/* <div>

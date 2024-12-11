@@ -5,7 +5,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { getAllAttendance } from "@/_server/actions/attendance"
 import { queryKeys } from "@/constants/queryKeys"
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
+import AttendanceActions from "@/forms/attendance/actions"
+import { CaretSortIcon } from "@radix-ui/react-icons"
 import { createColumnHelper } from "@tanstack/react-table"
 import { format } from "date-fns"
 
@@ -93,7 +94,7 @@ const columns = [
     },
     cell: ({ row }) => (
       <Link href={"employee/" + row?.original?.username} className="lowercase">
-        {format(row.getValue("login"), "Pp")}
+        {format(row.getValue("logout"), "Pp")}
       </Link>
     ),
   }),
@@ -119,22 +120,17 @@ const columns = [
       )
     },
   }),
-  // columnHelper.display({
-  //   id: "actions",
-  //   enableHiding: false,
-  //   cell: ({ row }) => {
-  //     const payment = row.original
-
-  //     return (
-  //       <div className="flex justify-center">
-  //         <Button variant="ghost" className="size-8 p-0">
-  //           <span className="sr-only">Open menu</span>
-  //           <DotsHorizontalIcon className="size-4" />
-  //         </Button>
-  //       </div>
-  //     )
-  //   },
-  // }),
+  columnHelper.display({
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      return (
+        <div className="flex justify-center">
+          <AttendanceActions data={row.original} />
+        </div>
+      )
+    },
+  }),
 ]
 
 export default function AttendanceList() {
@@ -149,8 +145,8 @@ export default function AttendanceList() {
         searchInput: {
           placeholder: "Search Employee ID, Name or Email...",
         },
-        empty: { title: "No Employees!" },
-        loading: { title: "Finding Employees" },
+        empty: { title: "No Attendances!" },
+        loading: { title: "Finding Attendances" },
       }}
     />
   )

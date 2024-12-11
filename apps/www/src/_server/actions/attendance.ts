@@ -70,17 +70,31 @@ export const getAllAttendance = async (props: { searchParams: unknown }) => {
   return { items: result, hasMore: result.length === parsed.limit }
 }
 
-export const adminAddAttendance = async (
-  props: z.infer<typeof attendanceSchema.add.validate>
+export const updateAttendance = async (
+  props:
+    | z.infer<typeof attendanceSchema.update.validate>
+    | z.infer<typeof attendanceSchema.add.validate>
 ) => {
   const orgSlug = z.string().parse(headers().get("x-org"))
+  const schema =
+    attendanceSchema[
+      (props as z.infer<typeof attendanceSchema.update.validate>).id
+        ? "update"
+        : "add"
+    ]
   const {
+    id,
     employee: emp_username,
     login,
     logout,
-  } = attendanceSchema.add.validate.parse(props)
+  } = schema.validate.parse({
+    ...props,
+    id: (props as any).id || "",
+  }) as z.infer<typeof attendanceSchema.update.validate>
 
-  const { session, org } = await attendanceSchema.list.read.permission(orgSlug)
+  const { session, org } = await (
+    id ? schema : attendanceSchema.add
+  ).permission(orgSlug)
 
   let emp = session.employee
 
@@ -89,20 +103,55 @@ export const adminAddAttendance = async (
   }
   if (!emp || !emp?.user_id) throw new Error("Employee not found!")
 
-  const data = await db
-    .insertInto("orgs.attendance")
-    .values({
-      logout,
-      login,
-      employee_id: emp.id,
-      org_id: org!.id,
-    })
-    .returning(["id"])
+  let data
+  if (id) {
+    await db
+      .updateTable("orgs.attendance")
+      .set({
+        logout,
+        login,
+      })
+      .where("id", "=", id)
+      .where("org_id", "=", org!.id)
+      .where("employee_id", "=", emp.id)
+      .executeTakeFirstOrThrow()
+      .catch(() => {
+        throw new Error("Failed to update attendance!")
+      })
+    data = { id }
+  } else {
+    data = await db
+      .insertInto("orgs.attendance")
+      .values({
+        logout,
+        login,
+        employee_id: emp.id,
+        org_id: org!.id,
+      })
+      .returning(["id"])
+      .executeTakeFirstOrThrow()
+      .catch(() => {
+        throw new Error("Failed to add attendance!")
+      })
+  }
+  // revalidatePath("/org/[orgSlug]/attendance", "page")
+  return data
+}
+
+export const deleteAttendance = async (
+  props: z.infer<typeof attendanceSchema.delete.validate>
+) => {
+  const orgSlug = z.string().parse(headers().get("x-org"))
+  const { id } = attendanceSchema.delete.validate.parse(props)
+
+  const { org } = await attendanceSchema.delete.permission(orgSlug)
+
+  await db
+    .deleteFrom("orgs.attendance")
+    .where("org_id", "=", org!.id)
+    .where("id", "=", id)
     .executeTakeFirstOrThrow()
     .catch(() => {
       throw new Error("Failed to add attendance!")
     })
-
-  // revalidatePath("/org/[orgSlug]/attendance", "page")
-  return data
 }

@@ -102,7 +102,7 @@ type Permissions = {
   }
   attendance: {
     dataType: OrgsAttendance
-    action: "view" | "create"
+    action: "view" | "create" | "update" | "delete"
   }
   attendanceList: {
     dataType: OrgsAttendance
@@ -150,7 +150,7 @@ const ROLES = {
     employeeInvite: {
       view: false,
       create: true,
-      delete: false,
+      delete: true,
     },
     employeePersonal: {
       view: true,
@@ -167,9 +167,11 @@ const ROLES = {
     attendance: {
       view: true,
       create: true,
+      update: true,
+      delete: true,
     },
     attendanceList: {
-      view: false,
+      view: true,
     },
     department: {
       view: true,
@@ -191,7 +193,7 @@ const ROLES = {
       view: true,
       create: true,
       update: true,
-      delete: false,
+      delete: true,
     },
     workSchedule: {
       view: true,
@@ -233,8 +235,10 @@ const ROLES = {
       update: false,
     },
     attendance: {
-      view: false,
-      create: false,
+      view: true,
+      create: true,
+      update: true,
+      delete: true,
     },
     attendanceList: {
       view: false,

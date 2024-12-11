@@ -11,10 +11,12 @@ export function SelectEmployee({
   size,
   selected = undefined,
   setSelected,
+  disabled,
 }: {
   size?: Parameters<typeof DefaultComboBox>[0]["size"]
   selected: string | undefined
   setSelected: (val: string | undefined) => void
+  disabled?: boolean
 }) {
   const [search, setSearch] = useState("")
   const [debouncedSearch] = useDebounce(search, 500)
@@ -43,6 +45,7 @@ export function SelectEmployee({
       selected={curr}
       setSelected={handleSelected}
       size={size}
+      disabled={disabled}
     />
   )
 }

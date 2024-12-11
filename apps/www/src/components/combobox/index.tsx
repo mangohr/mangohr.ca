@@ -37,6 +37,7 @@ export function DefaultComboBox({
   onSearch,
   loading,
   size = "default",
+  disabled,
 }: {
   data: DefaultCombobox[] | undefined
   placeholder: string
@@ -46,6 +47,7 @@ export function DefaultComboBox({
   onSearch?: (val: string) => void
   loading?: boolean
   size?: "lg" | "default" | "full"
+  disabled?: boolean
 }) {
   const [open, setOpen] = React.useState(false)
   const ref = React.useRef<HTMLButtonElement>(null)
@@ -53,7 +55,7 @@ export function DefaultComboBox({
   // if (isDesktop) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild disabled={disabled}>
         <Button
           ref={ref}
           variant="outline"

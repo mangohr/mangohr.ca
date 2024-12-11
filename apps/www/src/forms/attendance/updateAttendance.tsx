@@ -1,7 +1,10 @@
 "use client"
 
-import { ReactNode, useState, useTransition } from "react"
-import { adminAddAttendance } from "@/_server/actions/attendance"
+import { useEffect, useTransition } from "react"
+import {
+  getAllAttendance,
+  updateAttendance,
+} from "@/_server/actions/attendance"
 import { queryKeys } from "@/constants/queryKeys"
 import attendanceSchema from "@/schema/attendance"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -18,7 +21,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import {
   Form,
@@ -28,25 +30,44 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { SelectEmployee } from "@/components/combobox/selectEmployee"
 
-export default function AddAttendanceForm({ trigger }: { trigger: ReactNode }) {
+export default function UpdateAttendanceForm({
+  open,
+  setOpen,
+  data,
+}: {
+  open: boolean
+  setOpen: (val: boolean) => void
+  data?: Awaited<ReturnType<typeof getAllAttendance>>["items"][0]
+}) {
   const queryClient = useQueryClient()
   const [pending, setTransition] = useTransition()
-  const [open, setOpen] = useState(false)
-  const form = useForm<z.infer<typeof attendanceSchema.add.validate>>({
-    resolver: zodResolver(attendanceSchema.add.validate),
+  const schema = attendanceSchema[data?.id ? "update" : "add"]
+  const form = useForm<z.infer<typeof schema.validate>>({
+    resolver: zodResolver(schema.validate),
     defaultValues: {
-      employee: "",
-      login: "",
-      logout: "",
+      id: data?.id || "",
+      employee: data?.username || "",
+      login: (data?.login && new Date(data.login).toISOString()) || "",
+      logout: (data?.logout && new Date(data?.logout).toISOString()) || "",
     },
   })
 
+  // console.log(data)
+  // useEffect(() => {
+  //   if (!data) return
+  //   form.reset({
+  //     id: data?.id || "",
+  //     employee: data?.username || "",
+  //     login: (data?.login && new Date(data.login).toISOString()) || "",
+  //     logout: (data?.logout && new Date(data?.logout).toISOString()) || "",
+  //   })
+  // }, [data])
+
   const handleSubmit = form.handleSubmit(async (val) => {
     setTransition(() => {
-      adminAddAttendance(val).then((v) => {
+      updateAttendance(val).then((v) => {
         queryClient.invalidateQueries({ queryKey: [queryKeys.attendanceList] })
         form.reset()
         setOpen(false)
@@ -57,11 +78,14 @@ export default function AddAttendanceForm({ trigger }: { trigger: ReactNode }) {
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>{trigger}</DialogTrigger>
         <DialogContent className="">
           <DialogHeader>
             <DialogTitle>Attendance Form</DialogTitle>
-            <DialogDescription>{"Let's add an attendance"}</DialogDescription>
+            <DialogDescription>
+              {data?.id
+                ? "Lets update an attendance"
+                : "Let's add an attendance"}
+            </DialogDescription>
           </DialogHeader>
           <DialogBody>
             <Form {...form}>
@@ -83,6 +107,7 @@ export default function AddAttendanceForm({ trigger }: { trigger: ReactNode }) {
                             size="full"
                             selected={field.value}
                             setSelected={field.onChange}
+                            disabled={!!data?.username}
                           />
                         </FormControl>
                         <FormMessage />
@@ -141,7 +166,7 @@ export default function AddAttendanceForm({ trigger }: { trigger: ReactNode }) {
                   )}
                 />
                 <Button type="submit" className="w-full" disabled={pending}>
-                  Add Attendance
+                  {data?.id ? "Update Attendance" : "Add Attendance"}
                 </Button>
               </form>
             </Form>
