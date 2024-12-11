@@ -1,5 +1,6 @@
 import { roles } from "@/constants/roles"
 import { scopeIds } from "@/constants/scopes"
+import { hasPermission } from "@/iam"
 import { z } from "zod"
 
 import {
@@ -69,7 +70,8 @@ const employeeListSchema = listQueryStateSchema
 const employeeSchema = {
   list: {
     read: {
-      scope: scopeIds["read:employee:list"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeeList", "view"),
       validate: employeeListSchema({
         sortIds: z.enum(["id"]),
         filterObj: z.object({ id: z.enum(["id"]), value: z.string() }),
@@ -78,44 +80,62 @@ const employeeSchema = {
   },
   invite: {
     read: {
-      scope: scopeIds["read:invitation"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeeInvite", "view"),
       validate: null,
     },
     create: {
-      scope: scopeIds["create:invitation"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeeInvite", "create"),
       validate: inviteSchema,
     },
     delete: {
-      scope: scopeIds["delete:invitation"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeeInvite", "delete"),
       validate: null,
     },
   },
 
   general: {
     get: {
-      scope: scopeIds["read:employee:personal"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeePersonal", "view"),
       validate: null,
     },
     edit: {
-      scope: scopeIds["edit:employee:personal"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeePersonal", "update"),
       validate: personalSchema,
     },
   },
   currentJob: {
+    read: {
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeeJob", "view"),
+      validate: null,
+    },
     create: {
-      scope: scopeIds["edit:employee:personal"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeeJob", "create"),
       validate: currentJobSchema,
     },
   },
   role: {
+    read: {
+      validate: null,
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeeRole", "view"),
+    },
     edit: {
-      scope: scopeIds["edit:employee:role"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "employeeRole", "update"),
       validate: roleSchema,
     },
   },
   attendance: {
     create: {
-      scope: scopeIds["create:employee:attendance"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "attendance", "create"),
       validate: attendanceSchema,
     },
   },

@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
-import { hasPerm } from "@/_server/helpers/hasPerm"
 import { SessionProvider } from "@/context/session"
+import orgSchema from "@/schema/org"
 
 export default async function Layout({
   children,
@@ -9,7 +9,7 @@ export default async function Layout({
   children: ReactNode
   params: any
 }) {
-  const { session, org } = await hasPerm({ orgSlug: params.orgSlug })
+  const { org, session } = await orgSchema.get.permission(params.orgSlug)
 
   return (
     <div>

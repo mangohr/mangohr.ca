@@ -111,6 +111,7 @@ export interface OrgsEmployee {
   org_id: Int8;
   phone: string | null;
   role: Generated<string | null>;
+  roles: Generated<string[]>;
   scopes: string[] | null;
   user_id: Int8;
   work_email: string | null;

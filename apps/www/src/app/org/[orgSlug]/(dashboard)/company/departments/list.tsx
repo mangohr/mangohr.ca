@@ -106,7 +106,6 @@ function SingleDepartment({
       deleteDepartmentAction(id)
     })
   }
-  console.log({ data: data.name, show })
   const handle = (val: any) => {
     setShow(false)
     onEdit(val)

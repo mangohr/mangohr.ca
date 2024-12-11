@@ -1,13 +1,13 @@
 "use server"
 
 import { headers } from "next/headers"
+import employeeSchema from "@/schema/employee"
 import { Expression, sql, SqlBool } from "kysely"
 import { z } from "zod"
 
 import { nullsToUndefined } from "@/lib/utils"
 
 import { db } from "../db"
-import { hasPerm } from "../helpers/hasPerm"
 
 const schema = z.object({ search: z.string().optional() })
 
@@ -15,7 +15,7 @@ export const getEmployeesComboBox = async (params: { search: string }) => {
   const orgSlug = z.string().parse(headers().get("x-org"))
 
   const { search } = schema.parse(params)
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await employeeSchema.list.read.permission(orgSlug)
 
   const data = await db
     .selectFrom("orgs.employee as e")

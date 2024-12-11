@@ -1,5 +1,6 @@
-import { z } from "zod";
-import { scopeIds } from "@/constants/scopes";
+import { scopeIds } from "@/constants/scopes"
+import { hasPermission } from "@/iam"
+import { z } from "zod"
 
 const schema = {
   name: z.string().min(1),
@@ -7,32 +8,32 @@ const schema = {
   phone: z.string().optional(),
   location: z.string().optional(),
   active: z.boolean().catch(true),
-};
+}
 
-const create = z.object(schema);
+const create = z.object(schema)
 
 const update = z.object({
   id: z.coerce.number().int(),
   ...schema,
-});
+})
 
 const officeSchema = {
   get: {
-    scope: scopeIds["read:office"],
+    permission: (orgSlug: string) => hasPermission(orgSlug, "office", "view"),
     validate: null,
   },
   create: {
-    scope: scopeIds["create:office"],
+    permission: (orgSlug: string) => hasPermission(orgSlug, "office", "create"),
     validate: create,
   },
   update: {
-    scope: scopeIds["update:office"],
+    permission: (orgSlug: string) => hasPermission(orgSlug, "office", "update"),
     validate: update,
   },
   delete: {
-    scope: scopeIds["delete:office"],
+    permission: (orgSlug: string) => hasPermission(orgSlug, "office", "delete"),
     validate: z.string(),
   },
-};
+}
 
-export default officeSchema;
+export default officeSchema

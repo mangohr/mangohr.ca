@@ -3,7 +3,6 @@
 import { headers } from "next/headers"
 import { redirect, RedirectType } from "next/navigation"
 import { db } from "@/_server/db"
-import { hasPerm } from "@/_server/helpers/hasPerm"
 import { env } from "@/env"
 import employeeSchema from "@/schema/employee"
 import { newEmployeeEmailRenderer } from "@mhr/mails/emails"
@@ -17,7 +16,8 @@ import { sendEmail } from "../mailer/send"
 export const inviteEmployeeAction = async (data: string) => {
   const parsed = employeeSchema.invite.create.validate.parse(data)
   const orgSlug = z.string().parse(headers().get("x-org"))
-  const { org, session } = await hasPerm({ orgSlug })
+  const { org, session } =
+    await employeeSchema.invite.create.permission(orgSlug)
 
   if (session.user.email === parsed.general.email)
     throw Error("You cannot invite yourself.")

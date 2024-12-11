@@ -9,8 +9,6 @@ import {
   Img,
   Link,
   Preview,
-  render,
-  renderAsync,
   Section,
   Tailwind,
   Text,

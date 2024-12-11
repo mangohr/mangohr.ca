@@ -1,9 +1,7 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
 import { db } from "@/_server/db"
-import { hasPerm } from "@/_server/helpers/hasPerm"
 import attendanceSchema from "@/schema/attendance"
 import { orgSlugSchema } from "@/schema/default"
 import { Expression, sql, SqlBool } from "kysely"
@@ -14,7 +12,7 @@ import { getEmployee } from "../cache/org"
 export const getAllAttendance = async (props: { searchParams: unknown }) => {
   const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
   const parsed = attendanceSchema.list.read.validate.parse(props.searchParams)
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await attendanceSchema.list.read.permission(orgSlug)
   const query = db
     .selectFrom("orgs.attendance as a")
     .leftJoin("orgs.employee as e", "e.id", "a.employee_id")
@@ -25,7 +23,7 @@ export const getAllAttendance = async (props: { searchParams: unknown }) => {
       "a.logout",
       "u.image",
       "u.username",
-      sql<string>`trim(COALESCE(first_name, '') || ' ' || COALESCE(middle_name, '') || COALESCE(last_name, ''))`.as(
+      sql<string>`trim(COALESCE(first_name, '') || ' ' || COALESCE(middle_name, '') || ' ' || COALESCE(last_name, ''))`.as(
         "name"
       ),
     ])
@@ -82,7 +80,7 @@ export const adminAddAttendance = async (
     logout,
   } = attendanceSchema.add.validate.parse(props)
 
-  const { session, org } = await hasPerm({ orgSlug })
+  const { session, org } = await attendanceSchema.list.read.permission(orgSlug)
 
   let emp = session.employee
 

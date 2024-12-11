@@ -11,7 +11,73 @@ import * as SelectPrimitive from "@radix-ui/react-select"
 
 import { cn } from "@/lib/utils"
 
-const Select = SelectPrimitive.Root
+import { Button } from "./button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./dialog"
+import { FormControl } from "./form"
+import { Input } from "./input"
+
+const Select = ({
+  children,
+  onValueChange,
+  value,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>) => {
+  const [openPop, setOpenPop] = React.useState(false)
+  const [otherVal, setOtherVal] = React.useState(value || "")
+
+  const onSubmit = () => {
+    onValueChange && onValueChange(otherVal || "")
+    setOpenPop(false)
+  }
+
+  return (
+    <div>
+      <Dialog open={openPop} onOpenChange={setOpenPop}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Other Value</DialogTitle>
+            <DialogDescription>
+              Enter custom value in input below.
+            </DialogDescription>
+            <div className="space-y-4">
+              <Input
+                value={otherVal}
+                onChange={(e) => setOtherVal(e.target.value)}
+              />
+              <div className="flex justify-end">
+                <Button type="button" onClick={onSubmit}>
+                  Submit
+                </Button>
+              </div>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+      <SelectPrimitive.Root
+        {...props}
+        value={value}
+        onValueChange={(v) => {
+          if (v == "other") {
+            setOpenPop(true)
+          }
+          return v == undefined || v === "other"
+            ? onValueChange && onValueChange("")
+            : onValueChange && onValueChange(v)
+        }}
+      >
+        {children}
+      </SelectPrimitive.Root>
+    </div>
+  )
+}
+
+Select.displayName = SelectPrimitive.Root.displayName
 
 const SelectGroup = SelectPrimitive.Group
 
@@ -22,7 +88,7 @@ const SelectTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
     size?: "lg" | "default"
   }
->(({ className, children, size = "default", ...props }, ref) => (
+>(({ className, children, size = "default", value, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
@@ -122,13 +188,14 @@ SelectLabel.displayName = SelectPrimitive.Label.displayName
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
->(({ className, children, ...props }, ref) => (
+>(({ className, children, value, onChange, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
       "focus:bg-accent focus:text-accent-foreground relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
+    value={value || "undefined"}
     {...props}
   >
     <span className="absolute right-2 flex size-3.5 items-center justify-center">
@@ -152,6 +219,37 @@ const SelectSeparator = React.forwardRef<
   />
 ))
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName
+
+export const FromSelect = ({
+  onValueChange,
+  value,
+  placeholder,
+  options,
+}: {
+  onValueChange: (v: string) => void
+  value: string
+  placeholder?: string
+  options: Array<{ value: string; label: string }>
+}) => {
+  return (
+    <Select onValueChange={onValueChange} defaultValue={value}>
+      <FormControl>
+        <SelectTrigger>
+          <SelectValue placeholder={placeholder || "Select"}>
+            {options.find((e) => e.value === value)?.label || value}
+          </SelectValue>
+        </SelectTrigger>
+      </FormControl>
+      <SelectContent>
+        {options.map((o, i) => (
+          <SelectItem key={i} value={o.value}>
+            {o.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}
 
 export {
   Select,

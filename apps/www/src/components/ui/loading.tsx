@@ -2,7 +2,7 @@ import React from "react"
 
 export default function Loading({
   title = "Loading...",
-  description = "Hold tight, we are fetching data.",
+  description = "Hold tight, we're processing your request.",
 }: {
   title?: string
   description?: string

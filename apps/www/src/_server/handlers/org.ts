@@ -3,15 +3,18 @@
 import "server-only"
 
 import { headers } from "next/headers"
+import departmentSchema from "@/schema/department"
+import officeSchema from "@/schema/office"
+import orgSchema from "@/schema/org"
+import workScheduleSchema from "@/schema/work-schedule"
 import { z } from "zod"
 
 import { nullsToUndefined } from "@/lib/utils"
 
 import { db } from "../db"
-import { hasPerm } from "../helpers/hasPerm"
 
 export const getAllOrgs = async () => {
-  const { session } = await hasPerm()
+  const { session } = await orgSchema.list.permission()
   const [result] = await Promise.all([
     db
       .selectFrom("orgs.employee as e")
@@ -27,15 +30,13 @@ export const getAllOrgs = async () => {
       .execute(),
   ])
 
-  console.log(result)
-
   return result
 }
 
 export const getSingleOrg = async () => {
   const orgSlug = z.string().parse(headers().get("x-org"))
 
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await orgSchema.get.permission(orgSlug)
 
   return nullsToUndefined(org)
 }
@@ -43,7 +44,7 @@ export const getSingleOrg = async () => {
 export const getOffices = async () => {
   const orgSlug = z.string().parse(headers().get("x-org"))
 
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await officeSchema.get.permission(orgSlug)
 
   const offices = await db
     .selectFrom("orgs.office")
@@ -65,7 +66,7 @@ export const getOffices = async () => {
 export const getDepartments = async () => {
   const orgSlug = z.string().parse(headers().get("x-org"))
 
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await departmentSchema.get.permission(orgSlug)
 
   const departments = await db
     .selectFrom("orgs.department as d")
@@ -79,7 +80,8 @@ export const getDepartments = async () => {
 
 export const getWorkSchedules = async () => {
   const orgSlug = z.string().parse(headers().get("x-org"))
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await workScheduleSchema.get.permission(orgSlug)
+
   const result = await db
     .selectFrom("orgs.work_schedule")
     .where("org_id", "=", org!.id)

@@ -2,12 +2,12 @@ import { orgSlugSchema } from "@/schema/default"
 
 import "server-only"
 
+import employeeSchema from "@/schema/employee"
 import { sql } from "kysely"
 import { z } from "zod"
 
 import { getEmployee } from "../cache/org"
 import { db } from "../db"
-import { hasPerm } from "../helpers/hasPerm"
 
 export const getEmployeeJobs = async (params: {
   userName: string
@@ -17,7 +17,8 @@ export const getEmployeeJobs = async (params: {
     .object({ orgSlug: orgSlugSchema, userName: z.string() })
     .parse(params)
 
-  const { org, session } = await hasPerm({ orgSlug })
+  const { org, session } =
+    await employeeSchema.currentJob.read.permission(orgSlug)
 
   let emp = undefined
 

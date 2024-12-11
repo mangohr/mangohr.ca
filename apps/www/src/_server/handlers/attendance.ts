@@ -1,10 +1,10 @@
 import "server-only"
 
+import attendanceSchema from "@/schema/attendance"
 import { orgSlugSchema } from "@/schema/default"
 import { z } from "zod"
 
 import { db } from "../db"
-import { hasPerm } from "../helpers/hasPerm"
 
 export const getEmployeeAttendance = async (params: {
   userName: string
@@ -14,7 +14,7 @@ export const getEmployeeAttendance = async (params: {
     .object({ orgSlug: orgSlugSchema, userName: z.string() })
     .parse(params)
 
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await attendanceSchema.read.permission(orgSlug)
 
   const result = await db
     .selectFrom("orgs.attendance as a")

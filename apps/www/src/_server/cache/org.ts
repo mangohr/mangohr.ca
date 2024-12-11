@@ -13,7 +13,7 @@ export const getOrg = async (slug: SelectType<OrgsList["slug"]>) =>
         .selectFrom("orgs.list")
         .selectAll()
         .where("slug", "=", slug)
-        .executeTakeFirst(),
+        .executeTakeFirstOrThrow(),
     errorName: "Company not found!",
   })
 

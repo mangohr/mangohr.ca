@@ -31,6 +31,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
+  FromSelect,
   Select,
   SelectContent,
   SelectItem,
@@ -113,6 +114,7 @@ export function EmployeeGeneralFormContent() {
     control: form.control,
     keyName: "key",
   })
+
   return (
     <div className="space-y-6">
       <Card>
@@ -237,22 +239,18 @@ export function EmployeeGeneralFormContent() {
               <FormItem className="grid grid-cols-[200px,auto] items-center gap-6">
                 <FormLabel>Gender</FormLabel>
                 <div>
-                  <Select
+                  <FromSelect
+                    placeholder="Select Gender"
+                    value={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Gender" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="non-binary">Non Binary</SelectItem>
-                      <SelectItem value="">Prefer not to say </SelectItem>
-                    </SelectContent>
-                  </Select>{" "}
+                    options={[
+                      { value: "male", label: "Male" },
+                      { value: "female", label: "Female" },
+                      { value: "non-binary", label: "Non Binary" },
+                      { value: "other", label: "Other" },
+                      { value: "", label: "Prefer not to say" },
+                    ]}
+                  />
                   <FormMessage />
                 </div>
               </FormItem>
@@ -265,24 +263,18 @@ export function EmployeeGeneralFormContent() {
               <FormItem className="grid grid-cols-[200px,auto] items-center gap-6">
                 <FormLabel>Marital Status</FormLabel>
                 <div>
-                  <Select
+                  <FromSelect
+                    placeholder="Select Marital Status"
+                    value={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="married">Married</SelectItem>
-                      <SelectItem value="un-married">Un-married</SelectItem>
-                      <SelectItem value="common-law">Common-law</SelectItem>
-                      <SelectItem value="">Prefer not to say </SelectItem>
-
-                      {/* <SelectItem value="non-binary">Non Binary</SelectItem> */}
-                    </SelectContent>
-                  </Select>{" "}
+                    options={[
+                      { value: "married", label: "Married" },
+                      { value: "un-married", label: "Un Married" },
+                      { value: "common-law", label: "Common Law" },
+                      { value: "other", label: "Other" },
+                      { value: "", label: "Prefer not to say" },
+                    ]}
+                  />
                   <FormMessage />
                 </div>
               </FormItem>

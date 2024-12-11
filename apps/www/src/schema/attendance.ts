@@ -1,20 +1,27 @@
-import { scopeIds } from "@/constants/scopes"
+import { hasPermission } from "@/iam"
 import { z } from "zod"
 
-import { bigintStringSchema, dateSchema, listQueryStateSchema } from "./default"
+import { dateSchema, listQueryStateSchema } from "./default"
 
 const attendanceSchema = {
   list: {
     read: {
-      scope: scopeIds["read:attendance:list"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "attendanceList", "view"),
       validate: listQueryStateSchema({
         sortIds: z.enum(["id"]),
         filterObj: z.object({ id: z.enum(["id"]), value: z.string() }),
       }),
     },
   },
+  read: {
+    permission: (orgSlug: string) =>
+      hasPermission(orgSlug, "attendance", "view"),
+    validate: null,
+  },
   add: {
-    scope: scopeIds["add:attendance"],
+    permission: (orgSlug: string) =>
+      hasPermission(orgSlug, "attendance", "create"),
     validate: z
       .object({
         employee: z.string().min(1),

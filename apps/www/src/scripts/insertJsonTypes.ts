@@ -69,7 +69,6 @@ const transformFile = async () => {
     const matchIdx = matches.findIndex((m) => line.includes(m))
     if (matchIdx !== -1) {
       const match = matches[matchIdx]
-      console.log(match)
       const columnName = line.split(match)[0].trim()
       if (tableName && columnName) {
         const table = tables.find((table) => {

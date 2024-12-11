@@ -21,7 +21,6 @@ const JobPay = ({
   const onOptimistic = (
     data: z.infer<typeof employeeSchema.currentJob.create.validate>
   ) => {
-    console.log(data)
     setOptimisticEmployee(((p: any) => ({ ...p, current_job: data })) as any)
     setOptimisticData((p) => [data, ...p] as any)
   }

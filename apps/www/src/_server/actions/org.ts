@@ -5,7 +5,6 @@ import { headers } from "next/headers"
 import { redirect, RedirectType } from "next/navigation"
 import { delCache, redisKeys } from "@/_server/cache"
 import { db } from "@/_server/db"
-import { hasPerm } from "@/_server/helpers/hasPerm"
 import { orgSlugSchema } from "@/schema/default"
 import orgSchema from "@/schema/org"
 import slugify from "@sindresorhus/slugify"
@@ -17,7 +16,7 @@ export const createOrgAction = async (
   formData: z.infer<typeof orgSchema.create.validate>
 ) => {
   const { general } = orgSchema.create.validate.parse(formData)
-  const { session } = await hasPerm()
+  const { session } = await orgSchema.create.permission()
   const slug = slugify(general.name)
 
   const org = await db.transaction().execute(async (trx) => {
@@ -39,6 +38,7 @@ export const createOrgAction = async (
         org_id: org.id,
         user_id: session.user.id,
         role: "owner",
+        roles: ["admin"],
         address: {},
         first_name,
         last_name,
@@ -59,7 +59,7 @@ export const updateOrgAction = async (
 ) => {
   const data = orgSchema.update.validate.parse(formData)
   const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await orgSchema.update.permission(orgSlug)
 
   const result = await db
     .updateTable("orgs.list")

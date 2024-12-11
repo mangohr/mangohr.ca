@@ -2,6 +2,7 @@ import "server-only"
 
 import { headers } from "next/headers"
 import { orgSlugSchema } from "@/schema/default"
+import employeeSchema from "@/schema/employee"
 import { sql } from "kysely"
 import { jsonBuildObject } from "kysely/helpers/postgres"
 import { z } from "zod"
@@ -9,12 +10,11 @@ import { z } from "zod"
 import { nullsToUndefined } from "@/lib/utils"
 
 import { db } from "../db"
-import { hasPerm } from "../helpers/hasPerm"
 
 export const getAllEmployeesRoles = async () => {
   const orgSlug = z.string().parse(headers().get("x-org"))
 
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await employeeSchema.role.read.permission(orgSlug)
   const [result, roles] = await Promise.all([
     db
       .selectFrom("orgs.employee as e")
@@ -51,7 +51,8 @@ export const getEmployeeData = async (params: {
     .object({ orgSlug: orgSlugSchema, userName: z.string() })
     .parse(params)
 
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await employeeSchema.general.get.permission(orgSlug)
+
   const result = await db
     .selectFrom("orgs.employee as e")
     .innerJoin("auth.user as u", "u.id", "user_id")

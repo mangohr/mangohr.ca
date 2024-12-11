@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
 import { db } from "@/_server/db"
-import { hasPerm } from "@/_server/helpers/hasPerm"
 import officeSchema from "@/schema/office"
 import { z } from "zod"
 
@@ -17,7 +16,7 @@ export const updateOfficeAction = async (
   const action = (formData as any).id ? "update" : "create"
   const data = officeSchema[action].validate.parse(formData)
 
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await officeSchema[action].permission(orgSlug)
 
   if (action === "update") {
     const { id, ...rest } = data as z.infer<typeof officeSchema.update.validate>
@@ -40,7 +39,7 @@ export const updateOfficeAction = async (
 export const deleteOfficeAction = async (data: string) => {
   const id = officeSchema.delete.validate.parse(data)
   const orgSlug = z.string().parse(headers().get("x-org"))
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await officeSchema.delete.permission(orgSlug)
 
   await db
     .deleteFrom("orgs.office")

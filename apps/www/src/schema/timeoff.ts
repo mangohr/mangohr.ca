@@ -1,5 +1,5 @@
 import { timeOffStatus } from "@/constants/employee"
-import { scopeIds, scopes } from "@/constants/scopes"
+import { hasPermission } from "@/iam"
 import { z } from "zod"
 
 import { bigintStringSchema, dateSchema, listQueryStateSchema } from "./default"
@@ -39,27 +39,32 @@ const chartSchema = z
 export const timeoffSchema = {
   list: {
     read: {
-      scope: scopeIds["read:timeoff"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "timeoff", "view"),
       validate: listQueryStateSchema({
         sortIds: z.enum(["id"]),
         filterObj: z.object({ id: z.enum(["id"]), value: z.string() }),
       }),
     },
     chart: {
-      scope: scopeIds["read:timeoff"],
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "timeoff", "view"),
       validate: chartSchema,
     },
   },
   request: {
-    scope: scopeIds["create:timeoff"],
+    permission: (orgSlug: string) =>
+      hasPermission(orgSlug, "timeoff", "create"),
     validate: requestSchema,
   },
   approve: {
-    scopes: scopeIds["edit:timeoff"],
+    permission: (orgSlug: string) =>
+      hasPermission(orgSlug, "timeoff", "update"),
     validate: approveSchema,
   },
   create: {
-    scope: scopeIds["create:timeoff"],
+    permission: (orgSlug: string) =>
+      hasPermission(orgSlug, "timeoff", "create"),
     validate: z.object(createSchema),
   },
 }

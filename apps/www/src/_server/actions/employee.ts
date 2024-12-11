@@ -5,7 +5,6 @@ import { headers } from "next/headers"
 import { delCache, redisKeys } from "@/_server/cache"
 import { getEmployee } from "@/_server/cache/org"
 import { db } from "@/_server/db"
-import { hasPerm } from "@/_server/helpers/hasPerm"
 import { orgSlugSchema } from "@/schema/default"
 import employeeSchema from "@/schema/employee"
 import { timeoffSchema } from "@/schema/timeoff"
@@ -16,7 +15,7 @@ import { z } from "zod"
 export const getAllEmployees = async (props: { searchParams: unknown }) => {
   const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
   const parsed = employeeSchema.list.read.validate.parse(props.searchParams)
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await employeeSchema.list.read.permission(orgSlug)
   const query = db
     .selectFrom("orgs.employee as e")
     .leftJoin("auth.user", "auth.user.id", "e.user_id")
@@ -24,6 +23,7 @@ export const getAllEmployees = async (props: { searchParams: unknown }) => {
       "e.id",
       "role",
       "username",
+      "work_email",
       "email",
       "image",
       sql<string>`trim(COALESCE(e.first_name, '') || ' ' || COALESCE(e.middle_name, '') || ' ' || COALESCE(e.last_name, ''))`.as(
@@ -35,6 +35,7 @@ export const getAllEmployees = async (props: { searchParams: unknown }) => {
     ])
     .where((eb) => {
       const filters: Expression<SqlBool>[] = []
+      console.log(org!.id)
       filters.push(eb("org_id", "=", org!.id))
 
       if (parsed.search) {
@@ -84,7 +85,7 @@ export const updateEmployeeGeneralData = async (props: {
 
   const username = props.username && z.string().parse(props.username)
 
-  const { session, org } = await hasPerm({ orgSlug })
+  const { session, org } = await employeeSchema.general.edit.permission(orgSlug)
 
   let emp = session.employee
 
@@ -114,7 +115,8 @@ export const updateEmployeeCurrentJob = async (props: {
 
   const username = props.username && z.string().parse(props.username)
 
-  const { session, org } = await hasPerm({ orgSlug })
+  const { session, org } =
+    await employeeSchema.currentJob.create.permission(orgSlug)
 
   let emp = session.employee
 
@@ -179,7 +181,7 @@ export const updateEmployeeRole = async (props: {
 
   const username = props.username && z.string().parse(props.username)
 
-  const { session, org } = await hasPerm({ orgSlug })
+  const { session, org } = await employeeSchema.role.edit.permission(orgSlug)
 
   let emp = session.employee
 
@@ -212,7 +214,8 @@ export const addEmployeeAttendance = async (props: {
 
   const username = props.username && z.string().parse(props.username)
 
-  const { session, org } = await hasPerm({ orgSlug })
+  const { session, org } =
+    await employeeSchema.attendance.create.permission(orgSlug)
 
   let emp = session.employee
 
@@ -227,7 +230,7 @@ export const addEmployeeAttendance = async (props: {
     .where("logout", "is", null)
     .selectAll()
     .executeTakeFirst()
-  console.log(attendance)
+
   if (attendance?.login) {
     await db
       .updateTable("orgs.attendance")
@@ -260,7 +263,7 @@ export const employeeTimeOffRequest = async (props: {
 
   const username = props.username && z.string().parse(props.username)
 
-  const { session, org } = await hasPerm({ orgSlug })
+  const { session, org } = await timeoffSchema.request.permission(orgSlug)
 
   let emp = session.employee
 

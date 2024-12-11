@@ -40,8 +40,8 @@ async function Page() {
     totalTimeoffRequests += Number(e.p1)
   })
 
-  const today = new Date()
-  const hrs = today.getHours()
+  const today = (typeof window !== undefined && new Date()) || null
+  const hrs = today?.getHours() || 0
   let greet
 
   if (hrs < 12) greet = "Good Morning"
@@ -55,7 +55,7 @@ async function Page() {
           {greet}, {session?.user?.name}!
         </h1>
         <p className="text-foreground max-w-2xl font-light">
-          It&apos;s {format(today, "cccc, dd MMMM yyyy")}
+          It&apos;s {today && format(today, "cccc, dd MMMM yyyy")}
         </p>
       </div>
       <Card className="grid grid-cols-4">

@@ -6,7 +6,6 @@ import { timeoffSchema } from "@/schema/timeoff"
 import { z } from "zod"
 
 import { db } from "../db"
-import { hasPerm } from "../helpers/hasPerm"
 
 export const getEmployeeTimeOff = async (params: {
   userName: string
@@ -16,7 +15,7 @@ export const getEmployeeTimeOff = async (params: {
     .object({ orgSlug: orgSlugSchema, userName: z.string() })
     .parse(params)
 
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await timeoffSchema.list.read.permission(orgSlug)
 
   const result = await db
     .selectFrom("orgs.time_off as t")
@@ -37,7 +36,7 @@ export const getTimeOffChart = async (
   const { start, end } = timeoffSchema.list.chart.validate.parse(params)
 
   const orgSlug = z.string().parse(headers().get("x-org"))
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await timeoffSchema.list.read.permission(orgSlug)
 
   const result = await db
     .selectFrom("orgs.time_off as t")

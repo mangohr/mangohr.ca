@@ -12,7 +12,7 @@ export async function googleSignIn() {
 }
 
 export async function logout() {
-  return await signOut()
+  return await signOut({ redirectTo: "/" })
 }
 
 export async function getSession() {

@@ -32,13 +32,12 @@ export const getOrCache = async <T>({
   errorName: string
 }) => {
   const cache = await redis.get(key)
-
   const getFromDB = async () => {
     const result = await cacheMissFn()
-
     result && (await redis.set(key, JSON.stringify(result), "EX", 60 * 15))
     return result
   }
+
   const result = cache
     ? (JSON.parse(cache) as Awaited<ReturnType<typeof getFromDB>>)
     : await getFromDB()

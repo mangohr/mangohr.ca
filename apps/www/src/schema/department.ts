@@ -1,24 +1,28 @@
 import { scopeIds } from "@/constants/scopes"
+import { hasPermission } from "@/iam"
 import { z } from "zod"
 
 import { bigintStringSchema } from "./default"
 
 const edit = z.object({
   id: bigintStringSchema.optional(),
-  name: z.string(),
+  name: z.string().min(1),
 })
 
 const departmentSchema = {
   get: {
-    scope: scopeIds["read:office:schedule"],
+    permission: (orgSlug: string) =>
+      hasPermission(orgSlug, "department", "view"),
     validate: null,
   },
   edit: {
-    scope: scopeIds["edit:office:schedule"],
+    permission: (orgSlug: string) =>
+      hasPermission(orgSlug, "department", "update"),
     validate: edit,
   },
   delete: {
-    scope: scopeIds["edit:office:schedule"],
+    permission: (orgSlug: string) =>
+      hasPermission(orgSlug, "department", "delete"),
     validate: z.string(),
   },
 }

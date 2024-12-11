@@ -81,6 +81,7 @@ const columns = [
     cell: ({ row }) => (
       <Link href={`/employee/${row.original.username}`} className="lowercase">
         {row.getValue("email")}
+        {row.original.work_email && ", " + row.original.work_email}
       </Link>
     ),
   }),

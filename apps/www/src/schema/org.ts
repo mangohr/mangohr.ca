@@ -1,4 +1,4 @@
-import { scopeIds } from "@/constants/scopes"
+import { hasPermission } from "@/iam"
 import { z } from "zod"
 
 import { dateSchema } from "./default"
@@ -18,12 +18,16 @@ const editOrgSchema = {
 }
 
 const orgSchema = {
+  list: {
+    permission: () => hasPermission("", "orgList", "view"),
+    validate: null,
+  },
   get: {
-    scope: scopeIds["read:org"],
+    permission: (orgSlug: string) => hasPermission(orgSlug, "org", "view"),
     validate: null,
   },
   create: {
-    scope: scopeIds["create:org"],
+    permission: () => hasPermission("", "org", "create"),
     validate: z.object({
       general: z.object({
         name: z.string().min(1),
@@ -37,11 +41,11 @@ const orgSchema = {
     }),
   },
   update: {
-    scope: scopeIds["update:org"],
+    permission: (orgSlug: string) => hasPermission(orgSlug, "org", "update"),
     validate: z.object(editOrgSchema),
   },
   delete: {
-    scope: scopeIds["delete:org"],
+    permission: (orgSlug: string) => hasPermission(orgSlug, "org", "delete"),
     validate: null,
   },
 }

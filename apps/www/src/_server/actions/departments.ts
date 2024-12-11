@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
 import { db } from "@/_server/db"
-import { hasPerm } from "@/_server/helpers/hasPerm"
 import departmentSchema from "@/schema/department"
 import { z } from "zod"
 
@@ -13,7 +12,7 @@ export const updateDepartmentAction = async (
   const orgSlug = z.string().parse(headers().get("x-org"))
 
   const { id, ...rest } = departmentSchema.edit.validate.parse(formData)
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await departmentSchema.edit.permission(orgSlug)
 
   if (!id) {
     await db
@@ -36,7 +35,7 @@ export const deleteDepartmentAction = async (dep_id: string) => {
   const orgSlug = z.string().parse(headers().get("x-org"))
 
   const id = departmentSchema.delete.validate.parse(dep_id)
-  await hasPerm({ orgSlug })
+  await departmentSchema.delete.permission(orgSlug)
 
   await db.deleteFrom("orgs.department").where("id", "=", id).execute()
   revalidatePath("/org/[orgSlug]/company/departments", "page")

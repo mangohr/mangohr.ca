@@ -2,7 +2,6 @@
 
 import { headers } from "next/headers"
 import { db } from "@/_server/db"
-import { hasPerm } from "@/_server/helpers/hasPerm"
 import { orgSlugSchema } from "@/schema/default"
 import { timeoffSchema } from "@/schema/timeoff"
 import { addDays } from "date-fns"
@@ -14,7 +13,7 @@ import { getEmployee } from "../cache/org"
 export const getAllTimeOffs = async (props: { searchParams: unknown }) => {
   const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
   const parsed = timeoffSchema.list.read.validate.parse(props.searchParams)
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await timeoffSchema.list.read.permission(orgSlug)
   const query = db
     .selectFrom("orgs.time_off as t")
     .leftJoin("orgs.employee as e", "e.id", "t.employee_id")
@@ -87,7 +86,7 @@ export const createTimeOff = async (
   const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
   const { employee: emp_username, ...data } =
     timeoffSchema.create.validate.parse(props)
-  const { org, session } = await hasPerm({ orgSlug })
+  const { org, session } = await timeoffSchema.create.permission(orgSlug)
 
   let emp = session.employee
 
@@ -119,7 +118,7 @@ export const approveTimeOff = async (
     message,
     request: timeoff_id,
   } = timeoffSchema.approve.validate.parse(props)
-  const { org, session } = await hasPerm({ orgSlug })
+  const { org, session } = await timeoffSchema.approve.permission(orgSlug)
 
   let emp = session.employee
 
@@ -147,7 +146,6 @@ export const approveTimeOff = async (
 //   const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
 //   const { employee: emp_username, ...data } =
 //     timeoffSchema.create.validate.parse(props)
-//   const { org, session } = await hasPerm({ orgSlug })
 
 //   let emp = session.employee
 

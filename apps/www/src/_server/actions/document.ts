@@ -9,13 +9,12 @@ import { z } from "zod"
 
 import { getEmployee } from "../cache/org"
 import { db } from "../db"
-import { hasPerm } from "../helpers/hasPerm"
 import { getDownloadUrl, getPresignedUrl } from "../helpers/s3"
 
 export const getAllDocuments = async (props: { searchParams: unknown }) => {
   const orgSlug = orgSlugSchema.parse(headers().get("x-org"))
   const parsed = documentSchema.list.read.validate.parse(props.searchParams)
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await documentSchema.list.read.permission(orgSlug)
   const query = db
     .selectFrom("orgs.storage")
     .select([
@@ -86,7 +85,7 @@ export const documentUpload = async (data: {
     })
     .parse(data)
 
-  const { session, org } = await hasPerm({ orgSlug })
+  const { session, org } = await documentSchema.create.permission(orgSlug)
 
   let emp
 
@@ -134,7 +133,7 @@ export const onDocumentUploadSuccess = async (data: { id: string }) => {
       id: z.string().uuid(),
     })
     .parse(data)
-  const { session, org } = await hasPerm({ orgSlug })
+  const { session, org } = await documentSchema.create.permission(orgSlug)
 
   const result = await db
     .updateTable("orgs.storage")
@@ -156,8 +155,7 @@ export const onDocumentUploadRemove = async (data: { id: string }) => {
       id: z.string().uuid(),
     })
     .parse(data)
-  const { session, org } = await hasPerm({ orgSlug })
-
+  const { session, org } = await documentSchema.delete.permission(orgSlug)
   await db
     .deleteFrom("orgs.storage")
     .where("org_id", "=", org!.id)
@@ -176,7 +174,7 @@ export const getDocumentDownloadUrl = async (data: { path: string }) => {
     })
     .parse(data)
 
-  await hasPerm({ orgSlug })
+  await documentSchema.view.permission(orgSlug)
 
   const url = new URL(path)
 
