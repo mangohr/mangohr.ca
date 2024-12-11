@@ -118,6 +118,7 @@ const Page = () => {
   if (isPending)
     return (
       <Loading
+        className="h-screen"
         title="Sending..."
         description="Hold tight we're sending an invite"
       />

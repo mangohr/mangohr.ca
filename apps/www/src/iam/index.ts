@@ -148,7 +148,7 @@ const ROLES = {
       view: true,
     },
     employeeInvite: {
-      view: false,
+      view: true,
       create: true,
       delete: true,
     },

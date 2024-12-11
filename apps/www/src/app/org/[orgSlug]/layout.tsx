@@ -12,10 +12,10 @@ export default async function Layout({
   const { org, session } = await orgSchema.get.permission(params.orgSlug)
 
   return (
-    <div>
+    <>
       <SessionProvider session={session} org={org}>
         {children}
       </SessionProvider>
-    </div>
+    </>
   )
 }
