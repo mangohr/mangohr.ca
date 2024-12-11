@@ -55,10 +55,6 @@ export const metadata: Metadata = {
   },
 }
 
-const PostHogPageView = dynamic(() => import("../hooks/posthog"), {
-  ssr: false,
-})
-
 export default function RootLayout({
   children,
 }: {
@@ -77,7 +73,6 @@ export default function RootLayout({
         <Toaster position="top-right" />
         <QueryProvider>
           <CSPostHogProvider>
-            <PostHogPageView />
             <main className="flex min-h-screen flex-col">{children}</main>
           </CSPostHogProvider>
         </QueryProvider>
