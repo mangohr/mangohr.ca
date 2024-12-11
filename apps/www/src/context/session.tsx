@@ -2,13 +2,13 @@
 
 import { createContext, ReactNode, useContext, useLayoutEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { hasPerm } from "@/_server/helpers/hasPerm"
+import { hasPermission } from "@/iam"
 
 import { isSuperUser } from "@/lib/user"
 
 const Context = createContext<{
-  session: Awaited<ReturnType<typeof hasPerm>>["session"] | null
-  org: Awaited<ReturnType<typeof hasPerm>>["org"] | null
+  session: Awaited<ReturnType<typeof hasPermission>>["session"] | null
+  org: Awaited<ReturnType<typeof hasPermission>>["org"] | null
 }>({ session: null, org: null })
 
 export const SessionProvider = ({
@@ -17,8 +17,8 @@ export const SessionProvider = ({
   org,
 }: {
   children: ReactNode
-  session: Awaited<ReturnType<typeof hasPerm>>["session"]
-  org: Awaited<ReturnType<typeof hasPerm>>["org"]
+  session: Awaited<ReturnType<typeof hasPermission>>["session"]
+  org: Awaited<ReturnType<typeof hasPermission>>["org"]
 }) => {
   const pathname = usePathname()
 

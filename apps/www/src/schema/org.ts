@@ -18,6 +18,13 @@ const editOrgSchema = {
 }
 
 const orgSchema = {
+  dashboard: {
+    get: {
+      permission: (orgSlug: string) =>
+        hasPermission(orgSlug, "orgDashboard", "view"),
+      validate: null,
+    },
+  },
   list: {
     permission: () => hasPermission("", "orgList", "view"),
     validate: null,

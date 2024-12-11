@@ -1,10 +1,10 @@
 import { headers } from "next/headers"
 import { dateSchema } from "@/schema/default"
+import orgSchema from "@/schema/org"
 import { sql } from "kysely"
 import { z } from "zod"
 
 import { db } from "../db"
-import { hasPerm } from "../helpers/hasPerm"
 
 export const getDashboardData = async (data: {
   startDate: string
@@ -16,7 +16,7 @@ export const getDashboardData = async (data: {
 
   const orgSlug = z.string().parse(headers().get("x-org"))
 
-  const { org } = await hasPerm({ orgSlug })
+  const { org } = await orgSchema.dashboard.get.permission(orgSlug)
 
   const [
     totalAttendance,

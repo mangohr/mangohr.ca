@@ -75,6 +75,10 @@ type Permissions = {
     dataType: OrgsEmployee
     action: "view"
   }
+  orgDashboard: {
+    dataType: OrgsEmployee
+    action: "view"
+  }
   employeeList: {
     dataType: OrgsEmployee
     action: "view"
