@@ -9,6 +9,8 @@ import Stripe from "stripe"
 import { stripeSchema } from "./schema"
 import { stripe } from "./server.init"
 
+//
+
 export const honoPermissionMiddleware = <Resource extends keyof Permissions>(
   resource: Resource,
   action: Permissions[Resource]["action"],
