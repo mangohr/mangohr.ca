@@ -8,6 +8,7 @@ module.exports = {
     "src/components/**/*.{ts,tsx}",
     "src/forms/**/*.{ts,tsx}",
     "src/context/**/*.{ts,tsx}",
+    "apps/www/src/**/*.{ts,tsx}",
   ],
   theme: {
     container: {
@@ -19,13 +20,15 @@ module.exports = {
     },
     extend: {
       colors: {
+        green: "hsl(var(--green))",
+        "light-green": "hsl(var(--light-green))",
+        "dark-green": "hsl(var(--dark-green))",
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        green: "hsl(var(--green))",
-        "light-green": "hsl(var(--light-green))",
 
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -63,7 +66,7 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        sans: ["Hubot Sans", ...fontFamily.sans],
         // mono: ["var(--font-mono)", ...fontFamily.mono],
       },
       keyframes: {
