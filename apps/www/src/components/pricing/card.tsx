@@ -1,117 +1,65 @@
 import React, { Fragment } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { plans } from "@/constants/plans"
+import { useViewport } from "@/context/viewport"
 import { Check, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-import { Button } from "../ui/button"
-
-const plans = [
-  {
-    title: "CoreHR",
-    desc: "Our free tier provides you",
-    highlight: false,
-
-    monthly_amounts: {
-      cad: 0,
-    },
-    yearly_amount: {
-      cad: 0,
-    },
-    button_name: "Join Now",
-    features: [
-      { label: "Employee Management", check: true },
-      { label: "Document Management", check: true },
-      { label: "Audit Trail", check: true },
-      { label: "Up to 15 users", check: true },
-      { label: "Role based access", check: true },
-      { label: "Up to 3GB in storage", check: true },
-      { label: "Dedicated email support", check: true },
-    ],
-  },
-  {
-    title: "Essentials",
-    desc: "Our free tier provides you",
-    highlight: true,
-    monthly_amounts: {
-      cad: 6,
-    },
-    yearly_amount: {
-      cad: 6,
-    },
-    button_name: "Coming Soon",
-    features: [
-      { label: "Employee Management", check: true },
-      { label: "Document Management", check: true },
-      { label: "Audit Trail", check: true },
-      { label: "Up to 15 users", check: true },
-      { label: "Role based access", check: true },
-      { label: "Up to 3GB in storage", check: true },
-      { label: "Dedicated email support", check: true },
-    ],
-  },
-  {
-    title: "Premium",
-    desc: "Our free tier provides you",
-    highlight: false,
-
-    monthly_amounts: {
-      cad: 8,
-    },
-    yearly_amount: {
-      cad: 8,
-    },
-    button_name: "Coming Soon",
-    features: [
-      { label: "Employee Management", check: true },
-      { label: "Document Management", check: true },
-      { label: "Audit Trail", check: true },
-      { label: "Up to 15 users", check: true },
-      { label: "Role based access", check: true },
-      { label: "Up to 3GB in storage", check: true },
-      { label: "Dedicated email support", check: true },
-    ],
-  },
-]
+import { buttonVariants } from "../ui/button"
 
 function Card({ data }: { data: (typeof plans)[0] }) {
+  const router = useRouter()
+  const { isMobile } = useViewport()
+
+  const btn = (
+    <Link
+      className={cn(
+        buttonVariants({
+          size: "lg",
+          variant: data.highlight ? "white" : "outline",
+        }),
+        "w-full rounded-full md:text-lg items-center justify-center text-center",
+        !data.highlight && "border-foreground"
+      )}
+      style={{ marginTop: "2rem", marginBottom: "2rem" }}
+      href={
+        data.stripe.price_id
+          ? "/org/checkout?price=" + data.stripe.price_id
+          : "/org"
+      }
+    >
+      {data.button_name}
+    </Link>
+  )
   return (
     <div
       className={cn(
-        "space-y-4 rounded-lg border p-4",
-        data.highlight &&
-          "bg-gradient-to-b from-[#91E0B3] via-[#E9E293] to-[#FF8A03]"
+        "border-primary/30 space-y-1 rounded-lg border p-4 md:space-y-4",
+        data.highlight && "bg-gradient-to-b from-[#F9B459] to-[#F2F7F4]"
       )}
     >
-      <h2 className="text-2xl font-semibold">{data.title}</h2>
+      <h2 className="text-xl font-semibold md:text-2xl">{data.title}</h2>
       <p>{data.desc}</p>
       <h1>
-        <span className="text-5xl font-semibold">
+        <span className="text-3xl font-semibold md:text-5xl">
           {" "}
           ${data.monthly_amounts.cad}
         </span>{" "}
         <span>/ Month / User</span>
       </h1>
 
-      <Button
-        className={cn(
-          "block w-full rounded-full text-lg",
-          !data.highlight && "border-foreground"
-        )}
-        size={"lg"}
-        variant={data.highlight ? "white" : "outline"}
-        style={{ marginTop: "2rem", marginBottom: "2rem" }}
-      >
-        {data.button_name}
-      </Button>
+      {!isMobile && btn}
 
-      <div className="space-y-2">
-        <h3 className="text-lg font-semibold">Features</h3>
-        <div className="grid grid-cols-[20px,auto] items-center gap-2">
+      <div className="space-y-2 py-8 md:py-0">
+        <h3 className="font-semibold md:text-lg">Features</h3>
+        <div className="grid grid-cols-[20px,auto] items-center gap-2 text-sm md:text-base">
           {data.features.map((f, i) => (
             <Fragment key={i}>
               <span>
                 {f.check ? (
-                  <Check className="stroke-light-green size-4" />
+                  <Check className="stroke-green size-4" />
                 ) : (
                   <X className="size-4" />
                 )}
@@ -121,13 +69,14 @@ function Card({ data }: { data: (typeof plans)[0] }) {
           ))}
         </div>
       </div>
+      {isMobile && btn}
     </div>
   )
 }
 
 export const PricingCards = () => {
   return (
-    <div className="grid grid-cols-3 gap-10">
+    <div className="grid gap-10 md:grid-cols-3">
       {plans.map((p, i) => (
         <Card key={i} data={p} />
       ))}

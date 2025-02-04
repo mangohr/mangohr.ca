@@ -1,11 +1,9 @@
 "use client"
 
 import React, { ReactNode, useEffect, useState, useTransition } from "react"
-import { useParams } from "next/navigation"
 import { updateEmployeeRole } from "@/_server/actions/employee"
 import { getAllEmployeesRoles } from "@/_server/handlers/employee"
 import { roles } from "@/constants/roles"
-import { scopes } from "@/constants/scopes"
 import employeeSchema from "@/schema/employee"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -30,7 +28,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Label } from "@/components/ui/label"
-import { MultiSelect } from "@/components/ui/multiselect"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 export default function EmployeeRoleForm<
@@ -49,8 +46,7 @@ export default function EmployeeRoleForm<
   const form = useForm<z.infer<typeof employeeSchema.role.edit.validate>>({
     resolver: zodResolver(employeeSchema.role.edit.validate),
     defaultValues: {
-      role: "",
-      scopes: [],
+      roles: [],
     },
   })
 
@@ -64,7 +60,7 @@ export default function EmployeeRoleForm<
   })
 
   useEffect(() => {
-    return form.reset({ role: data.role || "", scopes: data.scopes || [] })
+    return form.reset({ roles: data.roles || [] })
   }, [data])
 
   return (
@@ -80,15 +76,15 @@ export default function EmployeeRoleForm<
             <DialogBody className="flex w-full flex-col gap-6">
               <FormField
                 control={form.control}
-                name="role"
+                name="roles"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Select Role</FormLabel>
                     <FormControl>
                       <RadioGroup
                         className="space-y-1 pt-2"
-                        onValueChange={field.onChange}
-                        defaultValue={data.role || ""}
+                        onValueChange={(v) => field.onChange([v])}
+                        defaultValue={data.roles[0] || ""}
                       >
                         {(Object.keys(roles) as Array<keyof typeof roles>).map(
                           (r, i) => (
@@ -106,28 +102,6 @@ export default function EmployeeRoleForm<
                           )
                         )}
                       </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="scopes"
-                render={({ field }) => (
-                  <FormItem className="col-span-2">
-                    <FormLabel>Assign Custom Scopes</FormLabel>
-                    <FormControl>
-                      <MultiSelect
-                        modalPopover
-                        options={scopes.map((s) => ({
-                          value: s.id,
-                          label: s.id.split(":").join(" "),
-                          description: s.label,
-                        }))}
-                        onValueChange={field.onChange}
-                        defaultValue={[]}
-                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

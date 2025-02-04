@@ -175,9 +175,7 @@ export const updateEmployeeRole = async (props: {
 }) => {
   const orgSlug = z.string().parse(headers().get("x-org"))
 
-  const { role, scopes } = employeeSchema.role.edit.validate.parse(
-    props.formData
-  )
+  const { roles } = employeeSchema.role.edit.validate.parse(props.formData)
 
   const username = props.username && z.string().parse(props.username)
 
@@ -188,15 +186,14 @@ export const updateEmployeeRole = async (props: {
   if (session.user.username !== username) {
     emp = await getEmployee(org!.id, username)
   }
-  if (!emp || !emp?.user_id) throw new Error("Employee not found!")
-
+  if (!emp || !emp?.id) throw new Error("Employee not found!")
+  console.log(roles)
   await db
     .updateTable("orgs.employee")
     .set({
-      scopes,
-      role,
+      roles: roles,
     })
-    .where("id", "=", emp.user_id)
+    .where("id", "=", emp.id)
     .executeTakeFirstOrThrow()
 
   revalidatePath("/org/[orgSlug]/company/permission", "page")

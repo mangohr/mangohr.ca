@@ -12,16 +12,16 @@ import { buttonVariants } from "../ui/button"
 function DefaultNav() {
   return (
     <nav
-      className="text-primary-foreground relative p-4"
+      className="text-primary-foreground relative p-6"
       style={{ zIndex: 1000 }}
     >
       <div className="m-auto flex max-w-screen-xl items-center justify-between">
         <div>
           <Link href={navs.home.url}>
             <Image
-              src="/assets/logo/full-white.png"
+              src="/assets/logo/full.png"
               width={120}
-              height={110}
+              height={35}
               alt="MangoHR"
             />
           </Link>
@@ -31,11 +31,11 @@ function DefaultNav() {
             <Link
               href={navs.dashboard.url}
               className={cn(
-                buttonVariants({ variant: "white-outline" }),
-                "h-10 rounded-full text-lg hover:bg-transparent"
+                buttonVariants({ variant: "outline" }),
+                "h-10 rounded-full text-lg"
               )}
             >
-              {navs.dashboard.name}
+              Try it now
             </Link>
           ) : (
             <>
@@ -52,8 +52,8 @@ function DefaultNav() {
               <Link
                 href={navs.login.url}
                 className={cn(
-                  buttonVariants({ variant: "white-outline" }),
-                  "h-10 rounded-full text-lg hover:bg-transparent"
+                  buttonVariants({ variant: "outline" }),
+                  "h-10 rounded-full text-lg"
                 )}
               >
                 Sign Up Now

@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useTransition } from "react"
-import { inviteEmployeeAction } from "@/_server/actions/invite"
+import { onboardAction } from "@/_server/actions/onboard"
+import { userSchema } from "@/schema/user"
 import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
 
 import { ButtonGroup, ButtonGroupItem } from "@/components/ui/button-group"
 import {
@@ -25,7 +25,7 @@ function Step1() {
     <div className="space-y-6">
       <FormField
         control={form.control}
-        name="name"
+        name="full_name"
         render={({ field }) => (
           <FormItem className="">
             <FormLabel>Whats your full name?</FormLabel>
@@ -34,7 +34,7 @@ function Step1() {
                 <Input
                   size={"lg"}
                   placeholder="John Doe"
-                  aria-labelledby="names"
+                  aria-labelledby="name"
                   {...field}
                 />
               </FormControl>
@@ -43,13 +43,87 @@ function Step1() {
           </FormItem>
         )}
       />
-
+      <div className="flex gap-4 w-full">
+        <FormField
+          control={form.control}
+          name="company_name"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Whats your company name?</FormLabel>
+              <div>
+                <FormControl>
+                  <Input
+                    size={"lg"}
+                    placeholder="Acme Inc"
+                    aria-labelledby="company_name"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="designation"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Your Designation</FormLabel>
+              <div>
+                <FormControl>
+                  <Input
+                    size={"lg"}
+                    placeholder="HR Manager"
+                    aria-labelledby="company_name"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+            </FormItem>
+          )}
+        />
+      </div>
       <FormField
         control={form.control}
-        name="company_name"
+        name="total_employees"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>How did you find MangoHR?</FormLabel>
+            <FormLabel>How many employees?</FormLabel>
+            <div>
+              <FormControl>
+                <ButtonGroup
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  className="grid grid-cols-5"
+                >
+                  <ButtonGroupItem value="1" label="Just you?" />
+                  <ButtonGroupItem value="1-10" label="1-10" />
+                  <ButtonGroupItem value="10-50" label="20-50" />
+                  <ButtonGroupItem value="50-100" label="50-100" />
+                  <ButtonGroupItem value="100+" label="100+" />
+                </ButtonGroup>
+              </FormControl>
+              <FormMessage />
+            </div>
+          </FormItem>
+        )}
+      />
+    </div>
+  )
+}
+
+function Step2() {
+  const form = useFormContext()
+
+  return (
+    <div className="space-y-6">
+      <FormField
+        control={form.control}
+        name="referral"
+        render={({ field }) => (
+          <FormItem className="">
             <div>
               <FormControl>
                 <ButtonGroup
@@ -95,21 +169,22 @@ const Page = () => {
   const addEmployeeFormSteps: Parameters<typeof MultiStepForm>[0]["schema"] = {
     general: {
       title: "General Information",
-      validate: z.any(),
+      validate: userSchema.onboard.create.validate.shape.general,
       defaultValues: "",
       component: <Step1 />,
     },
-    org: {
-      title: "Let's setup your company.",
-      validate: z.any(),
+    other: {
+      title: "How did you find MangoHR?",
+      validate: userSchema.onboard.create.validate.shape.other,
       defaultValues: "",
-      component: <Step1 />,
+      component: <Step2 />,
     },
   }
 
   const handleSubmit = (val: any) => {
+    console.log(val)
     startTransition(() => {
-      toast.promise(inviteEmployeeAction(val), {
+      toast.promise(onboardAction(val), {
         error: (e) => "Something went wrong while onboarding you!",
       })
     })

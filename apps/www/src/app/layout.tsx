@@ -1,16 +1,14 @@
 import type { Metadata } from "next"
-import dynamic from "next/dynamic"
-import { Outfit } from "next/font/google"
 import { CSPostHogProvider } from "@/context/posthog"
 import QueryProvider from "@/context/queryProvider"
 import HolyLoader from "holy-loader"
 
-import { cn } from "@/lib/utils"
+import { getIsSsrMobile } from "@/hooks/isMobile"
 import { Toaster } from "@/components/ui/sonner"
 
 import "./globals.css"
 
-const outfit = Outfit({ subsets: ["latin"] })
+import { ViewportProvider } from "@/context/viewport"
 
 export const metadata: Metadata = {
   // metadataBase: new URL(configuration.url),
@@ -60,8 +58,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const isMobile = getIsSsrMobile()
+
   return (
-    <html lang="en" className={cn(outfit.className)}>
+    <html lang="en">
       <body className={"flex min-h-screen flex-col antialiased"}>
         <HolyLoader
           color="hsl(var(--primary))"
@@ -71,11 +71,13 @@ export default function RootLayout({
           showSpinner={false}
         />
         <Toaster position="top-right" />
-        <QueryProvider>
-          <CSPostHogProvider>
-            <main className="flex min-h-screen flex-col">{children}</main>
-          </CSPostHogProvider>
-        </QueryProvider>
+        <ViewportProvider isMobile={isMobile}>
+          <QueryProvider>
+            <CSPostHogProvider>
+              <main className="flex min-h-screen flex-col">{children}</main>
+            </CSPostHogProvider>
+          </QueryProvider>
+        </ViewportProvider>
       </body>
     </html>
   )

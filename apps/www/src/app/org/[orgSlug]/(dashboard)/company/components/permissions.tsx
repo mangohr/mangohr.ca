@@ -1,16 +1,13 @@
 "use client"
 
-import React, { useEffect, useOptimistic, useState } from "react"
+import React, { useOptimistic } from "react"
 import { getAllEmployeesRoles } from "@/_server/handlers/employee"
-import { roles } from "@/constants/roles"
 import EmployeeRoleForm from "@/forms/employee/role"
 import { PenLine, Search } from "lucide-react"
-import { parseAsStringEnum, useQueryState } from "nuqs"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -28,10 +25,6 @@ export default function PermissionInfo({
 }: {
   data: Awaited<ReturnType<typeof getAllEmployeesRoles>>
 }) {
-  const [tab, setTab] = useQueryState(
-    "tab",
-    parseAsStringEnum(["roles", "scopes"])
-  )
   return (
     <div className="max-w-screen-lg space-y-6">
       <div className="flex items-center space-x-6">
@@ -41,9 +34,9 @@ export default function PermissionInfo({
         </div>
       </div>
 
-      <Card className="grid grid-cols-4 [&>:not(:last-child)]:border-r">
+      {/* <Card className="grid grid-cols-5 [&>:not(:last-child)]:border-r">
         {Object.keys(roles).map((r, i) => {
-          const role = data.roles.find((e) => e.role === r)
+          const role = data.roles.find((e) => e.roles === r)
           return (
             <div key={i} className="flex flex-col justify-between p-4">
               <CardDescription className="capitalize">{r}</CardDescription>
@@ -53,7 +46,7 @@ export default function PermissionInfo({
             </div>
           )
         })}
-      </Card>
+      </Card> */}
 
       <Input
         prefixEl={<Search />}
@@ -99,14 +92,16 @@ export function Single<
           </div>
           <div>
             <p>{state.name}</p>
-            <Label className="font-light">
-              {state.scopes?.length.toString() || 0} Custom Permissions
-            </Label>
+            <Label className="font-light">@{state.username}</Label>
           </div>
         </div>
       </TableCell>
       <TableCell className="space-x-2">
-        <Badge variant={"outline"}>{state.role || "No Role Assigned"} </Badge>
+        {state.roles.map((r, i) => (
+          <Badge key={i} variant={"outline"}>
+            {r || "No Role Assigned"}
+          </Badge>
+        ))}
       </TableCell>
       <TableCell className="text-end">
         <EmployeeRoleForm

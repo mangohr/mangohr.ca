@@ -25,7 +25,7 @@ async function Orgs() {
         <Image
           src="/assets/logo/full.png"
           width={150}
-          height={150}
+          height={45}
           alt="MangoHR"
         />
       </div>

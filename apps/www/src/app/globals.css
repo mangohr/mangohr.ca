@@ -2,34 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Hubot Sans";
+  src: url("/fonts/Hubot-Sans.ttf");
+}
+
 @layer base {
   :root {
     /* Colors */
 
-    --green: 162 75% 19%;
-    --light-green: 146 91% 30%;
-
-    --orange: 24.6 95% 53.1%;
-
+    --green: 146 91% 30%;
+    --dark-green: 132 48% 15%;
+    --black-green: 133 49% 11%;
+    --light-green: 144 24% 96%;
+    --orange: 34 93% 66%;
+    --white: 0 0% 100%;
     /* Shadcn */
 
-    --background: 0 0% 100%;
+    --background: var(--white);
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 20 14.3% 4.1%;
     --primary: var(--orange);
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 60 4.8% 95.9%;
-    --secondary-foreground: 24 9.8% 10%;
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
+    --primary-foreground: var(--black-green);
+    --secondary: var(--black-green);
+    --secondary-foreground: var(--white);
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
     --accent: 60 4.8% 95.9%;
     --accent-foreground: 24 9.8% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 60 9.1% 97.8%;
-    --border: 20 5.9% 90%;
+    --border: 240 5.9% 90%;
     --input: 20 5.9% 90%;
     --ring: var(--orange);
     --radius: 0.5rem;

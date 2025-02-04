@@ -1,5 +1,6 @@
 import React from "react"
 
+import { Heading } from "../custom/typography"
 import {
   Accordion,
   AccordionContent,
@@ -35,12 +36,14 @@ export default function DefaultFAQS() {
   return (
     <section className="m-auto max-w-screen-lg px-4 pb-20 xl:px-0">
       <div className="mb-20 flex flex-col items-center justify-center space-y-4">
-        <h2 className="text-5xl font-semibold">FAQs</h2>
+        <Heading>FAQs</Heading>
       </div>
       <Accordion type="single" collapsible className="w-full space-y-8">
         {faqs.map((f, i) => (
           <AccordionItem value={"item-" + i} key={i}>
-            <AccordionTrigger>{f.title}</AccordionTrigger>
+            <AccordionTrigger variant={"fancy"} expand="plus">
+              {f.title}
+            </AccordionTrigger>
             <AccordionContent>{f.value}</AccordionContent>
           </AccordionItem>
         ))}

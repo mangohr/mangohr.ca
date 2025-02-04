@@ -18,16 +18,27 @@ export const env = createEnv({
     S3_UPLOAD_BUCKET: z.string().min(1),
     S3_UPLOAD_REGION: z.string().min(1),
     NODE_ENV: z.string().optional(),
+    STRIPE_SECRET_KEY: z.string(),
+    NOTIFY_EMAILS: z.array(z.string()),
   },
   client: {
     // NEXT_PUBLIC_STRIPE_KEY: z.string().min(1),
     NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1),
     NEXT_PUBLIC_POSTHOG_HOST: z.string().min(1),
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
+
     // NEXT_PUBLIC_PRICE_ID_BASIC: z.string().min(1),
     // NEXT_PUBLIC_PRICE_ID_PREMIUM: z.string().min(1),
     // NEXT_PUBLIC_STRIPE_MANAGE_URL: z.string().min(1),
   },
   runtimeEnv: {
+    NOTIFY_EMAILS:
+      process.env.NOTIFY_EMAILS?.split(",").map((email) => email.trim()) ||
+      ([] as any),
+
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,

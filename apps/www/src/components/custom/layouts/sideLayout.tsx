@@ -24,7 +24,7 @@ function SideLayout({
   return (
     <div className="relative  h-screen flex-col items-center justify-center sm:grid md:max-w-none md:grid-cols-3 md:px-0">
       <div className="bg-muted relative hidden h-screen flex-col overflow-hidden text-white md:flex dark:border-r">
-        <div className="bg-green absolute inset-0" />
+        <div className="bg-secondary absolute inset-0" />
         <div className="absolute -bottom-48 -left-24 rotate-[270deg]">
           <Image
             src={"/assets/shapes/leaves.png"}
@@ -38,7 +38,7 @@ function SideLayout({
             <div className="flex items-center gap-4">
               <Button
                 className=""
-                variant={"outline"}
+                variant={"ghost"}
                 size={"icon-sm"}
                 onClick={() => router.back()}
               >
@@ -82,7 +82,9 @@ function SideLayout({
           </div>
         </div>
       </div>
-      <div className="col-span-2 h-screen overflow-y-auto p-8">{children}</div>
+      <div className="col-span-2 flex h-screen flex-col overflow-y-auto p-8">
+        {children}
+      </div>
     </div>
   )
 }

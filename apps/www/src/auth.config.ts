@@ -7,10 +7,12 @@ export const authConfig = {
     strategy: "jwt",
     maxAge: 7 * 24 * 60 * 60, // 7 days
   },
+  // secret: env.AUTH_SECRET,
   pages: {
     signIn: "/auth/login",
     signOut: "/auth/logout",
     verifyRequest: "/auth/verify",
+    newUser: "/onboarding",
   },
   callbacks: {
     authorized({ auth }) {

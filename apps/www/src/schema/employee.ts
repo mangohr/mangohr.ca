@@ -1,5 +1,3 @@
-import { roles } from "@/constants/roles"
-import { scopeIds } from "@/constants/scopes"
 import { hasPermission } from "@/iam"
 import { z } from "zod"
 
@@ -43,10 +41,7 @@ const currentJobSchema = z.object({
 })
 
 const roleSchema = z.object({
-  role: z.string().refine((t) => Object.keys(roles).includes(t as any)),
-  scopes: z
-    .array(z.string().refine((t) => Object.keys(scopeIds).includes(t as any)))
-    .catch([]),
+  roles: z.array(z.string()),
 })
 
 const inviteSchema = z.object({

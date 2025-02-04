@@ -107,48 +107,6 @@ export function DefaultComboBox({
       </PopoverContent>
     </Popover>
   )
-
-  // return (
-  //   <Drawer open={open} onOpenChange={setOpen}>
-  //     <DrawerTrigger asChild>
-  //       <Button variant="outline" className="w-[200px] justify-start">
-  //         {selected ? (
-  //           <>
-  //             {selected.image && (
-  //               <span
-  //                 className="block size-5 rounded-full border"
-  //                 style={{
-  //                   backgroundImage: selected.image
-  //                     ? `url(${selected.image})`
-  //                     : "hsl(var(--bg-border))",
-  //                   backgroundSize: "contain",
-  //                 }}
-  //               />
-  //             )}
-  //             <span className="">{selected.label}</span>
-  //           </>
-  //         ) : (
-  //           <span className="truncate">{name}</span>
-  //         )}
-  //         <span className="ml-auto">
-  //           <ChevronDown />
-  //         </span>
-  //       </Button>
-  //     </DrawerTrigger>
-  //     <DrawerContent>
-  //       <div className="mt-4 border-t">
-  //         <StatusList
-  //           setOpen={setOpen}
-  //           setSelected={setSelected}
-  //           data={data}
-  //           placeholder={placeholder}
-  //           onSearch={onSearch}
-  //           loading={loading}
-  //         />
-  //       </div>
-  //     </DrawerContent>
-  //   </Drawer>
-  // )
 }
 
 function StatusList({

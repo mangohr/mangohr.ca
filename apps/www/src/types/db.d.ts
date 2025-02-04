@@ -166,6 +166,16 @@ export interface OrgsOffice {
   phone: string | null;
 }
 
+export interface OrgsOnboarding {
+  company_name: string;
+  designation: string;
+  full_name: string;
+  id: Int8;
+  onboarded_at: Generated<Timestamp | null>;
+  referral: string | null;
+  total_employees: number | null;
+}
+
 export interface OrgsStorage {
   created_at: Generated<Timestamp | null>;
   employee_id: Int8 | null;
@@ -219,6 +229,7 @@ export interface DB {
   "orgs.job": OrgsJob;
   "orgs.list": OrgsList;
   "orgs.office": OrgsOffice;
+  "orgs.onboarding": OrgsOnboarding;
   "orgs.storage": OrgsStorage;
   "orgs.time_off": OrgsTimeOff;
   "orgs.work_schedule": OrgsWorkSchedule;

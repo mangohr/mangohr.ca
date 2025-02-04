@@ -9,7 +9,7 @@ export const sendEmail = async ({
   emails,
 }: {
   subject: string
-  text: string
+  text?: string
   html: string
   emails: string[]
 }) => {
@@ -24,10 +24,12 @@ export const sendEmail = async ({
         Data: subject,
       },
       Body: {
-        Text: {
-          Charset: "UTF-8",
-          Data: text,
-        },
+        ...(text && {
+          Text: {
+            Charset: "UTF-8",
+            Data: text,
+          },
+        }),
         Html: {
           Charset: "UTF-8",
           Data: html,

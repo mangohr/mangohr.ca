@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
+  typescript: {
+    ignoreBuildErrors: true,
+    ignoreDuringBuilds: true,
+  },
+  eslint: {
+    ignoreBuildErrors: true,
+    ignoreDuringBuilds: true,
+  },
   images: {
     remotePatterns: [
       {

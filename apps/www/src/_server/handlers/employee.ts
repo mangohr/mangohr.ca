@@ -28,15 +28,15 @@ export const getAllEmployeesRoles = async () => {
           "name"
         ),
         "auth.user.username",
-        "role",
+        "roles",
       ])
       .orderBy("hired_at desc")
       .execute(),
     db
       .selectFrom("orgs.employee")
       .where("org_id", "=", org!.id)
-      .select([sql<string>`COUNT(id)`.as("count"), "role"])
-      .groupBy("role")
+      .select([sql<string>`COUNT(id)`.as("count"), "roles"])
+      .groupBy("roles")
       .execute(),
   ])
 

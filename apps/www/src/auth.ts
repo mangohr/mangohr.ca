@@ -1,6 +1,6 @@
 // src.auth.ts
 import { magicLinkRenderer } from "@mhr/mails/emails"
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthConfig } from "next-auth"
 import google from "next-auth/providers/google"
 
 import { db } from "./_server/db"
@@ -9,12 +9,7 @@ import { sendEmail } from "./_server/mailer/send"
 import { authConfig } from "./auth.config"
 import { env } from "./env"
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
+export const serverAuthConfig = {
   ...authConfig,
   adapter: KyselyAdapter(),
   providers: [
@@ -52,4 +47,11 @@ export const {
       options: {},
     },
   ],
-})
+} satisfies NextAuthConfig
+
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth(serverAuthConfig)
