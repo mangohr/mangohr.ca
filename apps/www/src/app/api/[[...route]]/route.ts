@@ -19,7 +19,7 @@ declare module "hono" {
 }
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+// export const runtime = "nodejs"
 
 // export const config: PageConfig = {
 //   api: {
