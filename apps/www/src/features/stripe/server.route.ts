@@ -9,8 +9,6 @@ import Stripe from "stripe"
 import { stripeSchema } from "./schema"
 import { stripe } from "./server.init"
 
-//
-
 export const honoPermissionMiddleware = <Resource extends keyof Permissions>(
   resource: Resource,
   action: Permissions[Resource]["action"],
@@ -51,7 +49,7 @@ const app = new Hono()
       const org = c.get("org")
 
       const url = new URL(c.req.url)
-      const session = await stripe.checkout.sessions.create({
+      const session = await stripe().checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "subscription",
         line_items: [
