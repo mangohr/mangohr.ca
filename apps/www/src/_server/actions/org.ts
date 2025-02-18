@@ -5,6 +5,7 @@ import { headers } from "next/headers"
 import { redirect, RedirectType } from "next/navigation"
 import { delCache, redisKeys } from "@/_server/cache"
 import { db } from "@/_server/db"
+import { createSub, getOrCreateCustomer } from "@/features/stripe/helpers"
 import { orgSlugSchema } from "@/schema/default"
 import orgSchema from "@/schema/org"
 import slugify from "@sindresorhus/slugify"
@@ -12,24 +13,41 @@ import { z } from "zod"
 
 import { idGenerate } from "@/lib/idGenerate"
 
+import { getOrg } from "../cache/org"
+
 export const createOrgAction = async (
-  formData: z.infer<typeof orgSchema.create.validate>
+  formData: z.infer<typeof orgSchema.create.validate>,
+  noRedirect?: boolean
 ) => {
   const { general } = orgSchema.create.validate.parse(formData)
   const { session } = await orgSchema.create.permission()
-  const slug = slugify(general.name)
+  let slug = slugify(general.name)
+
+  const old = await getOrg(slug).catch(() => {})
+
+  if (old) {
+    slug = idGenerate({ prefix: slug, length: 10 })
+  }
 
   const org = await db.transaction().execute(async (trx) => {
-    const org = await db
+    const org = await trx
       .insertInto("orgs.list")
-      .values({ ...general, slug, owner: session.user.id })
-      .onConflict((oc) =>
-        oc
-          .column("slug")
-          .doUpdateSet({ slug: idGenerate({ prefix: slug, length: 10 }) })
-      )
+      .values({
+        ...general,
+        slug: slug,
+        owner: session.user.id,
+        subscription: {
+          id: null,
+          provider: "stripe",
+          active: false,
+        },
+        limits: {
+          seats: 1,
+        },
+      })
       .returning(["slug", "id"])
       .executeTakeFirstOrThrow()
+
     const [first_name, middle_name, last_name] =
       session.user.name?.split(" ") || [session.user.email?.split("@")[0]] || []
     await trx
@@ -37,8 +55,7 @@ export const createOrgAction = async (
       .values({
         org_id: org.id,
         user_id: session.user.id,
-        role: "owner",
-        roles: ["admin"],
+        roles: ["owner"],
         address: {},
         first_name,
         last_name,
@@ -51,7 +68,28 @@ export const createOrgAction = async (
     return org
   })
 
-  return redirect("/org/" + org.slug, RedirectType.replace)
+  const cus = await getOrCreateCustomer({ email: session.user.email! })
+  const sub = await createSub({
+    customer: cus.id,
+    subscribed_by: session.user.id,
+    org_id: org.id,
+  })
+  await db
+    .updateTable("orgs.list")
+    .where("id", "=", org.id)
+    .set({
+      subscription: {
+        id: sub.id,
+        provider: "stripe",
+        active: false,
+      },
+      limits: {
+        seats: 1,
+      },
+    })
+    .execute()
+
+  return noRedirect ? org : redirect("/org/" + org.slug, RedirectType.replace)
 }
 
 export const updateOrgAction = async (

@@ -25,7 +25,8 @@ export const SessionProvider = ({
   const router = useRouter()
   useLayoutEffect(() => {
     const empUrl = `/org/${org?.slug}/employee/${session.user.username}`
-    if (!isSuperUser(session?.employee?.role) && !pathname?.includes(empUrl)) {
+
+    if (!isSuperUser(session?.employee?.roles) && !pathname?.includes(empUrl)) {
       router.replace(empUrl)
     }
   }, [pathname])

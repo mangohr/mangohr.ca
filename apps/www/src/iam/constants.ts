@@ -1,5 +1,9 @@
 import { getEmployee } from "@/_server/cache/org"
 import { roles } from "@/constants/roles"
+import {
+  subscribePermission,
+  SubscribePermission,
+} from "@/features/stripe/schema"
 
 import {
   OrgsAttendance,
@@ -94,6 +98,7 @@ export type Permissions = {
     dataType: OrgsWorkSchedule
     action: "view" | "update" | "delete"
   }
+  subscribe: SubscribePermission
 }
 
 export const ROLES = {
@@ -169,6 +174,7 @@ export const ROLES = {
       update: true,
       delete: true,
     },
+    subscribe: subscribePermission().owner,
   },
   admin: {
     userOnboard: {
@@ -242,8 +248,11 @@ export const ROLES = {
       update: true,
       delete: true,
     },
+    subscribe: subscribePermission().admin,
   },
   manager: {
+    subscribe: subscribePermission().manager,
+
     userOnboard: {
       create: true,
     },
@@ -317,6 +326,8 @@ export const ROLES = {
     },
   },
   hr: {
+    subscribe: subscribePermission().hr,
+
     userOnboard: {
       create: true,
     },
@@ -390,6 +401,8 @@ export const ROLES = {
     },
   },
   employee: {
+    subscribe: subscribePermission().employee,
+
     userOnboard: {
       create: true,
     },

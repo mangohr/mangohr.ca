@@ -44,16 +44,22 @@ export const createUser = async (
   user: AdapterUser,
   db: Transaction<DB> | Kysely<DB>
 ) => {
-  const username = user.email.split("@")[0]
+  let username = user.email.split("@")[0]
+
+  const old = await db
+    .selectFrom("auth.user")
+    .where("username", "=", username)
+    .select("auth.user.id")
+    .executeTakeFirst()
+
+  if (old) {
+    username = idGenerate({ prefix: username, length: 10 })
+  }
 
   const result = await db
     .insertInto("auth.user")
     .values(format.to({ ...user, id: undefined, username }))
-    .onConflict((oc) =>
-      oc.column("username").doUpdateSet({
-        username: idGenerate({ prefix: username, length: 10 }),
-      })
-    )
+
     .returning(["id"])
     .executeTakeFirstOrThrow()
   user.id = result.id

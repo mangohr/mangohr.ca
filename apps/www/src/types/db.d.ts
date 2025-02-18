@@ -110,7 +110,6 @@ export interface OrgsEmployee {
   office: Int8 | null;
   org_id: Int8;
   phone: string | null;
-  role: Generated<string | null>;
   roles: Generated<string[]>;
   scopes: string[] | null;
   user_id: Int8;
@@ -146,12 +145,20 @@ export interface OrgsList {
   established_on: Timestamp | null;
   id: Generated<Int8>;
   industry: string | null;
+  /**
+   * @type: {seats:number}
+   */
+  limits:  {seats:number}
   location: string | null;
   name: string;
   owner: Int8;
   phone: string | null;
   picture: string | null;
   slug: string;
+  /**
+   * @type:{id:string | null,provider:"stripe",active:boolean, plan:string | null}
+   */
+  subscription: {id:string | null,provider:"stripe",active:boolean, plan:string | null}
   website: string | null;
 }
 

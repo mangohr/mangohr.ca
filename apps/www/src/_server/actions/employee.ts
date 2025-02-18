@@ -21,7 +21,6 @@ export const getAllEmployees = async (props: { searchParams: unknown }) => {
     .leftJoin("auth.user", "auth.user.id", "e.user_id")
     .select([
       "e.id",
-      "role",
       "username",
       "work_email",
       "email",
@@ -31,7 +30,7 @@ export const getAllEmployees = async (props: { searchParams: unknown }) => {
       ),
       "department",
       "hired_at",
-      "role",
+      "roles",
     ])
     .where((eb) => {
       const filters: Expression<SqlBool>[] = []
@@ -71,7 +70,6 @@ export const getAllEmployees = async (props: { searchParams: unknown }) => {
     .limit(parsed.limit)
     .offset(parsed.page * parsed.limit)
     .execute()
-
   return { items: result, hasMore: result.length === parsed.limit }
 }
 
@@ -187,7 +185,7 @@ export const updateEmployeeRole = async (props: {
     emp = await getEmployee(org!.id, username)
   }
   if (!emp || !emp?.id) throw new Error("Employee not found!")
-  console.log(roles)
+
   await db
     .updateTable("orgs.employee")
     .set({
@@ -195,6 +193,8 @@ export const updateEmployeeRole = async (props: {
     })
     .where("id", "=", emp.id)
     .executeTakeFirstOrThrow()
+
+  await delCache(redisKeys.employee.single(org!.id, username))
 
   revalidatePath("/org/[orgSlug]/company/permission", "page")
   return true

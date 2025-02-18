@@ -1,16 +1,19 @@
 import React, { Fragment } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { plans } from "@/constants/plans"
 import { useViewport } from "@/context/viewport"
+import {
+  GetStripeProductsResult,
+  StripeProduct,
+} from "@/features/stripe/server.actions"
+import { motion } from "framer-motion"
 import { Check, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { buttonVariants } from "../ui/button"
 
-function Card({ data }: { data: (typeof plans)[0] }) {
-  const router = useRouter()
+function PricingCard({ data }: { data: StripeProduct }) {
   const { isMobile } = useViewport()
 
   const btn = (
@@ -20,17 +23,13 @@ function Card({ data }: { data: (typeof plans)[0] }) {
           size: "lg",
           variant: data.highlight ? "white" : "outline",
         }),
-        "w-full rounded-full md:text-lg items-center justify-center text-center",
+        "w-full items-center justify-center rounded-full text-center md:text-lg",
         !data.highlight && "border-foreground"
       )}
       style={{ marginTop: "2rem", marginBottom: "2rem" }}
-      href={
-        data.stripe.price_id
-          ? "/org/checkout?price=" + data.stripe.price_id
-          : "/org"
-      }
+      href={"/subscribe?price=" + data.price.id}
     >
-      {data.button_name}
+      {data.price.unit_amount === 0 ? "Join now" : "Buy Now"}
     </Link>
   )
   return (
@@ -40,14 +39,14 @@ function Card({ data }: { data: (typeof plans)[0] }) {
         data.highlight && "bg-gradient-to-b from-[#F9B459] to-[#F2F7F4]"
       )}
     >
-      <h2 className="text-xl font-semibold md:text-2xl">{data.title}</h2>
-      <p>{data.desc}</p>
+      <h2 className="text-xl font-semibold md:text-2xl">{data.name}</h2>
+      <p>{data.description}</p>
       <h1>
         <span className="text-3xl font-semibold md:text-5xl">
           {" "}
-          ${data.monthly_amounts.cad}
-        </span>{" "}
-        <span>/ Month / User</span>
+          ${data.price.unit_amount}
+        </span>
+        <span>/ {data.price.recurring?.interval} / User</span>
       </h1>
 
       {!isMobile && btn}
@@ -58,13 +57,9 @@ function Card({ data }: { data: (typeof plans)[0] }) {
           {data.features.map((f, i) => (
             <Fragment key={i}>
               <span>
-                {f.check ? (
-                  <Check className="stroke-green size-4" />
-                ) : (
-                  <X className="size-4" />
-                )}
+                <Check className="stroke-green size-4" />
               </span>
-              <span>{f.label}</span>
+              <span>{f}</span>
             </Fragment>
           ))}
         </div>
@@ -74,12 +69,29 @@ function Card({ data }: { data: (typeof plans)[0] }) {
   )
 }
 
-export const PricingCards = () => {
+export const PricingCards = ({
+  plans,
+  isLoading,
+}: {
+  plans: GetStripeProductsResult | undefined
+  isLoading: boolean
+}) => {
   return (
     <div className="grid gap-10 md:grid-cols-3">
-      {plans.map((p, i) => (
-        <Card key={i} data={p} />
-      ))}
+      {[...(plans || Array(3))].map((p, i) =>
+        !isLoading ? (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2 }}
+          >
+            <PricingCard key={i} data={p} />
+          </motion.div>
+        ) : (
+          <Skeleton key={i} className="h-96 rounded-md border"></Skeleton>
+        )
+      )}
     </div>
   )
 }

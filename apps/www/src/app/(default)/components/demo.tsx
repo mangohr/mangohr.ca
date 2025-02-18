@@ -1,9 +1,13 @@
 import React from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { ArrowUpRight, Play } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Head, SubHeading } from "@/components/custom/typography"
+
+import { siteConfig } from "../../../../siteconfig"
 
 export default function Demo() {
   return (
@@ -34,16 +38,18 @@ export default function Demo() {
           desc="Manage all essential information, in one secure location. Our system ensures that you can easily update and retrieve records, maintaining accuracy and compliance with Canadian regulations."
           className="items-start text-start"
         />
-        <Button
-          className="gap-4 rounded-full text-lg"
-          variant={"secondary"}
-          size={"lg"}
+        <Link
+          href={siteConfig.contact.meeting}
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "lg" }),
+            "gap-4 rounded-full text-lg"
+          )}
         >
           <span>Book a call</span>
           <span className="bg-background text-foreground flex size-6 items-center justify-center rounded-full">
             <ArrowUpRight className="size-4" />
           </span>
-        </Button>
+        </Link>
       </div>
     </div>
   )

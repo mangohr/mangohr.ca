@@ -4,6 +4,7 @@ import { headers } from "next/headers"
 import { redirect, RedirectType } from "next/navigation"
 import { db } from "@/_server/db"
 import { env } from "@/env"
+import { Role } from "@/iam/constants"
 import employeeSchema from "@/schema/employee"
 import { newEmployeeEmailRenderer } from "@mhr/mails/emails"
 import { sql } from "kysely"
@@ -74,7 +75,7 @@ export const inviteEmployeeAction = async (data: string) => {
       .values({
         org_id: org!.id,
         user_id: user.id,
-        role: "employee",
+        roles: ["employee"] as Role[],
         first_name: parsed.general.first_name,
         last_name: parsed.general.last_name,
         middle_name: parsed.general.middle_name,

@@ -186,7 +186,7 @@ export default function DefaultFooter() {
           </div>
         )}
       </div>
-      <div className="justify-between text-sm md:text-base md:flex">
+      <div className="justify-between text-sm md:flex md:text-base">
         {!isMobile && (
           <div className="text-muted-foreground flex w-full max-w-screen-sm gap-12">
             {commonLinks.map((l, i) => (

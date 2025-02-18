@@ -6,7 +6,7 @@ import { formatDistanceToNow } from "date-fns"
 import { Plus } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import EmptyPage from "@/components/pages/empty"
 

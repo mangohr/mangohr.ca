@@ -19,7 +19,7 @@ export default function Sidebar() {
 
   const navs = superUserNavs
 
-  if (!isSuperUser(session?.employee?.role)) return null
+  if (!isSuperUser(session?.employee?.roles)) return null
 
   return (
     <div className={cn("w-14")}>

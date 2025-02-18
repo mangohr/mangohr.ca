@@ -2,7 +2,9 @@ import React from "react"
 import { getDashboardData } from "@/_server/handlers/dashboard"
 import { auth } from "@/auth"
 import { format, subDays } from "date-fns"
+import { Footprints } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -51,9 +53,17 @@ async function Page() {
   return (
     <div className="space-y-8 px-8 py-12">
       <div className="flex flex-col items-start gap-2">
-        <h1 className="text-3xl leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
-          {greet}, {session?.user?.name}!
-        </h1>
+        <div className="flex w-full justify-between gap-4">
+          <h1 className="text-3xl leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
+            {greet}, {session?.user?.name}!
+          </h1>
+          <div className="flex gap-4">
+            <Button>
+              <Footprints /> Take a Tour
+            </Button>
+            <Button variant={"outline"}>Need Help?</Button>
+          </div>
+        </div>
         <p className="text-foreground max-w-2xl font-light">
           It&apos;s {today && format(today, "cccc, dd MMMM yyyy")}
         </p>

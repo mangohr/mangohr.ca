@@ -64,6 +64,7 @@ const transformFile = async () => {
       ": Json;",
       ": ArrayType<Json> | null;",
       ": ArrayType<Json>",
+      ": Generated<Json | null>;",
     ]
 
     const matchIdx = matches.findIndex((m) => line.includes(m))

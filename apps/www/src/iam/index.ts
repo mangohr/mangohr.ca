@@ -35,7 +35,10 @@ export async function hasPermission<Resource extends keyof Permissions>(
         return data != null && permission(employee!, data)
       }
     )
-    if (!hasPerm) throw Error(`Insufficient permission (${resource}:${action})`)
+    if (!hasPerm)
+      throw Error(
+        `Insufficient permission (${resource}:${action}) on role:${employee.roles.join(",")} employee:${employee.id}`
+      )
   }
 
   return { session: { ...session, employee }, org }

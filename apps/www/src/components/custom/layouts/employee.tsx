@@ -159,7 +159,7 @@ export default function EmployeeLayout({ children }: { children: ReactNode }) {
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
-            {!isSuperUser(session?.employee?.role) && (
+            {!isSuperUser(session?.employee?.roles) && (
               <div>
                 <Button
                   variant={"outline"}

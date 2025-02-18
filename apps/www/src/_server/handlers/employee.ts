@@ -89,7 +89,7 @@ export const getEmployeeData = async (params: {
       "marital_status",
       "gender",
       "emergency_contacts",
-      "e.role",
+      "e.roles",
       eb.fn.toJson("d").as("department"),
       eb.fn.toJson("o").as("office"),
       eb.fn.toJson("cj").as("current_job"),

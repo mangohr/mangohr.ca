@@ -20,6 +20,7 @@ export const env = createEnv({
     NODE_ENV: z.string().optional(),
     STRIPE_SECRET_KEY: z.string(),
     NOTIFY_EMAILS: z.array(z.string()),
+    STRIPE_WEBHOOK_SECRET: z.string(),
   },
   client: {
     // NEXT_PUBLIC_STRIPE_KEY: z.string().min(1),
@@ -35,7 +36,7 @@ export const env = createEnv({
     NOTIFY_EMAILS:
       process.env.NOTIFY_EMAILS?.split(",").map((email) => email.trim()) ||
       ([] as any),
-
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,

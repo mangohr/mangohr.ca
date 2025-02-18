@@ -1,13 +1,17 @@
 import React from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 import { Heading } from "@/components/custom/typography"
+
+import { siteConfig } from "../../../../siteconfig"
 
 export default function Startup() {
   return (
-    <section className="m-auto max-w-screen-xl px-4 xl:px-0">
+    <section className="m-auto max-w-screen-xl">
       <div className="bg-primary-foreground relative z-0 grid-cols-2 overflow-hidden rounded-2xl p-4 text-white md:grid md:gap-8 md:p-24">
         <Image
           src="/assets/shapes/mango3.png"
@@ -15,7 +19,7 @@ export default function Startup() {
           width={534}
           height={595}
           quality={90}
-          className="absolute right-[-25%] top-[-15%] -z-10 md:-top-1/4 md:right-[-15%]"
+          className="absolute -right-1/4 top-[-20%] -z-10 md:-top-1/4 md:right-[-15%]"
         />{" "}
         <Image
           src="/assets/shapes/leaves1.png"
@@ -46,7 +50,7 @@ export default function Startup() {
           </p>
         </div>
         <div className="mt-12 md:mt-0">
-          <div className="flex w-full gap-8 space-y-8 rounded-2xl bg-[#20562C] p-6  md:space-y-0">
+          <div className="block w-full gap-8 space-y-8 rounded-2xl bg-[#20562C] p-6 md:flex md:space-y-0">
             <div>
               <Image
                 src={"/assets/shapes/harleen.png"}
@@ -58,17 +62,21 @@ export default function Startup() {
               />
             </div>
             <div className="flex flex-col justify-center space-y-6">
-              <Button
-                className="w-fit gap-4 rounded-full text-lg"
-                variant={"default"}
-                size={"lg"}
+              <Link
+                href={siteConfig.contact.meeting}
+                className={cn(
+                  buttonVariants({ variant: "default", size: "lg" }),
+                  "w-full gap-4 rounded-full text-lg md:w-fit"
+                )}
               >
                 <span>Talk to Harleen</span>
                 <span className="bg-background text-foreground flex size-6 items-center justify-center rounded-full">
                   <ArrowUpRight className="size-4" />
                 </span>
-              </Button>
-              <p>wait, who’s Harleen? Find out more at our Company page</p>
+              </Link>
+              <p className="text-center md:text-start">
+                wait, who’s Harleen? Find out more at our Company page
+              </p>
             </div>
           </div>
         </div>

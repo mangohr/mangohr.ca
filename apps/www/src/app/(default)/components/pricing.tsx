@@ -1,11 +1,21 @@
 import React from "react"
 import Link from "next/link"
+import {
+  getStripeProducts,
+  GetStripeProductsResult,
+} from "@/features/stripe/server.actions"
+import { useQuery } from "@tanstack/react-query"
 import { ArrowUpRight } from "lucide-react"
 
 import { Head } from "@/components/custom/typography"
 import PricingCards from "@/components/pricing/card"
 
 export default function Pricing() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["pricing-plans"],
+    queryFn: async () => await getStripeProducts(),
+  })
+
   return (
     <>
       <Head
@@ -13,7 +23,7 @@ export default function Pricing() {
         label="Packages"
         desc="Built with SMBs in mind. Our CoreHR package will be free forever - yes you read that right - free forever! Only pay for what you need and for the employees you have. Truly flexible pricing."
       />
-      <PricingCards />
+      <PricingCards plans={data} isLoading={isLoading} />
       <br />
       <br />
       <div className="space-y-2">
