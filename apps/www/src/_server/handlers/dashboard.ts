@@ -16,7 +16,7 @@ export const getDashboardData = async (data: {
 
   const orgSlug = z.string().parse(headers().get("x-org"))
 
-  const { org } = await orgSchema.dashboard.get.permission(orgSlug)
+  const { org, session } = await orgSchema.dashboard.get.permission(orgSlug)
 
   const [
     totalAttendance,
@@ -137,6 +137,8 @@ export const getDashboardData = async (data: {
       .execute(),
   ])
   return {
+    org,
+    employee: session.employee,
     topEmployees,
     totalAttendance,
     totalEmployees,

@@ -5,6 +5,7 @@ import { env } from "@/env"
 import { userSchema } from "@/schema/user"
 import { z } from "zod"
 
+import { db } from "../db"
 import { sendEmail } from "../mailer/send"
 
 export const onboardAction = async (
@@ -14,10 +15,10 @@ export const onboardAction = async (
   const { general, other } = userSchema.onboard.create.validate.parse(formData)
   const { session } = await userSchema.onboard.create.permission()
 
-  //   await db
-  //     .insertInto("orgs.onboarding")
-  //     .values({ ...general, ...other, id: session.user.id })
-  //     .execute()
+  await db
+    .insertInto("orgs.onboarding")
+    .values({ ...general, ...other, id: session.user.id })
+    .execute()
 
   console.log(env.NOTIFY_EMAILS)
 

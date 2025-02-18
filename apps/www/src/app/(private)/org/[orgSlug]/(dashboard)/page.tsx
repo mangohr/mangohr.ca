@@ -4,6 +4,8 @@ import { auth } from "@/auth"
 import { format, subDays } from "date-fns"
 import { Footprints } from "lucide-react"
 
+import { isSuperUser } from "@/lib/user"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -64,8 +66,13 @@ async function Page() {
             <Button variant={"outline"}>Need Help?</Button>
           </div>
         </div>
-        <p className="text-foreground max-w-2xl font-light">
-          It&apos;s {today && format(today, "cccc, dd MMMM yyyy")}
+        <p className="text-foreground max-w-2xl space-x-2 font-light">
+          <span>It&apos;s {today && format(today, "cccc, dd MMMM yyyy")}</span>
+          {isSuperUser(data.employee?.roles) && (
+            <Badge variant={"secondary"} className="py-0 font-light capitalize">
+              {data.org?.subscription.plan || "Free"} plan
+            </Badge>
+          )}
         </p>
       </div>
       <Card className="grid grid-cols-4">

@@ -6,6 +6,7 @@ import { redirect, RedirectType } from "next/navigation"
 import { delCache, redisKeys } from "@/_server/cache"
 import { db } from "@/_server/db"
 import { createSub, getOrCreateCustomer } from "@/features/stripe/helpers"
+import { stripe } from "@/features/stripe/server.init"
 import { orgSlugSchema } from "@/schema/default"
 import orgSchema from "@/schema/org"
 import slugify from "@sindresorhus/slugify"
@@ -40,6 +41,7 @@ export const createOrgAction = async (
           id: null,
           provider: "stripe",
           active: false,
+          plan: null,
         },
         limits: {
           seats: 1,
@@ -74,6 +76,9 @@ export const createOrgAction = async (
     subscribed_by: session.user.id,
     org_id: org.id,
   })
+
+  const product = await stripe().products.retrieve((sub as any).plan.product)
+
   await db
     .updateTable("orgs.list")
     .where("id", "=", org.id)
@@ -81,7 +86,8 @@ export const createOrgAction = async (
       subscription: {
         id: sub.id,
         provider: "stripe",
-        active: false,
+        active: true,
+        plan: product.name,
       },
       limits: {
         seats: 1,

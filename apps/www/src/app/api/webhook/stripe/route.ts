@@ -1,4 +1,4 @@
-import { delCache } from "@/_server/cache"
+import { delCache, redisKeys } from "@/_server/cache"
 import { db } from "@/_server/db"
 import { env } from "@/env"
 import { stripePlansCacheKey } from "@/features/stripe/schema"
@@ -39,6 +39,8 @@ const manageSubscriptionStatusChange = async (
       },
     })
     .executeTakeFirst()
+
+  await delCache(redisKeys.org.single(subscription.metadata.org_id))
 }
 
 export async function POST(req: Request) {
