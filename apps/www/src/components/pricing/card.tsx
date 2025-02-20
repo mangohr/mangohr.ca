@@ -42,9 +42,9 @@ function PricingCard({ data }: { data: StripeProduct }) {
       <h2 className="text-xl font-semibold md:text-2xl">{data.name}</h2>
       <p>{data.description}</p>
       <h1>
-        <span className="text-3xl font-semibold md:text-5xl">
+        <span className="text-3xl font-semibold capitalize md:text-5xl">
           {" "}
-          ${data.price.unit_amount}
+          ${Number(data.price.unit_amount || 0) / 100}
         </span>
         <span>/ {data.price.recurring?.interval} / User</span>
       </h1>
