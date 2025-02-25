@@ -281,7 +281,7 @@ export const ROLES = {
       update: false,
     },
     employeeJob: {
-      view: false,
+      view: true,
       create: false,
     },
     employeeRole: {
@@ -356,7 +356,7 @@ export const ROLES = {
       update: false,
     },
     employeeJob: {
-      view: false,
+      view: true,
       create: false,
     },
     employeeRole: {
@@ -432,7 +432,7 @@ export const ROLES = {
     },
     employeeJob: {
       view: true,
-      create: true,
+      create: false,
     },
     employeeRole: {
       view: true,

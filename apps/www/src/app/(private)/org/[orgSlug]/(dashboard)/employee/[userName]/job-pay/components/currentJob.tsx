@@ -3,11 +3,13 @@
 import React, { useState } from "react"
 import { useParams } from "next/navigation"
 import { useEmployee } from "@/context/employee"
+import { useSession } from "@/context/session"
 import { EmployeeCurrentJobForm } from "@/forms/employee/currentJob"
 import employeeSchema from "@/schema/employee"
 import { Plus } from "lucide-react"
 import { z } from "zod"
 
+import { isSuperUser } from "@/lib/user"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -25,6 +27,7 @@ const CurrentJob = ({
 }) => {
   const [edit, setEdit] = useState(false)
   const { userName } = useParams()
+  const { session } = useSession()
 
   const formId = "current-job-form"
 
@@ -42,15 +45,11 @@ const CurrentJob = ({
                 Save Changes
               </Button>
             </>
-          ) : (
-            <Button
-              variant={"outline"}
-              // size={"icon"}
-              onClick={() => setEdit(true)}
-            >
+          ) : isSuperUser(session?.employee?.roles) ? (
+            <Button variant={"outline"} onClick={() => setEdit(true)}>
               <Plus /> <span>New Job</span>
             </Button>
-          )}
+          ) : null}
         </div>
       </CardHeader>
       <CardContent>

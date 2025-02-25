@@ -50,6 +50,7 @@ export const inviteEmployeeAction = async (data: string) => {
     let user = await trx
       .selectFrom("auth.user")
       .select(["username", "id", "email", "emailVerified", "name", "image"])
+      .where("email", "=", parsed.general.email)
       .executeTakeFirst()
 
     if (!user) {
@@ -79,7 +80,7 @@ export const inviteEmployeeAction = async (data: string) => {
         first_name: parsed.general.first_name,
         last_name: parsed.general.last_name,
         middle_name: parsed.general.middle_name,
-        work_email: parsed.general.email,
+        work_email: user.email,
         address: {},
         emergency_contacts: [],
       })
