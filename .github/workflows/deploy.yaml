@@ -10,7 +10,6 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.repository != ${{ secrets.DEPLOY_REPO }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -19,6 +18,13 @@ jobs:
       id-token: "write"
 
     steps:
+      - name: Check repository
+        run: echo "DEPLOY_REPO=${{ secrets.DEPLOY_REPO }}" >> $GITHUB_ENV
+
+      - name: Skip job if not correct repo
+        if: github.repository != env.DEPLOY_REPO
+        run: exit 0 # This stops the job
+
       - name: Checkout
         uses: actions/checkout@v4
 

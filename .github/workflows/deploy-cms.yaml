@@ -7,11 +7,14 @@ on:
 
 jobs:
   Deploy-Production:
-    if: github.repository != ${{ secrets.DEPLOY_REPO }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: Check repository
+        run: echo "DEPLOY_REPO=${{ secrets.DEPLOY_REPO }}" >> $GITHUB_ENV
+
+      - name: Skip job if not correct repo
+        if: github.repository != env.DEPLOY_REPO
+        run: exit 0 # This stops the job
 
       - name: Set Environment Variable
         run: echo "VERCEL_GIT_HOOK=${{ secrets.VERCEL_GIT_HOOK }}" >> $GITHUB_ENV
