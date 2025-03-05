@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { getOrgsComboBox } from "@/_server/actions/combobox"
 import { useQuery } from "@tanstack/react-query"
 import { useDebounce } from "use-debounce"

@@ -1,0 +1,5 @@
+export * from "./demoVideo"
+export * from "./heading"
+export * from "./hero"
+export * from "./whyUs"
+export * from "./solutions"

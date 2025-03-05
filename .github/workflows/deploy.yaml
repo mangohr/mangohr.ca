@@ -10,6 +10,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.repository != ${{ secrets.DEPLOY_REPO }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
 

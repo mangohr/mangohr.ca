@@ -1,0 +1,21 @@
+name: Vercel Production Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Deploy-Production:
+    if: github.repository != ${{ secrets.DEPLOY_REPO }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set Environment Variable
+        run: echo "VERCEL_GIT_HOOK=${{ secrets.VERCEL_GIT_HOOK }}" >> $GITHUB_ENV
+
+      - name: Trigger Vercel Deployment
+        run: |
+          curl -X GET "$VERCEL_GIT_HOOK"
