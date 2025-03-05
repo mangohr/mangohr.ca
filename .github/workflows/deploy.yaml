@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.repository != secrets.DEPLOY_REPO
+    if: github.repository != "kundanmangohr/mangohr.ca"
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
