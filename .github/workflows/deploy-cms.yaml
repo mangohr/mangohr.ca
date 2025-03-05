@@ -7,7 +7,7 @@ on:
 
 jobs:
   Deploy-Production:
-    if: github.repository != "kundanmangohr/mangohr.ca"
+    if: github.repository != 'kundanmangohr/mangohr.ca'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
