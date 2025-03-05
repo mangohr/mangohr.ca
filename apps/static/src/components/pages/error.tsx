@@ -7,6 +7,7 @@ import { ArrowLeft, LucideIcon, RotateCcw, XCircle } from "lucide-react"
 import { Button } from "../ui/button"
 import { Label } from "../ui/label"
 
+// Error Page
 export default function ErrorPage({
   error,
   message,
